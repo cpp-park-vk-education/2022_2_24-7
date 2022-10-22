@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <sstream>
-
 #include <project.hpp>
 
 TEST(DefaultTest, Test) {
