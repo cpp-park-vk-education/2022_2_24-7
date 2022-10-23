@@ -36,7 +36,12 @@ jobs:
         run: |
           cd ..
           ./linters/run.sh
-
+      - name: Upload our build dir
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-dir
+          path: build
+  
   test:
     
     needs: [build]
@@ -47,12 +52,16 @@ jobs:
       
       - uses: actions/checkout@v3
       
-      - name: Building
-        run: |
-          mkdir build
-          cd build
-          cmake ..
-          cmake --build . 
+#       - name: Building
+#         run: |
+#           mkdir build
+#           cd build
+#           cmake ..
+#           cmake --build . 
+      - name: Donwload build dir
+        uses: actions/download-artifact@v3
+        with:
+          name: build-dir
       
       - name: Testing
         run: ./project/tests/project_tests
