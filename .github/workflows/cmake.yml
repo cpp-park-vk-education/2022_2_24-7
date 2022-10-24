@@ -65,11 +65,15 @@ jobs:
           cmake ..
           cmake --build . 
       
-#       - name: Testing
-#         run: ctest -C
+      - name: Testing
+        run: |
+          cd build
+          ctest -C
       - name: valgridn install
         run: sudo apt install valgrind
         
       - name: valgrind check
-        run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./ci_project 
+        run: |
+          cd build
+          valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./ci_project 
 #         Project name указываем тот, что мы создаём
