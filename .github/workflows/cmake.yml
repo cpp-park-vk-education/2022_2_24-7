@@ -68,7 +68,7 @@ jobs:
 #       - name: Testing
 #         run: ctest -C
       - name: valgridn install
-        run: apt install valgrind
+        run: sudo apt install valgrind
         
       - name: valgrind check
         run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./ci_project 
