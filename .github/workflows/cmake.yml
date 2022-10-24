@@ -70,10 +70,10 @@ jobs:
           name: build-dir
       
       - name: Testing
-        run: ./project/tests/project_tests
+        run: ctest -C
       - name: valgridn install
         run: apt install valgrind
         
       - name: valgrind check
-        run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./${PROJECT_NAME} 
+        run: valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./ci_project 
 #         Project name указываем тот, что мы создаём
