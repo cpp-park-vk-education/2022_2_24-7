@@ -58,19 +58,15 @@ jobs:
       
       - uses: actions/checkout@v3
       
-#       - name: Building
-#         run: |
-#           mkdir build
-#           cd build
-#           cmake ..
-#           cmake --build . 
-      - name: Donwload build dir
-        uses: actions/download-artifact@v3
-        with:
-          name: build-dir
+      - name: Building
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          cmake --build . 
       
-      - name: Testing
-        run: ctest -C
+#       - name: Testing
+#         run: ctest -C
       - name: valgridn install
         run: apt install valgrind
         
