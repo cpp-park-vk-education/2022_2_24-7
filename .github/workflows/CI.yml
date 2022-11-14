@@ -31,10 +31,10 @@ jobs:
           cd build
           cmake ..
           cmake --build . 
-      - name: test
-        run: |
-          cd build
-          ctest -VV
+#       - name: test
+#         run: |
+#           cd build
+#           ctest -VV
     
       - name: Out after build
         run: tree
@@ -48,19 +48,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Create dir
+        run: mkdir build
+          
       - name: Download build dir
         uses: actions/download-artifact@v3
         with:
           name: build-dir
           path: build
           
-      - name: Out
-        run: tree
-      
-      - name: Testing
-        run: |
-          cd build
-          ctest -VV
+#       - name: Out
+#         run: tree
+      - name: Test
+        run: ctest -VV
+        working-directory: build
       
       - name: valgridn install
         run: sudo apt install valgrind
