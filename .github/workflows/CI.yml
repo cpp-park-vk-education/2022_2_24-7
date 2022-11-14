@@ -31,6 +31,10 @@ jobs:
           cd build
           cmake ..
           cmake --build . 
+      - name: test
+        run: |
+          cd build
+          ctest -VV
     
       - name: Out after build
         run: tree
