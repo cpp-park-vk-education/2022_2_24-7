@@ -40,9 +40,7 @@ jobs:
         run: |
           tree
           ls -la build/tests/tests
-        
-      - name: name
-        run: git update-index --chmod=+x ./build/tests/tests
+
       - name: Upload our build dir
         uses: actions/upload-artifact@v3
         with:
@@ -65,11 +63,8 @@ jobs:
       - name: out
         run: ls -la build/tests    
       
-      - name: Permissions
-        run: git update-index --chmod=+x ./build/tests/tests
-      
       - name: Test
-        run: ctest -VV
+        run: sudo ctest -VV
         working-directory: build
       
       - name: valgridn install
