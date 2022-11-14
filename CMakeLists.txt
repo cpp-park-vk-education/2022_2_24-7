@@ -9,7 +9,7 @@ set(Executables "client/src/main.cpp")
 project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 17)
-
+message(${Directories})
 add_subdirectory(${Directories})
 
 add_executable(${PROJECT_NAME} ${Executables})
