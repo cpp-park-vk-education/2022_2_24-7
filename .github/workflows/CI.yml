@@ -55,19 +55,10 @@ jobs:
           name: build-dir
           path: build
 
-      - name: Permissions
-        run: |
-          sudo chmod 777 ./build/tests/tests
-          sudo chmod 777 ./build/joint_viewing
+      - name: Permissions for tests
+        run: sudo chmod 777 ./build/tests/tests
 
       - name: Test
         run: sudo ctest -VV
         working-directory: build
-
-      - name: valgridn install
-        run: sudo apt install valgrind
-
-      - name: valgrind check
-        run: |
-          cd build
-          valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./joint_viewing 
+        
