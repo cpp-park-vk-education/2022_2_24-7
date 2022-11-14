@@ -37,7 +37,12 @@ jobs:
 #           ctest -VV
     
       - name: Out after build
-        run: tree
+        run: |
+          tree
+          ls -la build/tests/tests
+        
+      - name: name
+        run: git update-index --chmod=+x ./build/tests/tests
       - name: Upload our build dir
         uses: actions/upload-artifact@v3
         with:
@@ -57,12 +62,12 @@ jobs:
         with:
           name: build-dir
           path: build
-          
+      - name: out
+        run: ls -la build/tests    
+      
       - name: Permissions
         run: git update-index --chmod=+x ./build/tests/tests
       
-      - name: out
-        run: ls -la build/tests
       - name: Test
         run: ctest -VV
         working-directory: build
