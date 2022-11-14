@@ -58,8 +58,6 @@ jobs:
           name: build-dir
           path: build
           
-#       - name: Out
-#         run: tree
       - name: Test
         run: ctest -VV
         working-directory: build
