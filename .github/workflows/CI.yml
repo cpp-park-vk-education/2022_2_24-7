@@ -31,7 +31,9 @@ jobs:
           cd build
           cmake ..
           cmake --build . 
-
+    
+      - name: Out after build
+        run: tree
       - name: Upload our build dir
         uses: actions/upload-artifact@v3
         with:
