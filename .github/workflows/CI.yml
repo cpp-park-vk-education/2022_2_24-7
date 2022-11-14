@@ -15,6 +15,10 @@ jobs:
       - uses: actions/checkout@v3
       - name: install cpplint
         run: pip install cpplint
+        
+      - name: Install cppcheck
+        run: sudo apt install cppcheck
+      
       - name: check files
         run: python cppLintCheck.py
 
@@ -43,6 +47,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build-dir
+      - name: Out
+        run: ls -la
       
       - name: Testing
         run: |
