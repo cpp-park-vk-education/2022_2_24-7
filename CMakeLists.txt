@@ -3,13 +3,15 @@ cmake_minimum_required(VERSION 3.14)
 set(PROJECT_NAME "joint_viewing")
 
 set(TestDirecotries "tests")
-set(Directories "libs " "server " "client ")
+set(Directories "libs" "server" "client")
 set(Executables "client/src/main.cpp")
+
+message(${Directories})
+message(${TestDirecotries})
 
 project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 17)
-message(${Directories})
 add_subdirectory(${Directories})
 
 add_executable(${PROJECT_NAME} ${Executables})
