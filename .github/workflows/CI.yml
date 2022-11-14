@@ -48,10 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Create dir
-        run: mkdir build
-          
+
       - name: Download build dir
         uses: actions/download-artifact@v3
         with:
@@ -61,7 +58,7 @@ jobs:
       - name: Permissions
         run: |
           sudo chmod 777 ./build/tests/tests
-          ls -la build/tests    
+          sudo chmod 777 ./build/joint_viewing
 
       - name: Test
         run: sudo ctest -VV
