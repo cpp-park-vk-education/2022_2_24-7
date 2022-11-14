@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches: 
-      - dev/ci_project 
       - main
   pull_request:
     branches: 
@@ -37,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: build-dir
-          path: build
+          path: ./build
   RunTests:
     needs: [Build]
     runs-on: ubuntu-latest
@@ -48,7 +47,7 @@ jobs:
         with:
           name: build-dir
       - name: Out
-        run: ls -la
+        run: tree
       
       - name: Testing
         run: |
