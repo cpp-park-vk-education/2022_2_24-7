@@ -55,4 +55,4 @@ jobs:
       - name: valgrind check
         run: |
           cd build
-          valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./ci_project 
+          valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./joint_viewing 
