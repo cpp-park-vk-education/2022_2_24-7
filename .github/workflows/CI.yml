@@ -58,6 +58,11 @@ jobs:
           name: build-dir
           path: build
           
+      - name: Permissions
+        run: git update-index --chmod=+x build/tests/tests
+      
+      - name: out
+        run: ls -la build/tests
       - name: Test
         run: ctest -VV
         working-directory: build
