@@ -3,34 +3,40 @@ name: CI
 on:
   push:
     branches: 
-      - main
+      - 'dev/*'
+#       Ченкну, чтобы на пул не было 5 обращений
   pull_request:
     branches: 
       - main
+
 jobs:
   RunLinters:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: install cpplint
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
+
+      - name: Install cpplint
         run: pip install cpplint
         
       - name: Install cppcheck
         run: sudo apt install cppcheck
       
-      - name: check files
-        run: python cppLintCheck.py
+      - name: Check files
+        run: python checkFiles.py
 
   Build:
+    needs: [RunLinters]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Building
         run: |
-          mkdir build
-          cd build
-          cmake ..
-          cmake --build . 
+          cmake -DTEST=1 -B build
+          cmake --build build
+#         сюда команду с флагами
 
       - name: Upload our build dir
         uses: actions/upload-artifact@v3
@@ -52,8 +58,23 @@ jobs:
 
       - name: Permissions for tests
         run: sudo chmod 777 ./build/tests/tests
+      
+      - name: Install valgrind
+        run: sudo apt-get install valgrind
 
       - name: Test
-        run: sudo ctest -VV
+        run: valgrind --tool=memcheck --leak-check=yes ctest -VV
         working-directory: build
-        
+    
+      - name: Coverage install and run
+        run: |
+          sudo apt install lcov -y
+          lcov -t "tests/tests" -o coverage.info -c -d tests/
+          genhtml -o report coverage.info
+        working-directory: build
+      
+      - name: Save coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage
+          path: ${{github.workspace}}/build/report
