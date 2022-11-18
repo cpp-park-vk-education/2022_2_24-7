@@ -4,7 +4,6 @@ on:
   push:
     branches: 
       - 'dev/*'
-#       Ченкну, чтобы на пул не было 5 обращений
   pull_request:
     branches: 
       - main
