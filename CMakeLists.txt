@@ -1,21 +1,15 @@
 cmake_minimum_required(VERSION 3.14)
 
-set(PROJECT_NAME "joint_viewing")
+project(mutual_editing)
 
-set(TestDirecotries "tests")
-set(Executables "client/src/main.cpp")
+option(BUILD_TESTS "Build test programs" OFF)
 
-project(${PROJECT_NAME})
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Wextra -Wpedantic -Werror")
 
-set(CMAKE_CXX_STANDARD 17)
-add_subdirectory("libs")
-add_subdirectory("client")
-add_subdirectory("server")
+add_subdirectory("client_side")
+add_subdirectory("server_side")
 
-add_executable(${PROJECT_NAME} ${Executables})
-
-target_link_libraries(${PROJECT_NAME} PRIVATE ${Project_LIBS})
-target_include_directories(${PROJECT_NAME} PUBLIC ${Project_INCLUDE_DIRS})
-
-enable_testing()
-add_subdirectory(${TestDirecotries})
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif(BUILD_TESTS)

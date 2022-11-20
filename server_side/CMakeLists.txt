@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.14)
+
+project(server_side)
+
+set(CMAKE_CXX_STANDARD 17)
+
+set(SERVER_LIB ${SERVER_LIB} PARENT_SCOPE)
+set(SERVER_INCLUDE_DIRS ${SERVER_INCLUDE_DIRS} PARENT_SCOPE)
