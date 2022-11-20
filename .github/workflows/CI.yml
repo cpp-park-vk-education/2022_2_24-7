@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - 'dev/**'
+
+jobs:
+  RunLinters:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
+
+      - name: Install cpplint
+        run: pip install cpplint
+        
+      - name: Install cppcheck
+        run: sudo apt install cppcheck
+
+      - name: Install clang-format, clang-tidy
+        run: sudo apt install clang-format
+      
+      - name: Check files
+        run: python cppLintCheck.py
+
+      - name: Format check
+        run: sh format_check.sh
+
+  Build:
+    needs: [RunLinters]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Building
+        run: |
+          cmake -DBUILD_TESTS=ON -B build
+          cmake --build build
+      
+      - name: Upload our build dir
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-dir
+          path: build
+          retention-days: 3
+
+  RunTests:
+    needs: [Build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download build dir
+        uses: actions/download-artifact@v3
+        with:
+          name: build-dir
+          path: build
+
+      - name: Permissions for tests
+        run: sudo chmod 777 ./build/tests/tests
+      
+      - name: Install valgrind
+        run: sudo apt-get install valgrind
+
+      - name: Test
+        run: valgrind --tool=memcheck --leak-check=yes ./tests/tests
+        working-directory: build
+    
+      - name: Coverage install and run
+        run: |
+          sudo apt install gcovr -y 
+          gcovr --html coverage.html --filter ../server_side/ --filter ../client_side/
+        working-directory: build
+        
+      - name: Save coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage
+          path: ${{github.workspace}}/build/coverage.html
