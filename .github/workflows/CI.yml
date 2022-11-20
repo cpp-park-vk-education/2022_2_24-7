@@ -32,12 +32,13 @@ jobs:
         run: |
           cmake -DBUILD_TESTS=ON -B build
           cmake --build build
-
+      
       - name: Upload our build dir
         uses: actions/upload-artifact@v3
         with:
           name: build-dir
           path: build
+          retention-days: 3
 
   RunTests:
     needs: [Build]
@@ -58,18 +59,17 @@ jobs:
         run: sudo apt-get install valgrind
 
       - name: Test
-        run: valgrind --tool=memcheck --leak-check=yes ctest -VV
+        run: valgrind --tool=memcheck --leak-check=yes ./tests/tests
         working-directory: build
     
       - name: Coverage install and run
         run: |
-          sudo apt install lcov -y
-          lcov -t "tests/tests" -o coverage.info -c -d tests/
-          genhtml -o report coverage.info
+          sudo apt install gcovr -y 
+          gcovr --html coverage.html --filter ../server_side/ --filter ../client_side/
         working-directory: build
-      
+        
       - name: Save coverage
         uses: actions/upload-artifact@v3
         with:
           name: coverage
-          path: ${{github.workspace}}/build/report
+          path: ${{github.workspace}}/build/coverage.html
