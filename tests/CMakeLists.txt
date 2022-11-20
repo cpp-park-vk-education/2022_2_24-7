@@ -18,7 +18,6 @@ if(NOT Gtest_FOUND)
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
   FetchContent_MakeAvailable(googletest)
 endif(NOT Gtest_FOUND)
-find_package(GTest CONFIG REQUIRED)
 
 include(GoogleTest)
 
