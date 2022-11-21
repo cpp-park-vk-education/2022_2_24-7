@@ -6,12 +6,14 @@ using namespace std;
 
 class Chat {
     bool createChatFile(string path){
-		path = "";
+		chatDir = path;
 		return true;
 	}; 
 
     public:
-        Chat(string dir): chatDir(dir){};
+        Chat(string dir){
+			createChatFile(dir);
+		};
 
         bool wrightMessage(string msg){ 
 			msg = "";
@@ -19,6 +21,9 @@ class Chat {
 
         string getWholeChat(){return "true"; };
 
+		string getChatDir() {
+			return chatDir;
+		}
     private:
         string chatDir;
 };
@@ -29,7 +34,7 @@ class User {
 
         string name;
 
-        User(int ID): id(ID){};
+        User(int ID, string Name): id(ID), name(Name){};
 };
 
 class Project {
@@ -58,6 +63,8 @@ class Project {
 			msg = "";
 			return true; };
 
+		int getID() { return id; };
+		
     private:
         int id;
         Chat chat = Chat("1");
