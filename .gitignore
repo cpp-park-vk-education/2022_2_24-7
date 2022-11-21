@@ -1,1 +1,12 @@
 build
+a.out
+test_old_dont_use
+matrix
+fold1
+algo
+vector
+test_11
+bui
+.vscode
+linters
+CPPLINT.cfg
