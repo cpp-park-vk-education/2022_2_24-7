@@ -1,23 +1,23 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.15)
 
 project(textEditor)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAXE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCES lineElement.cpp lineOfText.cpp textEditor.cpp)
-set(HEADERS include/lineElement.hpp include/lineOfText.hpp include/textEditor.hpp)
+set(SOURCES_TEXT "lineElement.cpp" "lineOfText.cpp" "textEditor.cpp" PARENT_SCOPE)
+set(SOURCES_TEXT "lineElement.cpp" "lineOfText.cpp" "textEditor.cpp")
 
 
-# set(TEXT_LIB ${TEXT_LIB} PARENT_SCOPE)
-# set(TEXT_INCLUDE_DIRS . PARENT_SCOPE)
 
 set(LIB_NAME ${PROJECT_NAME}_LIB)
 
-add_library(${LIB_NAME} ${SOURCES} ${HEADERS})
-target_include_directories(${LIB_NAME} PUBLIC "../textLib/include")
-
 set(TEXT_LIB ${LIB_NAME} PARENT_SCOPE)
-set(TEXT_INCLUDE_DIRS ${LIB_NAME} ./include PARENT_SCOPE)
+set(TEXT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
 
-# set(TEXT_LIB ${Project_LIB})
-# set(TEXT_INCLUDE_DIRS ${Project_INCLUDE_DIRS})
+set(TEXT_LIB ${LIB_NAME})
+set(TEXT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} )
+
+add_library(${LIB_NAME} ${SOURCES_TEXT})
+
+target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} "../textLib/")

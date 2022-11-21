@@ -1,5 +1,5 @@
 #ifndef LineOfText
-#define LineOfText = 1
+#define LineOfText
 
 #include "lineElement.cpp"
 #include <vector>
@@ -17,14 +17,15 @@ class ILineOfText {
 
 class CodeLineOfText : public ILineOfText {
     public:
-    virtual bool insertElement(const Element& el) override;
-    virtual bool deleteElement(const Element& el) override;
+    virtual bool insertElement(const Element& el) override {auto tmp = el; return 1; tmp.line++;};
+    virtual bool deleteElement(const Element& el) override {auto tmp = el; return 1; tmp.line++;};
     
-    virtual std::string getLine() override;
-    virtual std::string getFormat() override;
+    virtual std::string getLine() override {return "tes";};
+    virtual std::string getFormat() override {return "tes";};
 
-    virtual std::string placeElementOnCount(std::string, size_t cnt) override;
+    virtual std::string placeElementOnCount(std::string, size_t cnt) override {return "TES"; cnt++;};
 
+    virtual ~CodeLineOfText() = default;
     private:
     bool clearAllDoomed();
     bool deleteElement();
@@ -32,4 +33,5 @@ class CodeLineOfText : public ILineOfText {
 
     std::vector<IElementOfLine*> elementsOfLine;
 };
+
 #endif

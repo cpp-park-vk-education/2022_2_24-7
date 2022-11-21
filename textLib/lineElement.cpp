@@ -1,5 +1,5 @@
 #ifndef Lineaa
-#define Lineaa = 1
+#define Lineaa
 #include <array>
 #include <string>
 
@@ -29,21 +29,21 @@ class IElementOfLine
 class CRDTElement : public IElementOfLine
 {
     public:
-    CRDTElement() {};
-    virtual bool isVisible() override;
-    virtual bool isDoomed() override;
+    CRDTElement() {childs[0] = new CRDTElement;};
+    virtual bool isVisible() override{return 1;};
+    virtual bool isDoomed() override {return 1;};
     
-    virtual bool placeElement(const Element& elementToPlace) override;
-    virtual bool deleteElement(const Element& elementToDelete) override;
+    virtual bool placeElement(const Element& elementToPlace) override {if (value > 0) return 2;auto x = elementToPlace; return 0;};
+    virtual bool deleteElement(const Element& elementToDelete) override {return 1;auto x = elementToDelete;return 0;};
 
-    virtual std::string getText() override;
-    virtual std::string getFormat() override;
+    virtual std::string getText() override {if (numberOfChilds == 0) return "YES"; return "No";};
+    virtual std::string getFormat() override {return "YES";};
 
-    virtual std::string placeElementOnCount(std::string, size_t cnt) override;
+    virtual std::string placeElementOnCount(std::string, size_t cnt) override  {return "TES"; cnt++;};
 
 
-    virtual CRDTElement& operator=(const Element& element) override;
 
+    virtual IElementOfLine& operator=(const Element& element) override {auto _element = element; IElementOfLine* a = new CRDTElement; return *a; };
     private:
 
     size_t numberOfChilds;
