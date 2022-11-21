@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 project(mutual_editing)
 
-option(BUILD_TESTS "Build test programs" OFF)
+option(BUILD_TESTS "Build test programs" ON)
 
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Wextra -Wpedantic -Werror")
 
