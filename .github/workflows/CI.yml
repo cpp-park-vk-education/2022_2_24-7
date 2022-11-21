@@ -37,7 +37,7 @@ jobs:
       - name: Building
         run: |
           mkdir build
-          d build/
+          cd build/
           cmake .. -DTEST=1
           make --build .
           cd ../
