@@ -1,5 +1,0 @@
-if(EXISTS "/root/ci/build/tests/tests[1]_tests.cmake")
-  include("/root/ci/build/tests/tests[1]_tests.cmake")
-else()
-  add_test(tests_NOT_BUILT tests_NOT_BUILT)
-endif()
