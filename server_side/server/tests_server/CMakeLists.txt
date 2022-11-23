@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(testsForServer)
-
-set(SOURCES "tests.cpp")
+project(server_tests)
 
 set(CMAXE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(SOURCES "tests.cpp")
 
 # find_package(GTest CONFIG)
 # if(NOT Gtest_FOUND)
@@ -24,7 +24,6 @@ include(GoogleTest)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${Project_LIB} GTest::gtest_main ${SERVER_LIB})
-target_include_directories(${PROJECT_NAME} PRIVATE ${SERVER_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} server_lib GTest::gtest_main)
 
 gtest_discover_tests(${PROJECT_NAME})

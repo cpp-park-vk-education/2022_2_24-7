@@ -4,21 +4,23 @@ project(server)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(HEADERS "${CMAKE_CURRENT_BINARY_DIR}/include/")
-set(SOURCES "${CMAKE_CURRENT_BINARY_DIR}/src/")
+option(BUILD_SERVER_TESTS "Build server test programs" ON)
 
-set(SERVER_LIB ${PROJECT_NAME}_LIB)
-set(SERVER_INCLUDE_DIRS ${HEADERS})
+set(SOURCES "src/server.cpp")
 
-add_library(${SERVER_LIB} ${SOURCES} ${HEADERS})
-target_include_directories(${SERVER_LIB} PUBLIC ${HEADERS})
+add_library(${PROJECT_NAME}_lib STATIC ${SOURCES})
+set(${PROJECT_NAME}_lib ${CMAKE_CURRENT_SOURCE_DIR}/${SOURCES})
+set(server_include_directories ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-set_target_properties(${SERVER_LIB} PROPERTIES LINKER_LANGUAGE CXX)
+target_include_directories(${PROJECT_NAME}_lib PUBLIC ${server_include_directories})
 
-if(BUILD_TESTS)
+if(BUILD_SERVER_TESTS)
     enable_testing()
     add_subdirectory(tests_server)    
 endif()
 
-set(SERVER_LIB ${PROJECT_NAME}_LIB PARENT_SCOPE)
-set(SERVER_INCLUDE_DIRS "include/" PARENT_SCOPE)
+message("server_lib " ${server_lib})
+message("server_include_directories " ${server_include_directories})
+
+set(server_lib ${server_lib} PARENT_SCOPE)
+set(server_include_directories ${server_include_directories} PARENT_SCOPE)
