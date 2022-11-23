@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(tests)
+project(testsForTextEditor)
 
-set(CMAKE_CXX_STANDARD 17)
+set(SOURCES "tests.cpp")
+
+set(CMAXE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # find_package(GTest CONFIG)
 # if(NOT Gtest_FOUND)
@@ -19,9 +22,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(GoogleTest)
 
-set(TEST_SOURCES "testExampleLib/tests.cpp")
-add_executable(${PROJECT_NAME} ${TEST_SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${PROJECT_LIB} GTest::gtest_main) 
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_INCLUDE_DIRECTORIES})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${Project_LIB} GTest::gtest_main ${FOR_TEST_LIB})
+target_include_directories(${PROJECT_NAME} PRIVATE ${FOR_TEST_INCLUDE_DIRS})
+
 gtest_discover_tests(${PROJECT_NAME})
