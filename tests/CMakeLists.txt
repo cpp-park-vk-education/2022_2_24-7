@@ -22,6 +22,10 @@ include(GoogleTest)
 set(TEST_SOURCES "testExampleLib/tests.cpp")
 add_executable(${PROJECT_NAME} ${TEST_SOURCES})
 
+message("PR LIB " ${PROJECT_LIB})
+message("PR DIR " ${PROJECT_INCLUDE_DIRECTORIES})
+
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIB} GTest::gtest_main) 
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_INCLUDE_DIRECTORIES})
+# target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_INCLUDE_DIRECTORIES})
+target_include_directories(${PROJECT_NAME} PUBLIC "../${PROJECT_INCLUDE_DIRECTORIES}")
 gtest_discover_tests(${PROJECT_NAME})
