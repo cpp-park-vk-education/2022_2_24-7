@@ -7,8 +7,8 @@ set(TestSOURCES "testExampleLib/tests.cpp")
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(GTest CONFIG)
-if(NOT Gtest_FOUND)
+# find_package(GTest CONFIG)
+# if(NOT Gtest_FOUND)
   include(FetchContent)
   FetchContent_Declare(
     googletest
@@ -18,7 +18,7 @@ if(NOT Gtest_FOUND)
 
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
   FetchContent_MakeAvailable(googletest)
-endif(NOT Gtest_FOUND)
+# endif(NOT Gtest_FOUND)
 
 include(GoogleTest)
 
