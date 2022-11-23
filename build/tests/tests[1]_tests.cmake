@@ -1,0 +1,5 @@
+add_test( DefaultTest.Test /root/ci/build/tests/tests [==[--gtest_filter=DefaultTest.Test]==] --gtest_also_run_disabled_tests)
+set_tests_properties( DefaultTest.Test PROPERTIES WORKING_DIRECTORY /root/ci/build/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test( DefaultTest2.Test /root/ci/build/tests/tests [==[--gtest_filter=DefaultTest2.Test]==] --gtest_also_run_disabled_tests)
+set_tests_properties( DefaultTest2.Test PROPERTIES WORKING_DIRECTORY /root/ci/build/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set( tests_TESTS DefaultTest.Test DefaultTest2.Test)
