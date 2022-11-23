@@ -16,8 +16,7 @@ string(APPEND CMAKE_CXX_FLAGS " -Wlogical-op  -Wduplicated-cond -Wcast-qual -Wca
 if(BUILD_SERVER_SIDE OR BUILD_ALL)
     message("BUILD SERVER SIDE")
     add_subdirectory(server_side)
-    set(SERVER_SIDE_LIB ${SERVER_SIDE_LIB})
-    set(SERVER_SIDE_INCLUDE_DIRS ${SERVER_SIDE_INCLUDE_DIRS})
+    
 endif()
 
 if(BUILD_CLIENT_SIDE OR BUILD_ALL)
@@ -28,6 +27,8 @@ endif()
 if(BUILD_TESTS OR BUILD_ALL)
     message("BUILD GLOBAL TESTS")
     enable_testing()
+    set(PROJECT_LIB ${SERVER_SIDE_LIB})
+    set(PROJECT_INCLUDE_DIRECTORIES ${SERVER_INCLUDE_DIRS})
     add_subdirectory(tests)
 endif()
 

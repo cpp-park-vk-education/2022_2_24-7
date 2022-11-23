@@ -24,7 +24,7 @@ include(GoogleTest)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${Project_LIB} GTest::gtest_main ${FOR_TEST_LIB})
-target_include_directories(${PROJECT_NAME} PRIVATE ${FOR_TEST_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${Project_LIB} GTest::gtest_main ${SERVER_LIB})
+target_include_directories(${PROJECT_NAME} PRIVATE ${SERVER_INCLUDE_DIRS})
 
 gtest_discover_tests(${PROJECT_NAME})
