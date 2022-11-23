@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 append_newline () {
     if [ -z "$(tail -c 1 "$1")" ]; then
         :
