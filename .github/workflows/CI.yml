@@ -71,11 +71,17 @@ jobs:
       - name: Coverage install and run
         run: |
           sudo apt install gcovr -y 
-          gcovr --html coverage.html --filter ../server_side/ --filter ../client_side/
+          gcovr --xml coverage.xml --filter ../server_side/ --filter ../client_side/
         working-directory: build
         
       - name: Save coverage
         uses: actions/upload-artifact@v3
         with:
           name: coverage
-          path: ${{github.workspace}}/build/coverage.html
+          path: ${{github.workspace}}/build/coverage.xml
+      
+      - name: Comment Coverage
+        uses: 5monkeys/cobertura-action@master
+        with:
+          path: ${{github.workspace}}/build/coverage.xml
+          minimum_coverage: 75
