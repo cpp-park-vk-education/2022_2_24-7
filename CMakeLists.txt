@@ -27,8 +27,12 @@ endif()
 if(BUILD_TESTS OR BUILD_ALL)
     message("BUILD GLOBAL TESTS")
     enable_testing()
+    
+    message("Server LIB " ${SERVER_SIDE_LIB})
+    message("Server DIR " ${SERVER_SIDE_INCLUDE_DIRS})
+    
     set(PROJECT_LIB ${SERVER_SIDE_LIB})
-    set(PROJECT_INCLUDE_DIRECTORIES ${SERVER_INCLUDE_DIRS})
+    set(PROJECT_INCLUDE_DIRECTORIES "/server_side/${SERVER_SIDE_INCLUDE_DIRS}")
     add_subdirectory(tests)
 endif()
 
