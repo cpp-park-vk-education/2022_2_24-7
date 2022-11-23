@@ -2,9 +2,6 @@ cmake_minimum_required(VERSION 3.14)
 
 project(tests)
 
-message("It's tests")
-set(TestSOURCES "testExampleLib/tests.cpp")
-
 set(CMAKE_CXX_STANDARD 17)
 
 # find_package(GTest CONFIG)
@@ -22,8 +19,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(GoogleTest)
 
-add_executable(${PROJECT_NAME} ${TestSOURCES})
+set(TEST_SOURCES "testExampleLib/tests.cpp")
+add_executable(${PROJECT_NAME} ${TEST_SOURCES})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${Project_LIB} GTest::gtest_main)
-
+target_link_libraries(${PROJECT_NAME} GTest::gtest_main) 
 gtest_discover_tests(${PROJECT_NAME})

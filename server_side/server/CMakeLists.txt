@@ -4,17 +4,14 @@ project(server)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(SOURCES "src/server.cpp")
-set(HEADERS "include/server.hpp")
-
-message("SOURCES " ${SOURCES})
-message("HEADERS " ${HEADERS})
+aux_source_directory(src SOURCES)
+aux_source_directory(include HEADERS)
 
 set(SERVER_LIB ${PROJECT_NAME}_LIB)
-set(SERVER_INCLUDE_DIRS ${PROJECT_NAME}_INCLUDE_DIRS)
+set(SERVER_INCLUDE_DIRS ${HEADERS})
 
 add_library(${SERVER_LIB} ${SOURCES} ${HEADERS})
-target_include_directories(${SERVER_LIB} PUBLIC ./include)
+target_include_directories(${SERVER_LIB} PUBLIC ${HEADERS})
 
 set(SERVER_LIB ${SERVER_LIB} PARENT_SCOPE)
 set(SERVER_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
