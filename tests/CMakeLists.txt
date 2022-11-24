@@ -2,11 +2,12 @@ cmake_minimum_required(VERSION 3.14)
 
 project(tests)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAXE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(GTest REQUIRED)
-  
-if(NOT GTest_FOUND)
+
+if(Gtest_FOUND)
   include(FetchContent)
   FetchContent_Declare(
     googletest
@@ -23,9 +24,7 @@ include(GoogleTest)
 set(SOURCES "testExampleLib/tests.cpp")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-message("PR LIB " ${PROJECT_LIB})
-message("PR DIR " ${PROJECT_INCLUDE_DIRECTORIES})
-
 target_link_libraries(${PROJECT_NAME} ${mutual_editing_lib} GTest::gtest_main) 
 target_include_directories(${PROJECT_NAME} PUBLIC ${mutual_editing_include_directories})
+
 gtest_discover_tests(${PROJECT_NAME})

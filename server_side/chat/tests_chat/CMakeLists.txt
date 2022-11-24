@@ -1,14 +1,15 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(tests)
+project(testsForChat)
 
-message("It's tests")
-set(TestSOURCES "testExampleLib/tests.cpp")
+set(CMAXE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(SOURCES "tests.cpp")
 
-# find_package(GTest CONFIG)
-# if(NOT Gtest_FOUND)
+find_package(GTest REQUIRED)
+
+if(Gtest_FOUND)
   include(FetchContent)
   FetchContent_Declare(
     googletest
@@ -18,12 +19,13 @@ set(CMAKE_CXX_STANDARD 17)
 
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
   FetchContent_MakeAvailable(googletest)
-# endif(NOT Gtest_FOUND)
+endif()
 
 include(GoogleTest)
 
-add_executable(${PROJECT_NAME} ${TestSOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${Project_LIB} GTest::gtest_main)
+target_link_libraries(${PROJECT_NAME} ${CHAT_LIB} GTest::gtest_main)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CHAT_INCLUDE_DIRS})
 
 gtest_discover_tests(${PROJECT_NAME})

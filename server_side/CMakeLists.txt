@@ -2,25 +2,30 @@ cmake_minimum_required(VERSION 3.14)
 
 project(server_side)
 
-set(CMAKE_CXX_STANDARD 17)
+set(LIB_NAME ${PROJECT_NAME}_lib)
+
+set(CMAXE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(server)
 add_subdirectory(text_editor)
-# add_subdirectory(chat)
+add_subdirectory(chat)
 
-add_library(${PROJECT_NAME}_lib STATIC ${server_lib})
-set(${PROJECT_NAME}_lib ${server_lib})
-set(${PROJECT_NAME}_include_directories ${server_include_directories})
+add_library(${LIB_NAME} STATIC ${SERVER_SOURCES_HEADERS_LIB} ${TEXT_EDITOR_SOURCES_HEADERS_LIB} ${CHAT_SOURCES_HEADERS_LIB}) 
 
-target_include_directories(${PROJECT_NAME}_lib PUBLIC ${server_side_include_directories})
+set(CONNECTED_LIBS ${SERVER_LIB} ${TEXT_EDITOR_LIB} ${CHAT_LIB})
+set(SERVER_SIDE_INCLUDE_DIRECTORIES ${SERVER_INCLUDE_DIRS} ${TEXT_EDITOR_INCLUDE_DIRS} ${CHAT_INCLUDE_DIRS})
+
+target_link_libraries(${LIB_NAME} ${CONNECTED_LIBS}) 
+target_include_directories(${LIB_NAME} PUBLIC ${SERVER_SIDE_INCLUDE_DIRECTORIES})
 
 add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 
-target_link_libraries(${PROJECT_NAME} ${server_side_lib})
-target_include_directories(${PROJECT_NAME} PUBLIC ${server_side_include_directories})
+target_link_libraries(${PROJECT_NAME} ${CONNECTED_LIBS}) 
+target_include_directories(${PROJECT_NAME} PUBLIC ${SERVER_SIDE_INCLUDE_DIRECTORIES})
 
-message("server_side_lib " ${server_side_lib})
-message("server_side_include_directories " ${server_side_include_directories})
+message("server_side_lib " ${CONNECTED_LIBS})
+message("server_side_include_directories " ${SERVER_SIDE_INCLUDE_DIRECTORIES})
 
-set(${PROJECT_NAME}_lib ${server_side_lib} PARENT_SCOPE)
-set(${PROJECT_NAME}_include_directories ${server_side_include_directories} PARENT_SCOPE)
+set(SERVER_SIDE_LIB ${CONNECTED_LIBS} PARENT_SCOPE)
+set(SERVER_SIDE_INCLUDE_DIRECTORIES ${SERVER_SIDE_INCLUDE_DIRECTORIES} PARENT_SCOPE)

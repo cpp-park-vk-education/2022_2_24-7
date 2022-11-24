@@ -5,11 +5,20 @@ project(client_side)
 set(CMAXE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCES /src/main.cpp)
-set(HEADERS /include/main.hpp)
+set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/client.cpp")
+set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/client.hpp")
 
-if(BUILD_TESTS)
+set(CLIENT_SIDE_LIB "${PROJECT_NAME}_lib")
+set(CLIENT_SIDE_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
+
+set(CLIENT_SIDE_LIB ${CLIENT_SIDE_LIB} PARENT_SCOPE)
+set(CLIENT_SIDE_SOURCES_HEADERS_LIB ${SOURCES} ${HEADERS} PARENT_SCOPE)
+set(CLIENT_SIDE_INCLUDE_DIRS ${CLIENT_SIDE_INCLUDE_DIRS} PARENT_SCOPE)
+
+add_library(${CLIENT_SIDE_LIB} ${SOURCES} ${HEADERS})
+target_include_directories(${CLIENT_SIDE_LIB} PUBLIC ${CLIENT_SIDE_INCLUDE_DIRS})
+
+if(BUILD_TESTS OR BUILD_ALL)
     enable_testing()
-    add_subdirectory(tests)    
+    add_subdirectory(tests_client_side)    
 endif()
-

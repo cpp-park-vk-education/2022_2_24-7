@@ -26,18 +26,22 @@ endif()
 if(BUILD_TESTS OR BUILD_ALL)
     message("BUILD GLOBAL TESTS")
     
-    message("Server LIB " ${server_side_lib})
-    message("Server DIR " ${server_side_include_directories})
+    message("Server LIB " ${SERVER_SIDE_LIB})
+    message("Server DIR " ${SERVER_SIDE_INCLUDE_DIRECTORIES})
     
-    set(${PROJECT_NAME}_lib ${server_side_lib})
-    set(${PROJECT_NAME}_include_directories ${server_side_include_directories})
+    set(${PROJECT_NAME}_lib ${SERVER_SIDE_LIB})
+    set(${PROJECT_NAME}_include_directories ${SERVER_SIDE_INCLUDE_DIRECTORIES})
 
-    message("mutual_editing_lib " ${mutual_editing_lib})
+    message("mutual_editing_lib " ${MUTUAL_EDITING_LIB})
     message("mutual_editing_include_directories " ${mutual_editing_include_directories})
 
     enable_testing()
+    
     add_test(tests_text_editor "./server_side/text_editor/tests_text_editor/testsForTextEditor")
-    # Напишите свои тесты тут, пример выше
+    add_test(tests_server "./server_side/server/tests_server/testsForServer")
+    add_test(tests_chat "./server_side/chat/tests_chat/testsForChat")
+    add_test(tests_client_side "./client_side/tests_client_side/testsForClientSide")
+
     add_subdirectory(tests)
 endif()
 

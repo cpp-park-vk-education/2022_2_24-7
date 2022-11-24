@@ -5,18 +5,20 @@ project(chat)
 set(CMAXE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(FOR_TEST_LIB "${PROJECT_NAME}_LIB")
-set(FOR_TEST_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/include")
+set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/chat.cpp")
+set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/chat.hpp")
 
-set(SOURCES src/chat.cpp)
-set(HEADERS include/chat.hpp)
+set(CHAT_LIB "${PROJECT_NAME}_lib")
+set(CHAT_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+set(CHAT_LIB ${CHAT_LIB} PARENT_SCOPE)
+set(CHAT_SOURCES_HEADERS_LIB ${SOURCES} ${HEADERS} PARENT_SCOPE)
+set(CHAT_INCLUDE_DIRS ${CHAT_INCLUDE_DIRS} PARENT_SCOPE)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${FOR_TEST_LIB})
-target_include_directories(${PROJECT_NAME} PUBLIC ${FOR_TEST_INCLUDE_DIRS})
+add_library(${CHAT_LIB} ${SOURCES} ${HEADERS})
+target_include_directories(${CHAT_LIB} PUBLIC ${CHAT_INCLUDE_DIRS})
 
-if(BUILD_TESTS)
+if(BUILD_TESTS OR BUILD_ALL)
     enable_testing()
     add_subdirectory(tests_chat)    
 endif()

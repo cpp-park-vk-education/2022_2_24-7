@@ -10,7 +10,6 @@ set(SOURCES "tests.cpp")
 find_package(GTest REQUIRED)
 
 if(Gtest_FOUND)
-  message("SEARCH GTEST")
   include(FetchContent)
   FetchContent_Declare(
     googletest
@@ -26,7 +25,7 @@ include(GoogleTest)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${Project_LIB} ${FOR_TEST_LIB} GTest::gtest_main)
-target_include_directories(${PROJECT_NAME} PRIVATE "..${FOR_TEST_INCLUDE_DIRS}")
+target_link_libraries(${PROJECT_NAME} ${TEXT_EDITOR_LIB} GTest::gtest_main)
+target_include_directories(${PROJECT_NAME} PRIVATE ${TEXT_EDITOR_INCLUDE_DIRS})
 
 gtest_discover_tests(${PROJECT_NAME})

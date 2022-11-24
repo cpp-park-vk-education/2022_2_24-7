@@ -2,25 +2,23 @@ cmake_minimum_required(VERSION 3.14)
 
 project(server)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAXE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(BUILD_SERVER_TESTS "Build server test programs" ON)
+set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/server.cpp")
+set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/server.hpp")
 
-set(SOURCES "src/server.cpp")
+set(SERVER_LIB "${PROJECT_NAME}_lib")
+set(SERVER_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-add_library(${PROJECT_NAME}_lib STATIC ${SOURCES})
-set(${PROJECT_NAME}_lib ${CMAKE_CURRENT_SOURCE_DIR}/${SOURCES})
-set(server_include_directories ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(SERVER_LIB ${SERVER_LIB} PARENT_SCOPE)
+set(SERVER_SOURCES_HEADERS_LIB ${SOURCES} ${HEADERS} PARENT_SCOPE)
+set(SERVER_INCLUDE_DIRS ${SERVER_INCLUDE_DIRS} PARENT_SCOPE)
 
-target_include_directories(${PROJECT_NAME}_lib PUBLIC ${server_include_directories})
+add_library(${SERVER_LIB} ${SOURCES} ${HEADERS})
+target_include_directories(${SERVER_LIB} PUBLIC ${SERVER_INCLUDE_DIRS})
 
-if(BUILD_SERVER_TESTS)
+if(BUILD_TESTS OR BUILD_ALL)
     enable_testing()
     add_subdirectory(tests_server)    
 endif()
-
-message("server_lib " ${server_lib})
-message("server_include_directories " ${server_include_directories})
-
-set(server_lib ${server_lib} PARENT_SCOPE)
-set(server_include_directories ${server_include_directories} PARENT_SCOPE)
