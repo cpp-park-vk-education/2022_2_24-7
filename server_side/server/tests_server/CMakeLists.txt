@@ -7,8 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES "tests.cpp")
 
-# find_package(GTest CONFIG)
-# if(NOT Gtest_FOUND)
+find_package(GTest REQUIRED)
+
+if(NOT GTest_FOUND)
   include(FetchContent)
   FetchContent_Declare(
     googletest
@@ -18,7 +19,7 @@ set(SOURCES "tests.cpp")
 
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
   FetchContent_MakeAvailable(googletest)
-# endif(NOT Gtest_FOUND)
+endif()
 
 include(GoogleTest)
 
