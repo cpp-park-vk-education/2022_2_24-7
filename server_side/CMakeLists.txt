@@ -5,6 +5,8 @@ project(server_side)
 set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(server)
+add_subdirectory(text_editor)
+# add_subdirectory(chat)
 
 add_library(${PROJECT_NAME}_lib STATIC ${server_lib})
 set(${PROJECT_NAME}_lib ${server_lib})

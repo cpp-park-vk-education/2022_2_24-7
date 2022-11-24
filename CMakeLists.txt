@@ -36,6 +36,8 @@ if(BUILD_TESTS OR BUILD_ALL)
     message("mutual_editing_include_directories " ${mutual_editing_include_directories})
 
     enable_testing()
+    add_test(tests_text_editor "./server_side/text_editor/tests_text_editor/testsForTextEditor")
+    # Напишите свои тесты тут, пример выше
     add_subdirectory(tests)
 endif()
 
