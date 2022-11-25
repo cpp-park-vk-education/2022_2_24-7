@@ -27,7 +27,7 @@ jobs:
         run: python cppLintCheck.py
 
       - name: Format check
-        run: sh format_check.sh
+        run: sh scripts/format_check.sh
 
   Build:
     needs: [RunLinters]
