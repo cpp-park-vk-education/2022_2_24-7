@@ -1,6 +1,4 @@
 
 #include "../include/server.hpp"
 
-int arra() {
-    return 0;
-}
+int arra() { return 0; }
