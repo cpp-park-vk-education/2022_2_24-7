@@ -178,5 +178,6 @@ _deps
 .ionide
 
 build
+valgrind.log
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,cmake,gcov,linux,test
