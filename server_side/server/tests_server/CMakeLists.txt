@@ -9,7 +9,7 @@ set(SOURCES "tests.cpp")
 
 find_package(GTest REQUIRED)
 
-if(Gtest_FOUND)
+if(GTest_FOUND)
   include(FetchContent)
   FetchContent_Declare(
     googletest

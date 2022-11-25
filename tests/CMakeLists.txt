@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(GTest REQUIRED)
 
-if(Gtest_FOUND)
+if(GTest_FOUND)
   include(FetchContent)
   FetchContent_Declare(
     googletest
