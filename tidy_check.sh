@@ -8,7 +8,8 @@ server_side/text_editor/src/*.cpp server_side/text_editor/include/*.hpp \
 server_side/DB/src/*.cpp server_side/DB/include/*.hpp \
 client_side/src/*.cpp client_side/include/*.hpp "
 
-INCLUDE_FILES="-Iserver_side/server/include -Iserver_side/text_editor/include -Iserver_side/DB/include -Iclient_side/include"
+INCLUDE_FILES="-Iserver_side/server/include -Iserver_side/text_editor/include \
+-Iserver_side/DB/include -Iclient_side/include"
 
 print_lint_header "CLANG-TIDY"
 
