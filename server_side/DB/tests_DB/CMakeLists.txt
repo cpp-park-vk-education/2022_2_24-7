@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(testsForChat)
+project(testsForDB)
 
 set(CMAXE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -25,7 +25,7 @@ include(GoogleTest)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${CHAT_LIB} GTest::gtest_main)
-target_include_directories(${PROJECT_NAME} PRIVATE ${CHAT_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${DB_LIB} GTest::gtest_main)
+target_include_directories(${PROJECT_NAME} PRIVATE ${DB_INCLUDE_DIRS})
 
 gtest_discover_tests(${PROJECT_NAME})

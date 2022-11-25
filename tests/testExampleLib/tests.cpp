@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "chat.hpp"
+#include "DB.hpp"
 #include "line.hpp"
 #include "server.hpp"
 

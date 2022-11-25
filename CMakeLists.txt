@@ -39,7 +39,7 @@ if(BUILD_TESTS OR BUILD_ALL)
     
     add_test(tests_text_editor "./server_side/text_editor/tests_text_editor/testsForTextEditor")
     add_test(tests_server "./server_side/server/tests_server/testsForServer")
-    add_test(tests_chat "./server_side/chat/tests_chat/testsForChat")
+    add_test(tests_DB "./server_side/DB/tests_DB/testsForDB")
     add_test(tests_client_side "./client_side/tests_client_side/testsForClientSide")
 
     add_subdirectory(tests)
