@@ -23,11 +23,20 @@ jobs:
       - name: Install clang-format, clang-tidy
         run: sudo apt install clang-format
       
-      - name: Check files
-        run: python cppLintCheck.py
+      - name: cppCheck check
+        run: sh scripts/cppCheck_check.sh
 
-      - name: Format check
+      - name: cppLint check
+        run: sh scripts/cpplint_check.sh
+
+      - name: clangFormat check
         run: sh scripts/format_check.sh
+
+      - name: clangTidy check
+        run: sh scripts/tidy_check.sh
+
+      - name: vallgrind check
+        run: sh scripts/vallgrind_check.sh
 
   Build:
     needs: [RunLinters]
