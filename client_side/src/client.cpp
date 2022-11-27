@@ -1,2 +1,2 @@
 #include "client.hpp"
-int main() { return 0; }
+int arrr() { return 10; };
