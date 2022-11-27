@@ -38,9 +38,6 @@ jobs:
       - name: clangTidy check
         run: sh scripts/tidy_check.sh
 
-      - name: vallgrind check
-        run: sh scripts/vallgrind_check.sh
-
   Build:
     needs: [RunLinters]
     runs-on: ubuntu-latest
