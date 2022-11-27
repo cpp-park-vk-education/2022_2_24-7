@@ -21,7 +21,7 @@ target_include_directories(${LIB_NAME} PUBLIC ${SERVER_SIDE_INCLUDE_DIRECTORIES}
 
 add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 
-target_link_libraries(${PROJECT_NAME} ${CONNECTED_LIBS}) 
+target_link_libraries(${PROJECT_NAME} ${CONNECTED_LIBS})
 target_include_directories(${PROJECT_NAME} PUBLIC ${SERVER_SIDE_INCLUDE_DIRECTORIES})
 
 message("server_side_lib " ${CONNECTED_LIBS})

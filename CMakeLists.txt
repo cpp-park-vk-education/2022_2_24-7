@@ -29,8 +29,8 @@ if(BUILD_TESTS OR BUILD_ALL)
     message("Server LIB " ${SERVER_SIDE_LIB})
     message("Server DIR " ${SERVER_SIDE_INCLUDE_DIRECTORIES})
     
-    set(${PROJECT_NAME}_lib ${SERVER_SIDE_LIB})
-    set(${PROJECT_NAME}_include_directories ${SERVER_SIDE_INCLUDE_DIRECTORIES})
+    set(${PROJECT_NAME}_lib ${SERVER_SIDE_LIB} ${CLIENT_SIDE_LIB})
+    set(${PROJECT_NAME}_include_directories ${SERVER_SIDE_INCLUDE_DIRECTORIES} ${CLIENT_SIDE_INCLUDE_DIRS})
 
     message("mutual_editing_lib " ${MUTUAL_EDITING_LIB})
     message("mutual_editing_include_directories " ${mutual_editing_include_directories})
