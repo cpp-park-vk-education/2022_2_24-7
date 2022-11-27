@@ -20,6 +20,9 @@ jobs:
       - name: Install cppcheck
         run: sudo apt install cppcheck
 
+      - name: Install valgrind
+        run: sudo apt install valgrind -y
+
       - name: Install clang-format, clang-tidy
         run: sudo apt install clang-format
       
