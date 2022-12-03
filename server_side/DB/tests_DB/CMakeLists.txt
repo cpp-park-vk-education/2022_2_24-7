@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(tests)
+project(testsForDB)
 
 set(CMAXE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(SOURCES "tests.cpp")
 
 include(FetchContent)
 FetchContent_Declare(
@@ -14,11 +16,10 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-set(SOURCES "testExampleLib/tests.cpp")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${mutual_editing_lib} GTest::gtest_main) 
-target_include_directories(${PROJECT_NAME} PUBLIC ${mutual_editing_include_directories})
+target_link_libraries(${PROJECT_NAME} ${DB_LIB} GTest::gtest_main)
+target_include_directories(${PROJECT_NAME} PRIVATE ${DB_INCLUDE_DIRS})
 
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME})

@@ -20,14 +20,23 @@ jobs:
       - name: Install cppcheck
         run: sudo apt install cppcheck
 
+      - name: Install valgrind
+        run: sudo apt install valgrind -y
+
       - name: Install clang-format, clang-tidy
         run: sudo apt install clang-format
       
-      - name: Check files
-        run: python cppLintCheck.py
+      - name: cppCheck check
+        run: sh scripts/cppCheck_check.sh
 
-      - name: Format check
-        run: sh format_check.sh
+      - name: cppLint check
+        run: sh scripts/cpplint_check.sh
+
+      - name: clangFormat check
+        run: sh scripts/format_check.sh
+
+      - name: clangTidy check
+        run: sh scripts/tidy_check.sh
 
   Build:
     needs: [RunLinters]
@@ -36,7 +45,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Building
         run: |
-          cmake -DBUILD_TESTS=ON -B build
+          cmake -B build
           cmake --build build
       
       - name: Upload our build dir
@@ -71,11 +80,17 @@ jobs:
       - name: Coverage install and run
         run: |
           sudo apt install gcovr -y 
-          gcovr --html coverage.html --filter ../server_side/ --filter ../client_side/
+          gcovr --xml coverage.xml --filter ../server_side/ --filter ../client_side/
         working-directory: build
         
       - name: Save coverage
         uses: actions/upload-artifact@v3
         with:
           name: coverage
-          path: ${{github.workspace}}/build/coverage.html
+          path: ${{github.workspace}}/build/coverage.xml
+      
+      - name: Comment Coverage
+        uses: 5monkeys/cobertura-action@master
+        with:
+          path: ${{github.workspace}}/build/coverage.xml
+          minimum_coverage: 75
