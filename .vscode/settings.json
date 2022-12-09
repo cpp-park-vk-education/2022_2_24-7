@@ -1,5 +1,6 @@
 {
     "files.associations": {
+<<<<<<< HEAD
         "any": "cpp",
         "array": "cpp",
         "atomic": "cpp",
@@ -7,6 +8,40 @@
         "*.tcc": "cpp",
         "cctype": "cpp",
         "chrono": "cpp",
+=======
+        "string": "cpp",
+        "array": "cpp",
+        "any": "cpp",
+        "atomic": "cpp",
+        "*.tcc": "cpp",
+        "chrono": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "iterator": "cpp",
+        "memory_resource": "cpp",
+        "optional": "cpp",
+        "string_view": "cpp",
+        "fstream": "cpp",
+        "functional": "cpp",
+        "istream": "cpp",
+        "new": "cpp",
+        "ostream": "cpp",
+        "ranges": "cpp",
+        "sstream": "cpp",
+        "stdexcept": "cpp",
+        "stop_token": "cpp",
+        "streambuf": "cpp",
+        "system_error": "cpp",
+        "thread": "cpp",
+        "tuple": "cpp",
+        "variant": "cpp",
+        "bit": "cpp",
+        "cctype": "cpp",
+>>>>>>> 04d5a675dac3682fff6a2722f6f7c2eaea67f3c1
         "clocale": "cpp",
         "cmath": "cpp",
         "compare": "cpp",
@@ -21,6 +56,7 @@
         "ctime": "cpp",
         "cwchar": "cpp",
         "cwctype": "cpp",
+<<<<<<< HEAD
         "deque": "cpp",
         "forward_list": "cpp",
         "list": "cpp",
@@ -46,10 +82,23 @@
         "type_traits": "cpp",
         "utility": "cpp",
         "fstream": "cpp",
+=======
+        "map": "cpp",
+        "set": "cpp",
+        "exception": "cpp",
+        "algorithm": "cpp",
+        "memory": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "ratio": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+>>>>>>> 04d5a675dac3682fff6a2722f6f7c2eaea67f3c1
         "initializer_list": "cpp",
         "iomanip": "cpp",
         "iosfwd": "cpp",
         "iostream": "cpp",
+<<<<<<< HEAD
         "istream": "cpp",
         "limits": "cpp",
         "mutex": "cpp",
@@ -65,6 +114,13 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
+=======
+        "limits": "cpp",
+        "mutex": "cpp",
+        "numbers": "cpp",
+        "cinttypes": "cpp",
+        "typeinfo": "cpp",
+>>>>>>> 04d5a675dac3682fff6a2722f6f7c2eaea67f3c1
         "semaphore": "cpp"
     }
 }
