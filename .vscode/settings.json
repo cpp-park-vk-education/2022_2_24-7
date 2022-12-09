@@ -1,14 +1,5 @@
 {
     "files.associations": {
-<<<<<<< HEAD
-        "any": "cpp",
-        "array": "cpp",
-        "atomic": "cpp",
-        "bit": "cpp",
-        "*.tcc": "cpp",
-        "cctype": "cpp",
-        "chrono": "cpp",
-=======
         "string": "cpp",
         "array": "cpp",
         "any": "cpp",
@@ -41,7 +32,6 @@
         "variant": "cpp",
         "bit": "cpp",
         "cctype": "cpp",
->>>>>>> 04d5a675dac3682fff6a2722f6f7c2eaea67f3c1
         "clocale": "cpp",
         "cmath": "cpp",
         "compare": "cpp",
