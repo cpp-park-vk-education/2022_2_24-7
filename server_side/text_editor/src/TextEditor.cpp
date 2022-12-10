@@ -210,22 +210,31 @@ std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, s
             // last symbol delete
             
             isDeleteLine = true;
+            lineCount--;
             
             if (lineWhereToDelete == 0) {
                 // delete from first line
                 lines = lines->next;
-                
+
                 deletionLine->_elementStart->isVisible = false;
                 deletionElement = deletionLine->_elementStart;
 
+            
                 delete deletionLine;
             } else {
                 // delete not from first line
-        
+
                 beforeDeletionLine->next = deletionLine->next;
 
                 deletionLine->_elementStart->isVisible = false;
                 deletionElement = deletionLine->_elementStart;
+
+                if (lineWhereToDelete == lineCount - 1) {
+                    // last line
+                    beforeDeletionLine->next = new StartOfLine();
+                    deletionElement->next = beforeDeletionLine->next->_elementStart;
+                    lineCount++;
+                }
 
                 delete deletionLine;
             }
@@ -263,12 +272,15 @@ std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, s
         StartOfLine* tmp = deletionLine->next;
         deletionLine->next = deletionLine->next->next;
         
+        lineCount--;
         delete tmp;
     }
     
     // output command
     // first part of command
-    std::string firstPartOfCommand = std::to_string(_counter) + '|' + std::to_string(_UserId) + '|' ;
+    _counter++;
+
+    std::string firstPartOfCommand = std::to_string(deletionElement->count) + '|' + std::to_string(deletionElement->UserId) + '|' ;
 
     std::string commandToReturn = "d:" + firstPartOfCommand;
 

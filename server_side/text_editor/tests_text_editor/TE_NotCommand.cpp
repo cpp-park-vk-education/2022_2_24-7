@@ -35,15 +35,7 @@ TEST(TextEditor, insertElemnetsNotCommand) {
 }
 
 TEST(TextEditor, deleteElementsNotCommand) {
-    std::vector<std::string> commandsInResult;
-    
     WorkWithLines work;
-    // lek\n
-    // mus\n
-    // \n
-    // xyz\n
-    // x
-    std::cout << "Before insertion" << std::endl;
 
     work.insertElementInPosition(0, 0, "k");
     work.insertElementInPosition(0,0,"e");
@@ -63,11 +55,9 @@ TEST(TextEditor, deleteElementsNotCommand) {
     work.insertElementInPosition(3,3,"\n");
 
     work.insertElementInPosition(4,0,"x");
-
-    std::cout << "After insertion" << std::endl;
     
-    std::vector<std::string> neededCommand = {"i:1|0|a:0", "i:2|0|b:1|0:2", "i:3|0|\n:1|0:1",
-         "i:4|0|\n:3|0:1", "i:5|0|x:4|0:1", "", "", "", ""};
+    std::vector<std::string> neededCommand = {"d:9|0|", "d:14|0|", "d:10|0|",
+         "d:12|0|", "d:3|0|", "d:1|0|", "d:2|0|", "d:4|0|"};
 
     // first
     std::vector<std::string> neededResults = {"l", "e", "k", "\n", "m", "u", "s", "\n", "\n", "x", "y", "z", "\n", "x"};
@@ -76,113 +66,126 @@ TEST(TextEditor, deleteElementsNotCommand) {
     // delete 4
     std::vector<std::string> neededResults2 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "x", "y", "z", "\n"};
     // delete x from 3
-    std::vector<std::string> neededResults3 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "x", "y", "z", "\n"};
+    std::vector<std::string> neededResults3 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "y", "z", "\n"};
     // delete z from 3
-    std::vector<std::string> neededResults4 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "x", "y", "\n"};
+    std::vector<std::string> neededResults4 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "y", "\n"};
     // delete l
-    std::vector<std::string> neededResults5 = {"e", "k", "\n", "m", "u", "s", "\n", "x", "y", "\n"};
+    std::vector<std::string> neededResults5 = {"e", "k", "\n", "m", "u", "s", "\n", "y", "\n"};
     // delete k
-    std::vector<std::string> neededResults6 = {"e", "\n", "m", "u", "s", "\n", "x", "y", "\n"};
+    std::vector<std::string> neededResults6 = {"e", "\n", "m", "u", "s", "\n", "y", "\n"};
     // delete e
-    std::vector<std::string> neededResults7 = {"\n", "m", "u", "s", "\n", "x", "y", "\n"};
+    std::vector<std::string> neededResults7 = {"\n", "m", "u", "s", "\n", "y", "\n"};
     // delete \n
-    std::vector<std::string> neededResults8 = {"m", "u", "s", "\n", "x", "y", "\n"};
+    std::vector<std::string> neededResults8 = {"m", "u", "s", "\n", "y", "\n"};
 
-
-    Element* tmpCheck = work.getStartOfLine(0);
     
-    std::cout << "1" << std::endl;
+
+    std::vector<std::string> commandsInResult;
+    Element* tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults.size(); ++i) {
         EXPECT_EQ(tmpCheck->_value, neededResults[i][0]);
 
         tmpCheck = tmpCheck->next;
     }
 
-    std::cout << "2" << std::endl;
-    work.deleteElementFromPosition(2,0);
+    commandsInResult.push_back(work.deleteElementFromPosition(2,0));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults1.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults1[i][0]);
+        } else {
+            --i;
         }
 
         tmpCheck = tmpCheck->next;
     }
 
-    std::cout << "3" << std::endl;
-    work.deleteElementFromPosition(3,0);
+    commandsInResult.push_back(work.deleteElementFromPosition(3,0));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults2.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults2[i][0]);
+        } else {
+            --i;
         }
 
         tmpCheck = tmpCheck->next;
     }
 
-    std::cout << "4" << std::endl;
-    work.deleteElementFromPosition(2,0);
+    commandsInResult.push_back(work.deleteElementFromPosition(2,0));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults3.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults3[i][0]);
+        } else {
+            --i;
         }
 
         tmpCheck = tmpCheck->next;
     }
 
-    std::cout << "5" << std::endl;
-    work.deleteElementFromPosition(2,1);
+    commandsInResult.push_back(work.deleteElementFromPosition(2,1));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults4.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults4[i][0]);
+        } else {
+            --i;
         }
 
         tmpCheck = tmpCheck->next;
     }
 
-    std::cout << "6" << std::endl;
-    work.deleteElementFromPosition(0,0);
+    commandsInResult.push_back(work.deleteElementFromPosition(0,0));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults5.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults5[i][0]);
+        } else {
+            --i;
         }
 
         tmpCheck = tmpCheck->next;
     }
 
-    std::cout << "7" << std::endl;
-    work.deleteElementFromPosition(0,1);
+    commandsInResult.push_back(work.deleteElementFromPosition(0,1));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults6.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults6[i][0]);
+        } else {
+            --i;
         }
 
         tmpCheck = tmpCheck->next;
     }
 
-    std::cout << "8" << std::endl;
-    work.deleteElementFromPosition(0,0);
+    commandsInResult.push_back(work.deleteElementFromPosition(0,0));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults7.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults7[i][0]);
+        } else {
+            --i;
         }
 
         tmpCheck = tmpCheck->next;
     }
 
-    std::cout << "9" << std::endl;
-    work.deleteElementFromPosition(0,0);
+    commandsInResult.push_back(work.deleteElementFromPosition(0,0));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults8.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults8[i][0]);
+        } else {
+            --i;
         }
 
         tmpCheck = tmpCheck->next;
     }
+
+    for (size_t i = 0; i < commandsInResult.size(); ++i) {
+        EXPECT_EQ(commandsInResult[i], neededCommand[i]);
+    }
+
 }
