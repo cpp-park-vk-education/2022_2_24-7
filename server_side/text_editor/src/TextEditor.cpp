@@ -30,6 +30,8 @@ std::string WorkWithLines::insertElementInPosition(size_t lineWhereToPlace, size
                             ++i;
                         } else if (searchElement->isVisible) {
                             ++i;
+                        } else {
+                            searchElement = searchElement->next;
                         }
                     }
                     if (searchElement->isVisible) {
@@ -107,6 +109,10 @@ std::string WorkWithLines::insertElementInPosition(size_t lineWhereToPlace, size
             searchElementBefore = searchElementBefore->next;
         }
 
+        if (positionInLine == 1) {
+            searchElementBefore = searchElementBefore->next;
+        }
+
         Element* tmp = new Element(&symbol[0], &(++_counter), &_UserId);
         
         tmp->next = searchElementBefore->next;
@@ -158,7 +164,7 @@ std::string WorkWithLines::insertElementInPosition(size_t lineWhereToPlace, size
         commandToReturn += ':' + secondPartOfCommand;
         partsCount += 1;
 
-        if (afterThis->next->next) {
+        if (afterThis->next->next && afterThis->next->next->count != 0) {
             // after element exist
             thirdPartOfCommand = std::to_string(afterThis->next->next->count) + '|' + std::to_string(afterThis->next->next->UserId);
             commandToReturn += ':' + thirdPartOfCommand;
@@ -182,11 +188,87 @@ std::string WorkWithLines::insertElementInPosition(size_t lineWhereToPlace, size
 
 std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, size_t positionInLine) {
     Element* afterWhatElement = nullptr;
-
+    Element* deletionElement = nullptr;
     
-    
+    StartOfLine* beforeDeletionLine = nullptr;
+    StartOfLine* deletionLine = nullptr;
+    bool isDeleteLine = false;
 
-    std::string commandToReturn = "";
+    if (lineWhereToDelete != 0) {
+        beforeDeletionLine = lines;
+        for (size_t i = 0; i < lineWhereToDelete - 1; ++i) {
+            beforeDeletionLine = beforeDeletionLine->next;
+        }
+        deletionLine = beforeDeletionLine->next;
+    } else {
+        deletionLine = lines;
+    }
+    
+    if (positionInLine == 0) {
+        // first element delete 
+        if (deletionLine->_sizeOfLine == 1) {
+            // last symbol delete
+            
+            isDeleteLine = true;
+            
+            if (lineWhereToDelete == 0) {
+                // delete from first line
+                lines = lines->next;
+                
+                deletionLine->_elementStart->isVisible = false;
+                delete deletionLine;
+            } else {
+                // delete not from first line
+        
+                beforeDeletionLine->next = deletionLine->next;
+
+                deletionLine->_elementStart->isVisible = false;
+                delete deletionLine;
+            }
+        } else {
+            // not last symbol delete
+        
+            Element* nextVisible = deletionLine->_elementStart->next;
+            while (!nextVisible->isVisible) {
+                nextVisible = nextVisible->next;
+            }
+
+            deletionElement = deletionLine->_elementStart;
+            
+            deletionLine->_elementStart->isVisible = false;
+            deletionLine->_elementStart = nextVisible;
+        }
+    } else {
+        // not first element delete
+        
+        Element* tmp = deletionLine->_elementStart;
+        for (size_t i = 0; i < positionInLine; ) {
+            if (tmp->isVisible) {
+                ++i;
+            }
+            tmp = tmp->next;
+        }
+        deletionElement = tmp;
+
+        tmp->isVisible = false;
+    }
+
+    if (deletionElement->_value == '\n' && !isDeleteLine) {
+        // ERROR can be error
+        
+        StartOfLine* tmp = deletionLine->next;
+        deletionLine->next = deletionLine->next->next;
+        
+        delete tmp;
+    }
+    
+    // output command
+    // first part of command
+    std::string firstPartOfCommand = std::to_string(_counter) + '|' + std::to_string(_UserId) + '|' ;
+
+    std::string commandToReturn = "d:" + firstPartOfCommand;
+
+    return commandToReturn;
 };
 
 std::string WorkWithLines::insertElementInPosition(std::string command) {
@@ -202,8 +284,12 @@ size_t WorkWithLines::getQuantityOfLines() {
 };
 
 Element* WorkWithLines::getStartOfLine(size_t lineNumber) {
+    if (!lines) {
+        return nullptr;
+    }
+
     if (lineNumber <= lineCount) {
-        StartOfLine* searchForStart;   
+        StartOfLine* searchForStart = lines;   
         for(size_t i = 0; i < lineNumber; ++i) {
             searchForStart = searchForStart->next;
         }
@@ -226,11 +312,19 @@ size_t WorkWithLines::getSizeOfLine(size_t lineNumber) {
 };
 
 WorkWithLines::~WorkWithLines() {
-    Element* tmp = getStartOfLine(0);
+    Element* tmp = beggining;
 
     while(tmp) {
         Element* deleteElement = tmp;
         tmp = tmp->next;
         delete deleteElement;
+    }
+
+    StartOfLine* tmpLine = lines;
+    while(tmpLine) {
+        StartOfLine* tmp = tmpLine;
+        tmpLine = tmpLine->next;
+        
+        delete tmp;
     }
 };

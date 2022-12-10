@@ -5,7 +5,7 @@ project(testsForTextEditor)
 set(CMAXE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCES "tests.cpp")
+set(SOURCES "TE_NotCommand.cpp")
 
 include(FetchContent)
 FetchContent_Declare(

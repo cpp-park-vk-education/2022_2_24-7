@@ -5,8 +5,10 @@ project(text_editor)
 set(CMAXE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/line.cpp")
-set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/line.hpp")
+set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/TextEditor.cpp")
+
+set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/ITextEditor.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/TextEditor.hpp")
 
 set(TEXT_EDITOR_LIB "${PROJECT_NAME}_lib")
 set(TEXT_EDITOR_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
