@@ -1,11 +1,5 @@
 #include "Serializer.hpp"
 
-void Serializer::save()
-{
+void Serializer::save() {}
 
-}
-
-void Serializer::load()
-{
-
-}
+void Serializer::load() {}

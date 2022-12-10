@@ -1,12 +1,9 @@
 #pragma once
 
-#include <boost/shared_ptr.hpp>
 #include <ISerializer.hpp>
-class IConnection
-{
-
-public:
-
+#include <boost/shared_ptr.hpp>
+class IConnection {
+   public:
     virtual void handle_read() = 0;
     virtual void handle_write() = 0;
     virtual void start() = 0;

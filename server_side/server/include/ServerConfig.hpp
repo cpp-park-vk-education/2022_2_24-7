@@ -2,8 +2,7 @@
 
 #include <string>
 
-struct ServerConfig
-{
+struct ServerConfig {
     std::string address;
     std::string port;
 };

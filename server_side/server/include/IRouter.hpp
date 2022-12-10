@@ -1,6 +1,3 @@
 #pragma once
 
-class IRouter
-{
-
-};
+class IRouter {};
