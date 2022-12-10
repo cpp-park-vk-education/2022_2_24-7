@@ -96,7 +96,7 @@ std::string WorkWithLines::insertElementInPosition(size_t lineWhereToPlace, size
         // not first position
         StartOfLine *searchLine = lines;
         if (lineWhereToPlace != 0) {
-            for (size_t i = 0; i < lineWhereToPlace - 1; ++i) {
+            for (size_t i = 0; i < lineWhereToPlace; ++i) {
                 searchLine = searchLine->next;
             }
         }
@@ -109,9 +109,9 @@ std::string WorkWithLines::insertElementInPosition(size_t lineWhereToPlace, size
             searchElementBefore = searchElementBefore->next;
         }
 
-        if (positionInLine == 1) {
-            searchElementBefore = searchElementBefore->next;
-        }
+        // if (positionInLine == 1) {
+        //     searchElementBefore = searchElementBefore->next;
+        // }
 
         Element* tmp = new Element(&symbol[0], &(++_counter), &_UserId);
         
@@ -216,6 +216,8 @@ std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, s
                 lines = lines->next;
                 
                 deletionLine->_elementStart->isVisible = false;
+                deletionElement = deletionLine->_elementStart;
+
                 delete deletionLine;
             } else {
                 // delete not from first line
@@ -223,6 +225,8 @@ std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, s
                 beforeDeletionLine->next = deletionLine->next;
 
                 deletionLine->_elementStart->isVisible = false;
+                deletionElement = deletionLine->_elementStart;
+
                 delete deletionLine;
             }
         } else {
