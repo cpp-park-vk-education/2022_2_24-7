@@ -23,7 +23,7 @@ class Router : public IRouter {
 
 
 
-    Reply process_route(const IResponse& request) {
+    Reply processRoute(const IResponse& request) {
         std::string method = request.GetMethod();
         if(auto handler_it = handlersMap.find(method); handler_it != handlersMap.end()) {
             return (handler_it->second)(request)
