@@ -190,3 +190,37 @@ TEST(TextEditor, deleteElementsNotCommand) {
     }
 
 }
+
+TEST(TextEditor, insertCommand) {
+    std::vector<std::string> commandsInResult;
+    
+    WorkWithLines work;
+
+    commandsInResult.push_back(work.insertElementInPosition(0, 0, "k"));
+    commandsInResult.push_back(work.insertElementInPosition(0,0,"e"));
+    commandsInResult.push_back(work.insertElementInPosition(0,0,"l"));
+    commandsInResult.push_back(work.insertElementInPosition(0,3,"\n"));
+
+    commandsInResult.push_back(work.insertElementInPosition(1,0,"m"));
+    commandsInResult.push_back(work.insertElementInPosition(1,1,"u"));
+    commandsInResult.push_back(work.insertElementInPosition(1,2,"s"));
+    commandsInResult.push_back(work.insertElementInPosition(1,3,"\n"));
+
+    commandsInResult.push_back(work.insertElementInPosition(2,0,"\n"));
+
+    commandsInResult.push_back(work.insertElementInPosition(3,0,"x"));
+    commandsInResult.push_back(work.insertElementInPosition(3,1,"y"));
+    commandsInResult.push_back(work.insertElementInPosition(3,2,"z"));
+    commandsInResult.push_back(work.insertElementInPosition(3,3,"\n"));
+
+    commandsInResult.push_back(work.insertElementInPosition(4,0,"x"));
+    commandsInResult.push_back(work.insertElementInPosition(4,1,"\n"));
+
+    commandsInResult.push_back(work.insertElementInPosition(5,0,"\n"));    
+
+    WorkWithLines workCommand;
+    for (auto i: commandsInResult) {
+        workCommand.insertElementInPosition(i);
+    }
+
+}

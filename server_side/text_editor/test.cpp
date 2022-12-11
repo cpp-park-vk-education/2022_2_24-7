@@ -56,6 +56,11 @@ int main() {
     commandsInResult.push_back(work.insertElementInPosition(4,1,"\n"));
 
     commandsInResult.push_back(work.insertElementInPosition(5,0,"\n"));
+
+    WorkWithLines work1;
+    for(auto i: commandsInResult) {
+        work1.insertElementInPosition(i);
+    }
     
     return 0;
 }
