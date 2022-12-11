@@ -1,7 +1,10 @@
 #pragma once
 #include <vector>
+#include <algorithm>
+#include <sstream>
 
 #include "ITextEditor.hpp"
+#include "Command.hpp"
 // #include "SearcherForPlace.hpp"
 
 struct StartOfLine {

@@ -1,11 +1,125 @@
 // #include "TextEditor.hpp"
 #include "../include/TextEditor.hpp"
 
+struct Answer {
+    Answer() :answerLine(nullptr), answerLine(nullptr), linePos(0), afterEnter(false) {};
+    Element * answerElement;
+    StartOfLine* answerLine;
+    size_t linePos;
+
+    bool afterEnter;
+};
+
 WorkWithLines::WorkWithLines(size_t UserId, size_t counter) :  lineCount(0), _counter(counter), _UserId(UserId) {
     // searcher = new Searcher(this);
     lines = nullptr;
     beggining = nullptr;
 };
+
+Answer searchForElement(Element* fromWhere, Element* whatSearch, StartOfLine* firstLine) {
+    Answer answer;
+    
+    if (fromWhere && whatSearch) {
+        Element* tmp = fromWhere;
+        StartOfLine* line = firstLine;
+        StartOfLine* beforeLine = nullptr;
+        size_t lineCount = 0;
+        bool enter = false;
+
+        while (tmp) {
+            if (tmp->_value == '\n' && tmp->isVisible) {
+                enter = true;
+            }
+
+            if (tmp->count == whatSearch->count && tmp->UserId == whatSearch->UserId) {
+                break;
+            }
+
+            if (line && line->_elementStart == tmp) {
+                beforeLine = line;
+                line = line->next;
+                lineCount++;
+                enter = false;
+            }
+
+            tmp = tmp->next;
+        }
+
+        if (line && line->_elementStart == tmp) {
+            beforeLine = line;
+            line = line->next;
+            lineCount++;
+            enter = false;
+        }
+
+        answer.answerElement = tmp;
+        answer.answerLine = beforeLine;
+        answer.linePos = lineCount;
+        answer.afterEnter = enter;
+
+        return answer;
+    }
+    
+    return answer;
+}
+
+void insertElement(Element* startOfLine, Element* whatInsert, Element* afterWhatInsert, Element* beforeWhatInsert, StartOfLine** lines) {
+    // сделать проверку про 
+    // TODO проверить на before element, чтобы можно вставить перед элементами других людей
+    if (afterWhatInsert) {
+        // after insert
+        if (beforeWhatInsert) {
+            // after and before insert
+            Element* tmp = afterWhatInsert;
+            // beggining exist
+            while (tmp->UserId < whatInsert->UserId) {
+                // skip another elements with less userid
+                tmp = tmp->next;
+            }
+            whatInsert->next = tmp->next;
+            tmp->next = whatInsert;
+        } else {
+            // only after insert
+            Element* tmp = afterWhatInsert;
+            // beggining exist
+            while (tmp->UserId < whatInsert->UserId) {
+                // skip another elements with less userid
+                tmp = tmp->next;
+            }
+            whatInsert->next = tmp->next;
+            tmp->next = whatInsert;
+        }
+    } else {
+        if (beforeWhatInsert) {
+            // before insert
+            Element* tmp = startOfLine;
+            // beggining exist
+            while (tmp->UserId < whatInsert->UserId) {
+                // skip another elements with less userid
+                tmp = tmp->next;
+            }
+            whatInsert->next = tmp->next;
+            tmp->next = whatInsert;
+        } else {
+            // insert into beggining
+            if (startOfLine) {
+                Element* tmp = startOfLine;
+                // beggining exist
+                while (tmp->UserId < whatInsert->UserId) {
+                    // skip another elements with less userid
+                    tmp = tmp->next;
+                }
+                whatInsert->next = tmp->next;
+                tmp->next = whatInsert;
+
+            } else {
+                // beggining doesnt exist
+                startOfLine = whatInsert;
+            }
+        }
+    }
+}
+
 
 std::string WorkWithLines::insertElementInPosition(size_t lineWhereToPlace, size_t positionInLine, std::string symbol) {
     Element* afterThis = nullptr;
@@ -288,7 +402,94 @@ std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, s
 };
 
 std::string WorkWithLines::insertElementInPosition(std::string command) {
+    Command com(command);
+    Answer answerWhereElementBefore = searchForElement(beggining, com._afterElemenet,lines);
 
+    if (beggining) {
+        // elements exist
+        
+        if (lines) {
+            // lines exist
+
+            if (answerWhereElementBefore.linePos == 0) {
+                // insert before first line
+                
+                lines->_elementStart = com._insertElement;
+                lines->_sizeOfLine++;
+
+                if (answerWhereElementBefore.answerElement) {
+                    // element before insert exist
+                    if (com._beforeElement) {
+                        // element after insert exist
+
+                    } else {
+                        // element after insert doesnt exist
+                    }
+
+                } else {
+                    // element before insert doesn't exist
+
+                    if (com._beforeElement) {
+                        // element after insert exist
+
+                    } else {
+                        // element after insert doesnt exist
+                    }
+                }
+            } else {
+                // insert not before first line
+                
+                if (answerWhereElementBefore.afterEnter) {
+                    // after enter 
+                    // insert into next line
+
+                } else {
+                    // insert into same line
+
+                }
+
+                // ++ to line count
+            }
+        } else {
+            // lines doesnt exist
+            lines = new StartOfLine(com._insertElement, 1);
+
+            if (answerWhereElementBefore.answerElement) {
+                // insert after element
+
+                if (com._beforeElement) {
+                    // insert before this element
+
+                } else {
+                    // insert after element somwehere
+
+                }
+            } else {
+                // insert into beggining
+
+                if (com._beforeElement) {
+                    // insert before this element
+
+                } else {
+                    // insert after element somwehere
+
+                }
+            }
+        }
+    } else {
+        // elements doens't exist
+        beggining = com._insertElement;
+
+        lines = new StartOfLine(com._insertElement, 1);
+    }
+    
+
+    // insert after \n
+    if (com._afterElemenet && com._afterElemenet->_value == '\n') {
+
+    }
+
+    return command;
 };
 
 std::string WorkWithLines::deleteElementFromPosition(std::string command) {
