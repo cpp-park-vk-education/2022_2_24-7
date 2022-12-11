@@ -14,8 +14,8 @@ jobs:
         with:
           python-version: '3.10' 
 
-      - name: Install cpplint
-        run: sudo apt-get install boost
+      - name: Install boost
+        run: sudo apt-get install libboost-all-dev -y
 
       - name: Install cpplint
         run: pip install cpplint
