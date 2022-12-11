@@ -412,356 +412,10 @@ std::string WorkWithLines::insertElementInPosition(std::string command) {
 
     if (beggining) {
         // elements exist
-        
         if (lines) {
-            // lines exist
-
-            if (answerWhereElementBefore.linePos == 0) {
-                // insert before first line
-                // TODO same methods with one difference in input params below
-
-                if (answerWhereElementBefore.answerElement) {
-                    // element before insert exist
-                    if (com._beforeElement) {
-                        // element after insert exist
-                        Element* tmp = answerWhereElementBefore.answerElement;
-                        StartOfLine* tmpLine = lines;
-                        StartOfLine* beforeLine = nullptr;
-                        
-                        while (tmp->next->UserId < com._insertElement->UserId || !(tmp->next->count == com._beforeElement->count && tmp->next->UserId == com._beforeElement->UserId)) {
-                            if (tmp == tmpLine->_elementStart) {
-                                // if pass line start
-                                beforeLine = tmpLine;
-                                tmpLine = tmpLine->next;
-                                answerWhereElementBefore.afterEnter = false;
-                            }
-
-                            if (tmp->_value == '\n' && tmp->isVisible) {
-                                answerWhereElementBefore.afterEnter = true;
-                            }
-
-                            tmp = tmp->next;
-                        }
-
-                        if (beforeLine) {
-                            // in first line or later
-                            com._insertElement->next = tmp->next;
-                            tmp->next = com._insertElement;
-
-                            if( answerWhereElementBefore.afterEnter) {
-                                // after enter input
-                                beforeLine->next->_sizeOfLine++;
-                                beforeLine->next->_elementStart = com._insertElement;
-                            } else {
-                                // not after enter input
-                                beforeLine->_sizeOfLine++;
-                            }
-                            
-                        } else {
-                            // before first line
-                            com._insertElement->next = tmp->next;
-                            tmp->next = com._insertElement;
-                            
-                            lines->_elementStart = com._insertElement;
-                            lines->_sizeOfLine++;
-                        }
-
-                    } else {
-                        // element before insert doesnt exist
-                        Element* tmp = answerWhereElementBefore.answerElement;
-                        StartOfLine* tmpLine = lines;
-                        StartOfLine* beforeLine = nullptr;
-                        
-                        while (tmp->next->UserId < com._insertElement->UserId) {
-                            if (tmp == tmpLine->_elementStart) {
-                                // if pass line start
-                                beforeLine = tmpLine;
-                                tmpLine = tmpLine->next;
-
-                                answerWhereElementBefore.afterEnter = false;
-                            }
-
-                            if (tmp->_value == '\n' && tmp->isVisible) {
-                                answerWhereElementBefore.afterEnter = true;
-                            }
-
-
-                            tmp = tmp->next;
-                        }
-
-                        if (beforeLine) {
-                            // in first line or later
-                            com._insertElement->next = tmp->next;
-                            tmp->next = com._insertElement;
-                            
-                            if( answerWhereElementBefore.afterEnter) {
-                                // after enter input
-                                beforeLine->next->_sizeOfLine++;
-                                beforeLine->next->_elementStart = com._insertElement;
-                            } else {
-                                // not after enter input
-                                beforeLine->_sizeOfLine++;
-                            }
-                            
-                        } else {
-                            // before first line
-                            com._insertElement->next = tmp->next;
-                            tmp->next = com._insertElement;
-                            
-                            lines->_elementStart = com._insertElement;
-                            lines->_sizeOfLine++;
-                        }
-                    }
-
-                } else {
-                    // element after insert doesn't exist
-
-                    if (com._beforeElement) {
-                        // element before insert exist
-                        Element* tmp = beggining;
-                        StartOfLine* tmpLine = lines;
-                        StartOfLine* beforeLine = nullptr;
-                        bool flag = 1;
-                        
-                        while (tmp->next->UserId < com._insertElement->UserId || !(tmp->next->count == com._beforeElement->count && tmp->next->UserId == com._beforeElement->UserId)) {
-                            if (tmp == tmpLine->_elementStart) {
-                                // if pass line start
-                                beforeLine = tmpLine;
-                                tmpLine = tmpLine->next;
-                            }
-
-                            tmp = tmp->next;
-                            flag = 0;
-                        }
-
-                        if (beforeLine) {
-                            // in first line or later
-                            com._insertElement->next = tmp->next;
-                            tmp->next = com._insertElement;
-                            
-                            beforeLine->_sizeOfLine++;
-                        } else {
-                            // before first line
-                            if (flag) {
-                                // after beggining
-                                com._insertElement->next = tmp->next;
-                                tmp->next = com._insertElement;
-                            } else {
-                                // before beggining
-                                com._insertElement->next = beggining;
-                                beggining = com._insertElement;
-                            }
-                            
-                            lines->_elementStart = com._insertElement;
-                            lines->_sizeOfLine++;
-                        }
-                        
-
-                    } else {
-                        // element before insert doesnt exist
-                        Element* tmp = beggining;
-                        StartOfLine* tmpLine = lines;
-                        StartOfLine* beforeLine = nullptr;
-                        bool flag = 1;
-                        
-                        while (tmp->next->UserId < com._insertElement->UserId) {
-                            if (tmp == tmpLine->_elementStart) {
-                                // if pass line start
-                                beforeLine = tmpLine;
-                                tmpLine = tmpLine->next;
-                            }
-
-                            tmp = tmp->next;
-                            flag = 0;
-                        }
-
-                        if (beforeLine) {
-                            // in first line or later
-                            com._insertElement->next = tmp->next;
-                            tmp->next = com._insertElement;
-                            
-                            beforeLine->_sizeOfLine++;
-                        } else {
-                            // before first line
-                            if (flag) {
-                                // after beggining
-                                com._insertElement->next = tmp->next;
-                                tmp->next = com._insertElement;
-                            } else {
-                                // before beggining
-                                com._insertElement->next = beggining;
-                                beggining = com._insertElement;
-                            }
-                            
-                            lines->_elementStart = com._insertElement;
-                            lines->_sizeOfLine++;
-                        }
-                    }
-                }
-            } else {
-                // insert not before first line
-                if (com._beforeElement) {
-                    // element after insert exist
-                    Element* tmp = answerWhereElementBefore.answerElement;
-                    StartOfLine* tmpLine = answerWhereElementBefore.answerLine;
-                    StartOfLine* beforeLine = nullptr;
-                    
-                    while (tmp->UserId < com._insertElement->UserId || !(tmp->next->count == com._beforeElement->count && tmp->next->UserId == com._beforeElement->UserId)) {
-                        if (tmp == tmpLine->_elementStart) {
-                            // if pass line start
-                            beforeLine = tmpLine;
-                            tmpLine = tmpLine->next;
-                            answerWhereElementBefore.afterEnter = false;
-                        }
-
-                        if (tmp->_value == '\n' && tmp->isVisible) {
-                            answerWhereElementBefore.afterEnter = true;
-                        }
-
-                        tmp = tmp->next;
-                    }
-
-                    if (beforeLine) {
-                        // in first line or later
-                        com._insertElement->next = tmp->next;
-                        tmp->next = com._insertElement;
-
-                        if( answerWhereElementBefore.afterEnter) {
-                            // after enter input
-                            beforeLine->next->_sizeOfLine++;
-                            beforeLine->next->_elementStart = com._insertElement;
-                        } else {
-                            // not after enter input
-                            beforeLine->_sizeOfLine++;
-                        }
-                        
-                    } else {
-                        // before first line
-                        com._insertElement->next = tmp->next;
-                        tmp->next = com._insertElement;
-                        
-                        answerWhereElementBefore.answerLine->_elementStart = com._insertElement;
-                        answerWhereElementBefore.answerLine->_sizeOfLine++;
-                    }
-
-                } else {
-                    // element before insert doesnt exist
-                    Element* tmp = answerWhereElementBefore.answerElement;
-                    StartOfLine* tmpLine = answerWhereElementBefore.answerLine;
-                    StartOfLine* beforeLine = nullptr;
-                    
-                    while (tmp->UserId < com._insertElement->UserId) {
-                        if (tmp == tmpLine->_elementStart) {
-                            // if pass line start
-                            beforeLine = tmpLine;
-                            tmpLine = tmpLine->next;
-
-                            answerWhereElementBefore.afterEnter = false;
-                        }
-
-                        if (tmp->_value == '\n' && tmp->isVisible) {
-                            answerWhereElementBefore.afterEnter = true;
-                        }
-
-
-                        tmp = tmp->next;
-                    }
-
-                    if (beforeLine) {
-                        // in first line or later
-                        com._insertElement->next = tmp->next;
-                        tmp->next = com._insertElement;
-                        
-                        if( answerWhereElementBefore.afterEnter) {
-                            // after enter input
-                            beforeLine->next->_sizeOfLine++;
-                            beforeLine->next->_elementStart = com._insertElement;
-                        } else {
-                            // not after enter input
-                            beforeLine->_sizeOfLine++;
-                        }
-                        
-                    } else {
-                        // before first line
-                        com._insertElement->next = tmp->next;
-                        tmp->next = com._insertElement;
-                        
-                        answerWhereElementBefore.answerLine->_elementStart = com._insertElement;
-                        answerWhereElementBefore.answerLine->_sizeOfLine++;
-                    }
-                }
-
-            }
-
+            searchForElement(answerWhereElementBefore, com, lines, beggining);
         } else {
-            // lines doesnt exist
-            lines = new StartOfLine(com._insertElement, 1);
 
-            if (answerWhereElementBefore.answerElement) {
-                // insert after element
-
-                if (com._beforeElement) {
-                    // insert before this element
-                    Element* tmp = answerWhereElementBefore.answerElement;
-                    StartOfLine* tmpLine = lines;
-                    StartOfLine* beforeLine = nullptr;
-                    
-                    while (tmp->next->UserId < com._insertElement->UserId || !(tmp->next->count == com._beforeElement->count && tmp->next->UserId == com._beforeElement->UserId)) {
-                        tmp = tmp->next;
-                    }
-
-                    com._insertElement->next = tmp->next;
-                    tmp->next = com._insertElement;
-
-                    lines = new StartOfLine(com._insertElement, 1);
-                } else {
-                    // insert after element somwehere
-                    Element* tmp = answerWhereElementBefore.answerElement;
-                    StartOfLine* tmpLine = lines;
-                    StartOfLine* beforeLine = nullptr;
-                    
-                    while (tmp->next->UserId < com._insertElement->UserId) {
-                        tmp = tmp->next;
-                    }
-
-                    com._insertElement->next = tmp->next;
-                    tmp->next = com._insertElement;
-
-                    lines = new StartOfLine(com._insertElement, 1);
-                }
-            } else {
-                // insert into beggining
-
-                if (com._beforeElement) {
-                    // insert before this element
-                    Element* tmp = beggining;
-                    StartOfLine* tmpLine = lines;
-                    StartOfLine* beforeLine = nullptr;
-                    
-                    while (tmp->next->UserId < com._insertElement->UserId || !(tmp->next->count == com._beforeElement->count && tmp->next->UserId == com._beforeElement->UserId)) {
-                        tmp = tmp->next;
-                    }
-
-                    com._insertElement->next = tmp->next;
-                    tmp->next = com._insertElement;
-
-                    lines = new StartOfLine(com._insertElement, 1);
-                } else {
-                    // insert after element somwehere
-                    Element* tmp = beggining;
-                    StartOfLine* tmpLine = lines;
-                    StartOfLine* beforeLine = nullptr;
-                    
-                    while (tmp->next->UserId < com._insertElement->UserId) {
-                        tmp = tmp->next;
-                    }
-
-                    com._insertElement->next = tmp->next;
-                    tmp->next = com._insertElement;
-
-                    lines = new StartOfLine(com._insertElement, 1);
-                }
-            }
         }
     } else {
         // elements doens't exist
@@ -835,6 +489,10 @@ WorkWithLines::~WorkWithLines() {
 };
 
 
+void searchWithoutLines(Answer* answer, Command& command, StartOfLine** line, Element* beggining) {
+    
+}
+
 bool funcWithBefore(Element* el, Element* el1) {
     if (el1)  {
         return el->count == el1->count && el1->UserId == el->UserId;
@@ -847,6 +505,10 @@ void searchForElement(Answer& answerWhereElementBefore, Command& com, StartOfLin
     Element* tmp = begginng;
     if (answerWhereElementBefore.answerElement) {
         tmp = answerWhereElementBefore.answerElement;
+    }
+
+    if (answerWhereElementBefore.answerLine != nullptr) {
+        line = answerWhereElementBefore.answerLine;
     }
 
     StartOfLine* tmpLine = line;
@@ -875,6 +537,8 @@ void searchForElement(Answer& answerWhereElementBefore, Command& com, StartOfLin
             com._insertElement->next = tmp->next;
             tmp->next = com._insertElement;
 
+            answerWhereElementBefore.answerElement = tmp;
+
             if (answerWhereElementBefore.afterEnter) {
                 beforeLine->next->_sizeOfLine++;
                 beforeLine->next->_elementStart = com._insertElement;
@@ -882,11 +546,17 @@ void searchForElement(Answer& answerWhereElementBefore, Command& com, StartOfLin
                 beforeLine->_sizeOfLine++;
             }
         } else {
-            if (tmp == begginng && !flag) {
-                
+            if (tmp == begginng && !flag && answerWhereElementBefore.linePos != 0) {
+                if (tmp->UserId < com._insertElement->UserId) {
+                    com._insertElement->next = begginng;
+                    begginng = com._insertElement;
+                    answerWhereElementBefore.answerElement = nullptr;
+                }
+            } else {
+                com._insertElement->next = tmp->next;
+                tmp->next = com._insertElement;
+                answerWhereElementBefore.answerElement = tmp;
             }
-            com._insertElement->next = tmp->next;
-            tmp->next = com._insertElement;
 
             line->_elementStart = com._insertElement;
             line->_sizeOfLine++;
@@ -900,6 +570,12 @@ void searchForElement(Answer& answerWhereElementBefore, Command& com, StartOfLin
             
             com._insertElement->next = begginng;
             begginng = com._insertElement;
+            answerWhereElementBefore.answerElement = tmp;
+            answerWhereElementBefore.answerElement = nullptr
+        } else {
+            com._insertElement->next = begginng->next;
+            begginng->next = com._insertElement;
+            answerWhereElementBefore.answerElement = begginng;
         }
     }
 
