@@ -1,6 +1,7 @@
 // #include "TextEditor.hpp"
 #include "../include/TextEditor.hpp"
 
+
 struct Answer {
     Answer() : answerElement(nullptr), answerLine(nullptr), linePos(0), afterEnter(false) {};
 
@@ -9,12 +10,6 @@ struct Answer {
     size_t linePos;
 
     bool afterEnter;
-};
-
-WorkWithLines::WorkWithLines(size_t UserId, size_t counter) :  lineCount(0), _counter(counter), _UserId(UserId) {
-    // searcher = new Searcher(this);
-    lines = nullptr;
-    beggining = nullptr;
 };
 
 Answer searchForElement(Element* fromWhere, Element* whatSearch, StartOfLine* firstLine) {
@@ -62,7 +57,13 @@ Answer searchForElement(Element* fromWhere, Element* whatSearch, StartOfLine* fi
     }
     
     return answer;
-}
+};
+
+WorkWithLines::WorkWithLines(size_t UserId, size_t counter) :  lineCount(0), _counter(counter), _UserId(UserId) {
+    // searcher = new Searcher(this);
+    lines = nullptr;
+    beggining = nullptr;
+};
 
 void insertElement(Element* startOfLine, Element* whatInsert, Element* afterWhatInsert, Element* beforeWhatInsert, StartOfLine** lines) {
     // сделать проверку про 
@@ -852,42 +853,54 @@ void searchForElement(Answer& answerWhereElementBefore, Command& com, StartOfLin
     StartOfLine* beforeLine = nullptr;
     bool flag = true;
 
-    while (tmp->next->UserId < com._beforeElement->UserId || funcWithBefore(tmp->next, com._beforeElement)) {
-        if (tmp->_value == '\n' && tmp->isVisible) {
-            answerWhereElementBefore.afterEnter = true;
+    if (tmp->next) {
+        while (tmp->next->UserId < com._beforeElement->UserId || funcWithBefore(tmp->next, com._beforeElement)) {
+            if (tmp->_value == '\n' && tmp->isVisible) {
+                answerWhereElementBefore.afterEnter = true;
+            }
+
+            if (tmpLine->_elementStart == tmp) {
+                beforeLine = tmpLine;
+                tmpLine = tmpLine->next;
+                
+                answerWhereElementBefore.afterEnter = false;
+            }
+
+            flag = false;
+            tmp = tmp->next;
         }
 
-        if (tmpLine->_elementStart == tmp) {
-            beforeLine = tmpLine;
-            tmpLine = tmpLine->next;
+        if (beforeLine) {
             
-            answerWhereElementBefore.afterEnter = false;
-        }
+            com._insertElement->next = tmp->next;
+            tmp->next = com._insertElement;
 
-        flag = false;
-        tmp = tmp->next;
-    }
-
-    if (beforeLine) {
-        
-        com._insertElement->next = tmp->next;
-        tmp->next = com._insertElement;
-
-        if (answerWhereElementBefore.afterEnter) {
-            beforeLine->next->_sizeOfLine++;
-            beforeLine->next->_elementStart = com._insertElement;
+            if (answerWhereElementBefore.afterEnter) {
+                beforeLine->next->_sizeOfLine++;
+                beforeLine->next->_elementStart = com._insertElement;
+            } else {
+                beforeLine->_sizeOfLine++;
+            }
         } else {
-            beforeLine->_sizeOfLine++;
+            if (tmp == begginng && !flag) {
+                
+            }
+            com._insertElement->next = tmp->next;
+            tmp->next = com._insertElement;
+
+            line->_elementStart = com._insertElement;
+            line->_sizeOfLine++;
         }
     } else {
-        if (tmp == begginng && !flag) {
-            
-        }
-        com._insertElement->next = tmp->next;
-        tmp->next = com._insertElement;
+        if (tmp == begginng && tmp->UserId < com._insertElement->UserId) {
+            // if input in first symbol
 
-        line->_elementStart = com._insertElement;
-        line->_sizeOfLine++;
+            line->_elementStart = com._insertElement;
+            line->_sizeOfLine++;
+            
+            com._insertElement->next = begginng;
+            begginng = com._insertElement;
+        }
     }
 
 }

@@ -3,6 +3,7 @@
 
 #include "TextEditor.hpp"
 
+
 TEST(TextEditor, insertElemnetsNotCommand) {
     std::vector<std::string> commandsInResult;
     

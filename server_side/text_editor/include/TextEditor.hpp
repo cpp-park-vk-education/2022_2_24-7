@@ -26,6 +26,7 @@ struct StartOfLine {
     StartOfLine* next;
 };
 
+
 class WorkWithLines : public IWorkWithText {
     public:
     WorkWithLines(size_t UserId = 0, size_t counter = 0);
