@@ -38,4 +38,4 @@ class Router : public IRouter {
     std::unordered_map<std::string, Handler> handlersMap; 
 };
 // в объявлении на серваке это выглядит как-то так:
-Router<Reply(*)(const Request &request)> myRouter;
+//Router<Reply(*)(const Request &request)> myRouter;

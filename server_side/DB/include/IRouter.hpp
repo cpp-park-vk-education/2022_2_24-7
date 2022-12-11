@@ -3,6 +3,7 @@
 #include <string>
 #include "Reply.hpp"
 #include "Request.hpp"
+#include "IResponse.hpp"
 
 template<typename Handler>
 class IRouter {
