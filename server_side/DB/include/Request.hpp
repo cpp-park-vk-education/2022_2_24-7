@@ -3,16 +3,18 @@
 #include "IResponse.hpp"
 
 struct Request : IResponse {
+    std::string GetMethod() override { return method; }
 
-    std::string GetMethod() override {
-        return method;
-    }
+    Request(std::string _method, std::string _afterChar = "",
+            std::string _beforeChar = "", std::string _countUser = "",
+            std::string _userId = "", std::string _insertChar = "",
+            std::string _number = "");
 
     std::string method;
-    std::string countUser; // количество изменений
-    std::string userId; // уникальный ID польователя
-    std::string insertChar; // символ для вноса
+    std::string countUser;   // количество изменений
+    std::string userId;      // уникальный ID польователя
+    std::string insertChar;  // символ для вноса
     std::string afterChar;  // элемент после символа для вноса
-    std::string beforeChar; // элемент до символа для вноса
-    std::string nember; // режим для заноса символа
+    std::string beforeChar;  // элемент до символа для вноса
+    std::string number;      // режим для заноса символа
 };

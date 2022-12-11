@@ -1,9 +1,9 @@
 #pragma once
 
+#include "IResponse.hpp"
 #include "Reply.hpp"
 #include "Request.hpp"
-#include "IResponse.hpp"
 
-Reply InsertSymbol(const Request& request);
-Reply DeleteSymbol(const Reply& request);
-Reply GetProjectFile(const Reply& request);
+Reply InsertSymbol(const IResponse& request);
+Reply DeleteSymbol(const IResponse& request);
+Reply GetProjectFile(const IResponse& request);
