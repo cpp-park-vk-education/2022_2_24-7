@@ -4,34 +4,29 @@
 #include <unordered_map>
 
 #include "Handlers.hpp"
-#include "IResponse.hpp"
 #include "IRouter.hpp"
+#include "Parser.hpp"
 #include "Reply.hpp"
 #include "Request.hpp"
+#include "User.hpp"
 
 class Router : public IRouter {
    public:
-    Router() {
-        addHandler("i", InsertSymbol);
-        addHandler("d", DeleteSymbol);
-    }
+    Router(IParser &_parser, std::vector<ConnectionPtr> &_connections, std::vector<User> &_users,
+           std::string _filesPath = "./");
 
-    void addHandler(const std::string &method, const Handler &handler) {
-        handlersMap.emplace(method, handler);
-    }
+    void addHandler(const std::string &method, const Handler &handler) override;
 
-    Reply processRoute(const Request &request) {
-        std::string method = request.method;
-        if (auto handler_it = handlersMap.find(method);
-            handler_it != handlersMap.end()) {
-            return (handler_it->second)(request);
-        };
-        Reply failReply("1");
-        return failReply;
-    }
+    Reply processRoute(const Request &request) override;
 
+    void sendToAllProjectUsers(const Reply &reply) override;
+
+    // bool connectUser(const User &user) override;
+    // bool disconnectUser(const User &user) override;
    private:
+    IParser &parser;
+    std::vector<ConnectionPtr> &connections;
+    std::vector<User> &projectUsers;
     std::unordered_map<std::string, Handler> handlersMap;
+    std::string filesPath;
 };
-// в объявлении на серваке это выглядит как-то так:
-// Router<Reply(*)(const Request &request)> myRouter;

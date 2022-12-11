@@ -5,10 +5,17 @@
 struct Request : IResponse {
     std::string GetMethod() override { return method; }
 
-    Request(std::string _method, std::string _afterChar = "",
-            std::string _beforeChar = "", std::string _countUser = "",
+    Request(std::string _method, std::string _countUser = "",
             std::string _userId = "", std::string _insertChar = "",
-            std::string _number = "");
+            std::string _afterChar = "", std::string _beforeChar = "",
+            std::string _number = "")
+        : method(_method),
+          countUser(_countUser),
+          userId(_userId),
+          insertChar(_insertChar),
+          afterChar(_afterChar),
+          beforeChar(_beforeChar),
+          number(_number){};
 
     std::string method;
     std::string countUser;   // количество изменений
