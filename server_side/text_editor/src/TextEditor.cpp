@@ -2,7 +2,8 @@
 #include "../include/TextEditor.hpp"
 
 struct Answer {
-    Answer() :answerLine(nullptr), answerLine(nullptr), linePos(0), afterEnter(false) {};
+    Answer() : answerElement(nullptr), answerLine(nullptr), linePos(0), afterEnter(false) {};
+
     Element * answerElement;
     StartOfLine* answerLine;
     size_t linePos;
@@ -375,6 +376,9 @@ std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, s
             }
             tmp = tmp->next;
         }
+        while (!tmp->isVisible) {
+            tmp = tmp->next;
+        }
         deletionElement = tmp;
 
         tmp->isVisible = false;
@@ -413,43 +417,281 @@ std::string WorkWithLines::insertElementInPosition(std::string command) {
 
             if (answerWhereElementBefore.linePos == 0) {
                 // insert before first line
-                
-                lines->_elementStart = com._insertElement;
-                lines->_sizeOfLine++;
+                // TODO same methods with one difference in input params below
 
                 if (answerWhereElementBefore.answerElement) {
                     // element before insert exist
                     if (com._beforeElement) {
                         // element after insert exist
+                        Element* tmp = answerWhereElementBefore.answerElement;
+                        StartOfLine* tmpLine = lines;
+                        StartOfLine* beforeLine = nullptr;
+                        
+                        while (tmp->next->UserId < com._insertElement->UserId || !(tmp->next->count == com._beforeElement->count && tmp->next->UserId == com._beforeElement->UserId)) {
+                            if (tmp == tmpLine->_elementStart) {
+                                // if pass line start
+                                beforeLine = tmpLine;
+                                tmpLine = tmpLine->next;
+                                answerWhereElementBefore.afterEnter = false;
+                            }
+
+                            if (tmp->_value == '\n' && tmp->isVisible) {
+                                answerWhereElementBefore.afterEnter = true;
+                            }
+
+                            tmp = tmp->next;
+                        }
+
+                        if (beforeLine) {
+                            // in first line or later
+                            com._insertElement->next = tmp->next;
+                            tmp->next = com._insertElement;
+
+                            if( answerWhereElementBefore.afterEnter) {
+                                // after enter input
+                                beforeLine->next->_sizeOfLine++;
+                                beforeLine->next->_elementStart = com._insertElement;
+                            } else {
+                                // not after enter input
+                                beforeLine->_sizeOfLine++;
+                            }
+                            
+                        } else {
+                            // before first line
+                            com._insertElement->next = tmp->next;
+                            tmp->next = com._insertElement;
+                            
+                            lines->_elementStart = com._insertElement;
+                            lines->_sizeOfLine++;
+                        }
 
                     } else {
-                        // element after insert doesnt exist
+                        // element before insert doesnt exist
+                        Element* tmp = answerWhereElementBefore.answerElement;
+                        StartOfLine* tmpLine = lines;
+                        StartOfLine* beforeLine = nullptr;
+                        
+                        while (tmp->next->UserId < com._insertElement->UserId) {
+                            if (tmp == tmpLine->_elementStart) {
+                                // if pass line start
+                                beforeLine = tmpLine;
+                                tmpLine = tmpLine->next;
+
+                                answerWhereElementBefore.afterEnter = false;
+                            }
+
+                            if (tmp->_value == '\n' && tmp->isVisible) {
+                                answerWhereElementBefore.afterEnter = true;
+                            }
+
+
+                            tmp = tmp->next;
+                        }
+
+                        if (beforeLine) {
+                            // in first line or later
+                            com._insertElement->next = tmp->next;
+                            tmp->next = com._insertElement;
+                            
+                            if( answerWhereElementBefore.afterEnter) {
+                                // after enter input
+                                beforeLine->next->_sizeOfLine++;
+                                beforeLine->next->_elementStart = com._insertElement;
+                            } else {
+                                // not after enter input
+                                beforeLine->_sizeOfLine++;
+                            }
+                            
+                        } else {
+                            // before first line
+                            com._insertElement->next = tmp->next;
+                            tmp->next = com._insertElement;
+                            
+                            lines->_elementStart = com._insertElement;
+                            lines->_sizeOfLine++;
+                        }
                     }
 
                 } else {
-                    // element before insert doesn't exist
+                    // element after insert doesn't exist
 
                     if (com._beforeElement) {
-                        // element after insert exist
+                        // element before insert exist
+                        Element* tmp = beggining;
+                        StartOfLine* tmpLine = lines;
+                        StartOfLine* beforeLine = nullptr;
+                        bool flag = 1;
+                        
+                        while (tmp->next->UserId < com._insertElement->UserId || !(tmp->next->count == com._beforeElement->count && tmp->next->UserId == com._beforeElement->UserId)) {
+                            if (tmp == tmpLine->_elementStart) {
+                                // if pass line start
+                                beforeLine = tmpLine;
+                                tmpLine = tmpLine->next;
+                            }
+
+                            tmp = tmp->next;
+                            flag = 0;
+                        }
+
+                        if (beforeLine) {
+                            // in first line or later
+                            com._insertElement->next = tmp->next;
+                            tmp->next = com._insertElement;
+                            
+                            beforeLine->_sizeOfLine++;
+                        } else {
+                            // before first line
+                            if (flag) {
+                                // after beggining
+                                com._insertElement->next = tmp->next;
+                                tmp->next = com._insertElement;
+                            } else {
+                                // before beggining
+                                com._insertElement->next = beggining;
+                                beggining = com._insertElement;
+                            }
+                            
+                            lines->_elementStart = com._insertElement;
+                            lines->_sizeOfLine++;
+                        }
+                        
 
                     } else {
-                        // element after insert doesnt exist
+                        // element before insert doesnt exist
+                        Element* tmp = beggining;
+                        StartOfLine* tmpLine = lines;
+                        StartOfLine* beforeLine = nullptr;
+                        bool flag = 1;
+                        
+                        while (tmp->next->UserId < com._insertElement->UserId) {
+                            if (tmp == tmpLine->_elementStart) {
+                                // if pass line start
+                                beforeLine = tmpLine;
+                                tmpLine = tmpLine->next;
+                            }
+
+                            tmp = tmp->next;
+                            flag = 0;
+                        }
+
+                        if (beforeLine) {
+                            // in first line or later
+                            com._insertElement->next = tmp->next;
+                            tmp->next = com._insertElement;
+                            
+                            beforeLine->_sizeOfLine++;
+                        } else {
+                            // before first line
+                            if (flag) {
+                                // after beggining
+                                com._insertElement->next = tmp->next;
+                                tmp->next = com._insertElement;
+                            } else {
+                                // before beggining
+                                com._insertElement->next = beggining;
+                                beggining = com._insertElement;
+                            }
+                            
+                            lines->_elementStart = com._insertElement;
+                            lines->_sizeOfLine++;
+                        }
                     }
                 }
             } else {
                 // insert not before first line
-                
-                if (answerWhereElementBefore.afterEnter) {
-                    // after enter 
-                    // insert into next line
+                if (com._beforeElement) {
+                    // element after insert exist
+                    Element* tmp = answerWhereElementBefore.answerElement;
+                    StartOfLine* tmpLine = answerWhereElementBefore.answerLine;
+                    StartOfLine* beforeLine = nullptr;
+                    
+                    while (tmp->UserId < com._insertElement->UserId || !(tmp->next->count == com._beforeElement->count && tmp->next->UserId == com._beforeElement->UserId)) {
+                        if (tmp == tmpLine->_elementStart) {
+                            // if pass line start
+                            beforeLine = tmpLine;
+                            tmpLine = tmpLine->next;
+                            answerWhereElementBefore.afterEnter = false;
+                        }
+
+                        if (tmp->_value == '\n' && tmp->isVisible) {
+                            answerWhereElementBefore.afterEnter = true;
+                        }
+
+                        tmp = tmp->next;
+                    }
+
+                    if (beforeLine) {
+                        // in first line or later
+                        com._insertElement->next = tmp->next;
+                        tmp->next = com._insertElement;
+
+                        if( answerWhereElementBefore.afterEnter) {
+                            // after enter input
+                            beforeLine->next->_sizeOfLine++;
+                            beforeLine->next->_elementStart = com._insertElement;
+                        } else {
+                            // not after enter input
+                            beforeLine->_sizeOfLine++;
+                        }
+                        
+                    } else {
+                        // before first line
+                        com._insertElement->next = tmp->next;
+                        tmp->next = com._insertElement;
+                        
+                        answerWhereElementBefore.answerLine->_elementStart = com._insertElement;
+                        answerWhereElementBefore.answerLine->_sizeOfLine++;
+                    }
 
                 } else {
-                    // insert into same line
+                    // element before insert doesnt exist
+                    Element* tmp = answerWhereElementBefore.answerElement;
+                    StartOfLine* tmpLine = answerWhereElementBefore.answerLine;
+                    StartOfLine* beforeLine = nullptr;
+                    
+                    while (tmp->UserId < com._insertElement->UserId) {
+                        if (tmp == tmpLine->_elementStart) {
+                            // if pass line start
+                            beforeLine = tmpLine;
+                            tmpLine = tmpLine->next;
 
+                            answerWhereElementBefore.afterEnter = false;
+                        }
+
+                        if (tmp->_value == '\n' && tmp->isVisible) {
+                            answerWhereElementBefore.afterEnter = true;
+                        }
+
+
+                        tmp = tmp->next;
+                    }
+
+                    if (beforeLine) {
+                        // in first line or later
+                        com._insertElement->next = tmp->next;
+                        tmp->next = com._insertElement;
+                        
+                        if( answerWhereElementBefore.afterEnter) {
+                            // after enter input
+                            beforeLine->next->_sizeOfLine++;
+                            beforeLine->next->_elementStart = com._insertElement;
+                        } else {
+                            // not after enter input
+                            beforeLine->_sizeOfLine++;
+                        }
+                        
+                    } else {
+                        // before first line
+                        com._insertElement->next = tmp->next;
+                        tmp->next = com._insertElement;
+                        
+                        answerWhereElementBefore.answerLine->_elementStart = com._insertElement;
+                        answerWhereElementBefore.answerLine->_sizeOfLine++;
+                    }
                 }
 
-                // ++ to line count
             }
+
         } else {
             // lines doesnt exist
             lines = new StartOfLine(com._insertElement, 1);
@@ -459,20 +701,64 @@ std::string WorkWithLines::insertElementInPosition(std::string command) {
 
                 if (com._beforeElement) {
                     // insert before this element
+                    Element* tmp = answerWhereElementBefore.answerElement;
+                    StartOfLine* tmpLine = lines;
+                    StartOfLine* beforeLine = nullptr;
+                    
+                    while (tmp->next->UserId < com._insertElement->UserId || !(tmp->next->count == com._beforeElement->count && tmp->next->UserId == com._beforeElement->UserId)) {
+                        tmp = tmp->next;
+                    }
 
+                    com._insertElement->next = tmp->next;
+                    tmp->next = com._insertElement;
+
+                    lines = new StartOfLine(com._insertElement, 1);
                 } else {
                     // insert after element somwehere
+                    Element* tmp = answerWhereElementBefore.answerElement;
+                    StartOfLine* tmpLine = lines;
+                    StartOfLine* beforeLine = nullptr;
+                    
+                    while (tmp->next->UserId < com._insertElement->UserId) {
+                        tmp = tmp->next;
+                    }
 
+                    com._insertElement->next = tmp->next;
+                    tmp->next = com._insertElement;
+
+                    lines = new StartOfLine(com._insertElement, 1);
                 }
             } else {
                 // insert into beggining
 
                 if (com._beforeElement) {
                     // insert before this element
+                    Element* tmp = beggining;
+                    StartOfLine* tmpLine = lines;
+                    StartOfLine* beforeLine = nullptr;
+                    
+                    while (tmp->next->UserId < com._insertElement->UserId || !(tmp->next->count == com._beforeElement->count && tmp->next->UserId == com._beforeElement->UserId)) {
+                        tmp = tmp->next;
+                    }
 
+                    com._insertElement->next = tmp->next;
+                    tmp->next = com._insertElement;
+
+                    lines = new StartOfLine(com._insertElement, 1);
                 } else {
                     // insert after element somwehere
+                    Element* tmp = beggining;
+                    StartOfLine* tmpLine = lines;
+                    StartOfLine* beforeLine = nullptr;
+                    
+                    while (tmp->next->UserId < com._insertElement->UserId) {
+                        tmp = tmp->next;
+                    }
 
+                    com._insertElement->next = tmp->next;
+                    tmp->next = com._insertElement;
+
+                    lines = new StartOfLine(com._insertElement, 1);
                 }
             }
         }
@@ -486,7 +772,8 @@ std::string WorkWithLines::insertElementInPosition(std::string command) {
 
     // insert after \n
     if (com._afterElemenet && com._afterElemenet->_value == '\n') {
-
+        
+        if (com._insertElement->next != nullptr) {}
     }
 
     return command;
@@ -545,3 +832,62 @@ WorkWithLines::~WorkWithLines() {
         delete tmp;
     }
 };
+
+
+bool funcWithBefore(Element* el, Element* el1) {
+    if (el1)  {
+        return el->count == el1->count && el1->UserId == el->UserId;
+    } else {
+        return true;
+    }
+}
+
+void searchForElement(Answer& answerWhereElementBefore, Command& com, StartOfLine* line, Element* begginng) {
+    Element* tmp = begginng;
+    if (answerWhereElementBefore.answerElement) {
+        tmp = answerWhereElementBefore.answerElement;
+    }
+
+    StartOfLine* tmpLine = line;
+    StartOfLine* beforeLine = nullptr;
+    bool flag = true;
+
+    while (tmp->next->UserId < com._beforeElement->UserId || funcWithBefore(tmp->next, com._beforeElement)) {
+        if (tmp->_value == '\n' && tmp->isVisible) {
+            answerWhereElementBefore.afterEnter = true;
+        }
+
+        if (tmpLine->_elementStart == tmp) {
+            beforeLine = tmpLine;
+            tmpLine = tmpLine->next;
+            
+            answerWhereElementBefore.afterEnter = false;
+        }
+
+        flag = false;
+        tmp = tmp->next;
+    }
+
+    if (beforeLine) {
+        
+        com._insertElement->next = tmp->next;
+        tmp->next = com._insertElement;
+
+        if (answerWhereElementBefore.afterEnter) {
+            beforeLine->next->_sizeOfLine++;
+            beforeLine->next->_elementStart = com._insertElement;
+        } else {
+            beforeLine->_sizeOfLine++;
+        }
+    } else {
+        if (tmp == begginng && !flag) {
+            
+        }
+        com._insertElement->next = tmp->next;
+        tmp->next = com._insertElement;
+
+        line->_elementStart = com._insertElement;
+        line->_sizeOfLine++;
+    }
+
+}

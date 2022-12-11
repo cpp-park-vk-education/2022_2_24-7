@@ -25,18 +25,23 @@ int main() {
 
     work.insertElementInPosition(4,0,"x");
     work.insertElementInPosition(4,1,"\n");
+    
     work.insertElementInPosition(5,0,"\n");
 
-    work.deleteElementFromPosition(2,0);
-    work.deleteElementFromPosition(3,0);
-    work.deleteElementFromPosition(2,0);
-    work.deleteElementFromPosition(2,1);
-    work.deleteElementFromPosition(0,0);
-    work.deleteElementFromPosition(0,1);
-    work.deleteElementFromPosition(0,0);
-    work.deleteElementFromPosition(0,0);
-    work.deleteElementFromPosition(3,0);
-    work.insertElementInPosition(3,0,"a");
+    work.deleteElementFromPosition(4,1);
+    work.deleteElementFromPosition(4,1);
+    work.insertElementInPosition(4,0,"\n");
+
+    // work.deleteElementFromPosition(2,0);
+    // work.deleteElementFromPosition(3,0);
+    // work.deleteElementFromPosition(2,0);
+    // work.deleteElementFromPosition(2,1);
+    // work.deleteElementFromPosition(0,0);
+    // work.deleteElementFromPosition(0,1);
+    // work.deleteElementFromPosition(0,0);
+    // work.deleteElementFromPosition(0,0);
+    // work.deleteElementFromPosition(3,0);
+    // work.insertElementInPosition(3,0,"a");
     //work.deleteElementFromPosition(0,0);
     // commandsInResult.push_back(work.insertElementInPosition(0, 0, "a"));
     // commandsInResult.push_back(work.insertElementInPosition(0,0,"b"));

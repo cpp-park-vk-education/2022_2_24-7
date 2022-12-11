@@ -5,6 +5,19 @@
 
 #include "element.hpp"
 
+std::vector<std::string> parseString(std::string str, char separator) {
+        std::vector <std::string> parseString;
+        
+        std::stringstream stream(str);
+        std::string segmentOfStream;
+
+        while (std::getline(stream,segmentOfStream, separator)) {
+            parseString.push_back(segmentOfStream);
+        }
+
+        return parseString;
+};
+
 struct Command {
     Command(std::string str) {
         _insertElement = nullptr;
@@ -13,14 +26,8 @@ struct Command {
 
         std::vector<std::string> parsedString = parseString(str, ':');
 
-        switch (parsedString[parsedString.size()][0])
-        {
-        case '0':
-            // first input
-            break;
-        case '1':
-            // has before element
-            
+        char a = parsedString[parsedString.size()][0];
+        if (a == '1') {
             std::vector <std::string> beforeElementInStrings = parseString(parsedString[2], '|');
             std::stringstream countBeforeStream(beforeElementInStrings[0]); 
             size_t countBefore;
@@ -32,10 +39,7 @@ struct Command {
 
             char tmpSymbol = ' ';
             _beforeElement = new Element(&tmpSymbol, &countBefore, &userBefore);
-            break;
-        case '2':
-            // has element after
-            
+        } else if (a == '2') {
             std::vector <std::string> afterElementInStrings = parseString(parsedString[2], '|');
             std::stringstream countAfterStream(afterElementInStrings[0]); 
             size_t countAfter;
@@ -46,13 +50,8 @@ struct Command {
             countAfterStream >> userAfter;
 
             char tmpSymbol = ' ';
-            _afterElemenet = new Element(&tmpSymbol, &countBefore, &userBefore);
-            
-            break;
-        case '3':
-            // has after and before
-            
-            // after element
+            _afterElemenet = new Element(&tmpSymbol, &countAfter, &userAfter);
+        } else if (a == '3') {
             std::vector <std::string> afterElementInStrings = parseString(parsedString[2], '|');
             std::stringstream countAfterStream(afterElementInStrings[0]); 
             size_t countAfter;
@@ -63,7 +62,7 @@ struct Command {
             countAfterStream >> userAfter;
 
             char tmpSymbol = ' ';
-            _afterElemenet = new Element(&tmpSymbol, &countBefore, &userBefore);
+            _afterElemenet = new Element(&tmpSymbol, &countAfter, &userAfter);
 
             // before element
             std::vector <std::string> beforeElementInStrings = parseString(parsedString[3], '|');
@@ -75,13 +74,8 @@ struct Command {
             countBeforeStream << beforeElementInStrings[1];
             countBeforeStream >> userBefore;
 
-            char tmpSymbol = ' ';
+            tmpSymbol = ' ';
             _beforeElement = new Element(&tmpSymbol, &countBefore, &userBefore);
-
-            break;
-        
-        default:
-            break;
         }
 
         // insert element
@@ -109,15 +103,3 @@ struct Command {
     }
 };
 
-std::vector<std::string> parseString(std::string str, char separator) {
-        std::vector <std::string> parseString;
-        
-        std::stringstream stream(str);
-        std::string segmentOfStream;
-
-        while (std::getline(stream,segmentOfStream, separator)) {
-            parseString.push_back(segmentOfStream);
-        }
-
-        return parseString;
-};
