@@ -4,6 +4,7 @@
 #include "include/TextEditor.hpp"
 #include "src/TextEditor.cpp"
 #include "include/WorkWithData.hpp"
+#include "src/WorkWithData.cpp"
 
 #include <iostream>
 int main() {
@@ -150,6 +151,7 @@ int main() {
     };
 
     WorkWithData a1;
+    a1.userFirst(0,0);
 
     a1.operationWithData("i:a:0");
     a1.operationWithData("i:h:0");
@@ -157,6 +159,7 @@ int main() {
 
 
     WorkWithData a;
+    a.userFirst(0,0);
     for (auto i : insertCommands) {
         a.operationWithData(i, 1);
     }
@@ -164,5 +167,6 @@ int main() {
     for (auto i : commandsDelete) {
         a.operationWithData(i, 1);
     }
+    
     return 0;
 }

@@ -1,11 +1,12 @@
+// #include "../include/WorkWithData.hpp"
 #include "WorkWithData.hpp"
 
 WorkWithData::WorkWithData() {
-    translator = new TranslatorFromList;
-    workWithCPP = new WorkWithCppFile;
+    // translator = new TranslatorFromList;
+    // workWithCPP = new WorkWithCppFile;
 };
 
-std::string WorkWithData::operationWithData(std::string operation, bool isCommand = false) {
+std::string WorkWithData::operationWithData(std::string operation, bool isCommand) {
     bool isInsert = false;
     std::vector<std::string> vecs = parseString(operation, ':');
     if (vecs[0][0] == 'i') {
@@ -22,17 +23,18 @@ std::string WorkWithData::operationWithData(std::string operation, bool isComman
         // TODO
         if (isInsert){
             AnswerLinePos answ;
-            textEditor->getLinePosFromPos(std::stoul(vecs[2]));
+            size_t post = std::stoul(vecs[2]);
+            textEditor->getLinePosFromPos(post);
             return textEditor->insertElementInPosition(answ.line, answ.pos, &vecs[1][0]);
         } else {
             AnswerLinePos answ;
-            textEditor->getLinePosFromPos(std::stoul(vecs[2]));
+            textEditor->getLinePosFromPos(std::stoul(vecs[1]));
             return textEditor->deleteElementFromPosition(answ.line,answ.pos);
         }
     }
 };
 
-void WorkWithData::userFirst(size_t UserId = 0, size_t userCount = 0) {
+void WorkWithData::userFirst(size_t UserId, size_t userCount) {
     textEditor = new WorkWithLines(UserId, userCount);
 };
 
@@ -53,8 +55,8 @@ std::string WorkWithData::getLine(size_t numberOfLine) {
 };
 
 void WorkWithData::addFile(std::string path) {
-    workWithCPP->addExtension("cpp");
-    workWithCPP->addPathFile(path);
+    // workWithCPP->addExtension("cpp");
+    // workWithCPP->addPathFile(path);
 };
 
 std::string WorkWithData::getLogFileDirectory() {

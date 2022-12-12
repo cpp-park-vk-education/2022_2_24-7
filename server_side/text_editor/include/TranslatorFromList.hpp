@@ -1,3 +1,4 @@
+#pragma once
 #include "ITranslator.hpp"
 
 class TranslatorFromList : public ITranslator {

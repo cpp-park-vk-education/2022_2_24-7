@@ -1,8 +1,9 @@
+#pragma once
 #include "IWorkWithData.hpp"
 #include "WorkWithFile.hpp"
 
 #include "TextEditor.hpp"
-#include "TranslatorFromList.hpp"
+// #include "TranslatorFromList.hpp"
 
 class WorkWithData : public IWorkWithData {
     public:
@@ -18,8 +19,8 @@ class WorkWithData : public IWorkWithData {
     std::string getFileWithDataDricetory() override;
 
     private:
-    ITranslator* translator;
-    IWorkWithFile* workWithCPP;
+    // ITranslator* translator;
+    // IWorkWithFile* workWithCPP;
 
     IWorkWithText* textEditor;
 };

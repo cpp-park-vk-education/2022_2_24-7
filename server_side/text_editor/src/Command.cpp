@@ -1,5 +1,5 @@
-// #include "Command.hpp"
-#include "../include/Command.hpp"
+#include "Command.hpp"
+// #include "../include/Command.hpp"
 
 std::vector<std::string> parseString(std::string str, char separator) {
         std::vector <std::string> parseString;

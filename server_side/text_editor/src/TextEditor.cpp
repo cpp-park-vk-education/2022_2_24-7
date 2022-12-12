@@ -1,5 +1,5 @@
-// #include "TextEditor.hpp"
-#include "../include/TextEditor.hpp"
+#include "TextEditor.hpp"
+// #include "../include/TextEditor.hpp"
 
 
 bool funcWithBefore(Element* el, Element* beforeElement) {
