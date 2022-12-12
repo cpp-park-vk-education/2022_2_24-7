@@ -1,7 +1,15 @@
+#include <iostream>
+
 #include "IRouter.hpp"
 #include "Serializer.hpp"
 #include "Server.hpp"
 
-#include <iostream>
+int main() {
+    Serializer serializer;
+    IRouter router;
+    Server server(serializer, router);
 
-int main() { return 0; }
+    server.run();
+
+    return 0;
+}

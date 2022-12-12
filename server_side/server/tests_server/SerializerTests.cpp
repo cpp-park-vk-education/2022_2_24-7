@@ -3,8 +3,7 @@
 #include "ISerializer.hpp"
 #include "Serializer.hpp"
 
-TEST(DISABLED_SerializerTest, CanSaveRequest)
-{
+TEST(SerializerTest, CanSaveRequest) {
     Serializer ser;
     boost::asio::streambuf buf;
     Request req;
@@ -14,11 +13,10 @@ TEST(DISABLED_SerializerTest, CanSaveRequest)
     EXPECT_EQ(req.command, "some_command");
 }
 
-TEST(DISABLED_SerializerTest, CanLoadReply)
-{
+TEST(SerializerTest, CanLoadReply) {
     Serializer ser;
     boost::asio::streambuf buf;
-    Reply rep = { "some_command" };
+    Reply rep = {"some_command"};
     ser.load(buf, rep);
     std::string ostr;
     std::istream(&buf) >> ostr;

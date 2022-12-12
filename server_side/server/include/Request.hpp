@@ -9,7 +9,7 @@ struct Request {
 
     template <class Archive>
     void serialize(Archive& ar, unsigned) {
-        ar & command;
+        ar& command;
     }
 
    public:

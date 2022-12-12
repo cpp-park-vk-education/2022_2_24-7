@@ -6,7 +6,7 @@
 class IRouter {
    public:
     Reply processRoute(const Request& request) {
-        Reply rep { request.command };
+        Reply rep{request.command};
         return rep;
     }
 };
