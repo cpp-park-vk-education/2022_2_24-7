@@ -5,6 +5,9 @@
 
 #include "IResponse.hpp"
 #include "User.hpp"
+#include "Reply.hpp"
+#include "Request.hpp"
+
 
 class IRouter {
    public:
