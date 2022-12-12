@@ -26,6 +26,8 @@ struct StartOfLine {
     StartOfLine* next;
 };
 
+class Answer;
+void searchForElement(Answer& answerWhereElementBefore, Command& com, StartOfLine** line, Element** begginng);
 
 class WorkWithLines : public IWorkWithText {
     public:
