@@ -5,8 +5,23 @@ project(DB)
 set(CMAXE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/DB.cpp")
-set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/DB.hpp")
+set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/DB.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/Handlers.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/Parser.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/Router.cpp")
+
+set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/DB.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/Handlers.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/IConnection.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/IParser.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/IProject.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/IResponse.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/IWorkWithData.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/Parser.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/Reply.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/Request.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/Router.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/User.hpp")
 
 set(DB_LIB "${PROJECT_NAME}_lib")
 set(DB_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
