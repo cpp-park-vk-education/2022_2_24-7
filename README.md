@@ -2,4 +2,5 @@
 TeamWork - Сервис (ide) для совместной разработки с поддержкой видеосвязи
 Chat branch
 
-UML diagram: https://app.diagrams.net/#G19ZA9EjK7nmwLxfxvh30ptExsg6YqAtec
+UML diagram: https://drive.google.com/file/d/1AheykZJZ2FCc59qoDSN408GF59ji1f4o/view?usp=sharing
+
