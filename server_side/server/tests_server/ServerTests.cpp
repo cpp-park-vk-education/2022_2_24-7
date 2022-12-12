@@ -1,8 +1,11 @@
-#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 
-#include "IServer.hpp"
+#include "Server.hpp"
+#include "Serializer.hpp"
 
-using ::testing::AtLeast;
-using ::testing::DoAll;
-using ::testing::Return;
-using ::testing::SetArgReferee;
+TEST(ServerTest, StartServer) {
+    IRouter router;
+    Serializer serializer;
+    
+    Server server(serializer, router);
+}

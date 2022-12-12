@@ -4,6 +4,6 @@
 
 class Serializer : public ISerializer {
    public:
-    void save() override;
-    void load() override;
+    void save(boost::asio::streambuf& writeBuf, Request& req) override;
+    void load(boost::asio::streambuf& readBuf, Reply& rep) override;
 };

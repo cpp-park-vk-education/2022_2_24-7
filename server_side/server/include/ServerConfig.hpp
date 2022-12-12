@@ -4,5 +4,5 @@
 
 struct ServerConfig {
     std::string address;
-    std::string port;
+    std::string port = "8001";
 };

@@ -1,13 +1,14 @@
 #include "Connection.hpp"
-#include "IRouter.hpp"
 
-void Connection::handle_read() {}
+#include <boost/bind/bind.hpp>
 
-void Connection::handle_write() {}
+void Connection::handle_read(const boost::system::error_code& e) { }
+
+void Connection::handle_write(const boost::system::error_code& e) { }
 
 Connection::Connection(boost::asio::io_service& io_service, ISerializer& serializer, IRouter& router)
-    : socket(io_service), serializer(serializer), router(router) {}
+    : socket(io_service), serializer(serializer), router(router) { }
 
 void Connection::start() {}
 
-void Connection::get_socket() {}
+boost::asio::ip::tcp::socket& Connection::get_socket() { }

@@ -1,8 +1,14 @@
-#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 
-#include "IConnection.hpp"
+#include "Connection.hpp"
+#include "Serializer.hpp"
 
-using ::testing::AtLeast;
-using ::testing::DoAll;
-using ::testing::Return;
-using ::testing::SetArgReferee;
+TEST(ConnectionTest, StartConnection) {
+    boost::asio::io_service service;
+    IRouter router;
+    Serializer serializer;
+    
+    ConnectionPtr connect;
+    connect.reset(new Connection(service, serializer,  router));
+    connect->start();
+}
