@@ -62,5 +62,6 @@ int main() {
         work1.insertElementInPosition(i);
     }
     
+    work1.deleteElementFromPosition("d:1|0");
     return 0;
 }
