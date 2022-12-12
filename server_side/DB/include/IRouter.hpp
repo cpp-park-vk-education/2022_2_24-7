@@ -8,6 +8,7 @@
 #include "Reply.hpp"
 #include "Request.hpp"
 
+using Handler = Reply (*)(const IResponse& request, const std::string filePath);
 
 class IRouter {
    public:
@@ -22,4 +23,3 @@ class IRouter {
     virtual void sendToAllProjectUsers(const Reply& reply) = 0;
 };
 
-using Handler = Reply (*)(const IResponse& request, const std::string filePath);
