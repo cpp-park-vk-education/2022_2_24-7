@@ -5,6 +5,8 @@
 
 #include "IResponse.hpp"
 #include "User.hpp"
+#include "Reply.hpp"
+#include "Request.hpp"
 
 using Handler = Reply (*)(const IResponse& request, const std::string filePath);
 
