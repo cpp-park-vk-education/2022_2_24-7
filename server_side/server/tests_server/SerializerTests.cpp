@@ -8,3 +8,8 @@ using ::testing::DoAll;
 using ::testing::Return;
 using ::testing::SetArgReferee;
 */
+
+#include <gtest/gtest.h>
+
+
+TEST(DefaultserverTest, ST2) { EXPECT_EQ((2 * 2), 4); }
