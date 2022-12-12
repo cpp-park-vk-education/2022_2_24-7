@@ -5,10 +5,7 @@ project(DB)
 set(CMAXE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/DB.cpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/Handlers.cpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/Parser.cpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/Router.cpp")
+set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/DB.cpp")
 
 set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/DB.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/Handlers.hpp"
