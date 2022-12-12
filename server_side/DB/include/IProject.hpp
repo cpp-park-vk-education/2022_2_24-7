@@ -2,9 +2,10 @@
 
 #include <string>
 #include <vector>
-#include "User.hpp"
+
 #include "IConnection.hpp"
 #include "IWorkWithData.hpp"
+#include "User.hpp"
 
 class IProject {
     virtual bool connectUser() = 0;

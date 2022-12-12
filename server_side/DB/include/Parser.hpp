@@ -1,9 +1,10 @@
 #pragma once
 
-#include "IParser.hpp"
-#include "Request.hpp"
-#include "Reply.hpp"
 #include <string>
+
+#include "IParser.hpp"
+#include "Reply.hpp"
+#include "Request.hpp"
 
 class Parser : IParser {
    public:

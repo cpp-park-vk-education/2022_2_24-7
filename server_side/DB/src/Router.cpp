@@ -1,4 +1,5 @@
 #include "Router.hpp"
+
 #include "IParser.hpp"
 
 void Router::addHandler(const std::string &method, const Handler &handler) {
@@ -29,6 +30,4 @@ void Router::getPrivat() {
     std::cout << std::endl;
 }
 
-void Router::sendToUser(const User &user) {
-    std::cout << "\n HELLO USER \n";
-};
+void Router::sendToUser(const User &user) { std::cout << "\n HELLO USER \n"; };
