@@ -6,6 +6,8 @@
 #include "IResponse.hpp"
 #include "User.hpp"
 
+using Handler = Reply (*)(const IResponse& request, const std::string filePath);
+
 class IRouter {
    public:
     virtual void addHandler(const std::string& method,
@@ -18,5 +20,3 @@ class IRouter {
     virtual void sendToUser(const User& user) = 0;
     virtual void sendToAllProjectUsers(const Reply& reply) = 0;
 };
-
-using Handler = Reply (*)(const IResponse& request, const std::string filePath);

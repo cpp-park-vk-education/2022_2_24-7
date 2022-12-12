@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-
+#include "User.hpp"
 #include "IConnection.hpp"
 #include "IWorkWithData.hpp"
 
