@@ -11,4 +11,4 @@ class WorkWithCppFile: public IWorkWithFile{
     private:
     std::string _path;
     std::string _extension;
-}
+};

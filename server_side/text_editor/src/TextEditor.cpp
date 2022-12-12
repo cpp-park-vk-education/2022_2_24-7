@@ -870,3 +870,18 @@ void searchForElement(Answer& answerWhereElementBefore, Command& com, StartOfLin
     }
 };
 
+AnswerLinePos WorkWithLines::getLinePosFromPos(size_t pos) {
+    AnswerLinePos answ;
+    StartOfLine* tmp = lines;
+    for (size_t i = 0; i < lineCount; ++i) {
+        if (pos > tmp->_sizeOfLine) {
+            pos -= tmp->_sizeOfLine;
+            answ.line++;
+        } else {
+            break;
+        }
+        tmp = tmp->next;
+    }
+    answ.pos = pos;
+};
+

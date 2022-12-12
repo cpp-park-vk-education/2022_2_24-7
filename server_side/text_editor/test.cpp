@@ -3,6 +3,7 @@
 #include "src/Command.cpp"
 #include "include/TextEditor.hpp"
 #include "src/TextEditor.cpp"
+#include "include/WorkWithData.hpp"
 
 #include <iostream>
 int main() {
@@ -67,6 +68,7 @@ int main() {
     work1.deleteElementFromPosition("d:1|0");
     */
 
+    
     WorkWithLines work;
 
     std::vector <std::string> insertCommands;
@@ -146,5 +148,21 @@ int main() {
     if (nullptr == workWithCommands.getStartOfLine(0)) {
         std::cout << "XA" << std::endl;
     };
+
+    WorkWithData a1;
+
+    a1.operationWithData("i:a:0");
+    a1.operationWithData("i:h:0");
+    a1.operationWithData("d:1");
+
+
+    WorkWithData a;
+    for (auto i : insertCommands) {
+        a.operationWithData(i, 1);
+    }
+
+    for (auto i : commandsDelete) {
+        a.operationWithData(i, 1);
+    }
     return 0;
 }

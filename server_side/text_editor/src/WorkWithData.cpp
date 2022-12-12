@@ -7,7 +7,8 @@ WorkWithData::WorkWithData() {
 
 std::string WorkWithData::operationWithData(std::string operation, bool isCommand = false) {
     bool isInsert = false;
-    if (parseString(operation, ':')[0][0] == 'i') {
+    std::vector<std::string> vecs = parseString(operation, ':');
+    if (vecs[0][0] == 'i') {
         isInsert = true;
     }
 
@@ -20,9 +21,13 @@ std::string WorkWithData::operationWithData(std::string operation, bool isComman
     } else {
         // TODO
         if (isInsert){
-            // return textEditor->insertElementInPosition();
+            AnswerLinePos answ;
+            textEditor->getLinePosFromPos(std::stoul(vecs[2]));
+            return textEditor->insertElementInPosition(answ.line, answ.pos, &vecs[1][0]);
         } else {
-            // return textEditor->deleteElementFromPosition(operation);
+            AnswerLinePos answ;
+            textEditor->getLinePosFromPos(std::stoul(vecs[2]));
+            return textEditor->deleteElementFromPosition(answ.line,answ.pos);
         }
     }
 };
@@ -32,7 +37,19 @@ void WorkWithData::userFirst(size_t UserId = 0, size_t userCount = 0) {
 };
 
 std::string WorkWithData::getLine(size_t numberOfLine) {
-    return translator->returnStringFromDataType(textEditor->getStartOfLine(numberOfLine));
+    // return translator->returnStringFromDataType(textEditor->getStartOfLine(numberOfLine));
+    Element* tmp = textEditor->getStartOfLine(numberOfLine);
+    std::string returnString;
+    while (tmp && tmp->isVisible) {
+        returnString.push_back(tmp->_value);
+        
+        if (tmp->_value == '\n') {
+            break;
+        }
+        
+        tmp = tmp->next;
+    }
+    return returnString;
 };
 
 void WorkWithData::addFile(std::string path) {
@@ -45,5 +62,5 @@ std::string WorkWithData::getLogFileDirectory() {
 };
 
 std::string WorkWithData::getFileWithDataDricetory() {
-    
+    // TODO
 };

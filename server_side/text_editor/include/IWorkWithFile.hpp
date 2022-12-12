@@ -6,5 +6,5 @@ class IWorkWithFile {
     virtual bool addPathFile(std::string addPathToFile) = 0;
     
     virtual bool writeToFile(std::string whatToWrite) = 0;
-    virtual std::string getPath(); = 0;
+    virtual std::string getPath() = 0;
 };

@@ -26,6 +26,13 @@ struct StartOfLine {
     StartOfLine* next;
 };
 
+// struct AnswerLinePos {
+//     AnswerLinePos() :line(0), pos(0);
+
+//     size_t line;
+//     size_t pos;
+// };
+
 class Answer;
 void searchForElement(Answer& answerWhereElementBefore, Command& com, StartOfLine** line, Element** begginng);
 
@@ -45,6 +52,8 @@ class WorkWithLines : public IWorkWithText {
     Element* getStartOfLine(size_t lineNumber) override;
 
     size_t getSizeOfLine(size_t lineNumber) override;
+    AnswerLinePos getLinePosFromPos(size_t pos) override;
+    
     ~WorkWithLines();
 
     private:
