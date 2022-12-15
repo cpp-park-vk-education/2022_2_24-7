@@ -267,18 +267,6 @@ TEST(TextEditor, deleteCommand) {
     
     std::vector<std::string> commandsDelete;
     
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
     std::vector<std::string> neededCommand = {"d:9|0|", "d:14|0|", "d:10|0|",
          "d:12|0|", "d:3|0|", "d:1|0|", "d:2|0|", "d:4|0|"};
 

@@ -1,5 +1,5 @@
-#include "TextEditor.hpp"
-// #include "../include/TextEditor.hpp"
+// #include "TextEditor.hpp"
+#include "../include/TextEditor.hpp"
 
 
 bool funcWithBefore(Element* el, Element* beforeElement) {
@@ -873,7 +873,8 @@ void searchForElement(Answer& answerWhereElementBefore, Command& com, StartOfLin
 AnswerLinePos WorkWithLines::getLinePosFromPos(size_t pos) {
     AnswerLinePos answ;
     StartOfLine* tmp = lines;
-    for (size_t i = 0; i < lineCount; ++i) {
+
+    while (tmp) {
         if (pos > tmp->_sizeOfLine) {
             pos -= tmp->_sizeOfLine;
             answ.line++;
@@ -882,6 +883,8 @@ AnswerLinePos WorkWithLines::getLinePosFromPos(size_t pos) {
         }
         tmp = tmp->next;
     }
+        
     answ.pos = pos;
+    return answ;
 };
 

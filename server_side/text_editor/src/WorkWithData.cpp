@@ -1,5 +1,5 @@
-// #include "../include/WorkWithData.hpp"
-#include "WorkWithData.hpp"
+#include "../include/WorkWithData.hpp"
+// #include "WorkWithData.hpp"
 
 WorkWithData::WorkWithData() {
     // translator = new TranslatorFromList;
@@ -24,11 +24,11 @@ std::string WorkWithData::operationWithData(std::string operation, bool isComman
         if (isInsert){
             AnswerLinePos answ;
             size_t post = std::stoul(vecs[2]);
-            textEditor->getLinePosFromPos(post);
+            answ = textEditor->getLinePosFromPos(post);
             return textEditor->insertElementInPosition(answ.line, answ.pos, &vecs[1][0]);
         } else {
             AnswerLinePos answ;
-            textEditor->getLinePosFromPos(std::stoul(vecs[1]));
+            answ = textEditor->getLinePosFromPos(std::stoul(vecs[1]));
             return textEditor->deleteElementFromPosition(answ.line,answ.pos);
         }
     }
