@@ -1,5 +1,5 @@
-// #include "TextEditor.hpp"
-#include "../include/TextEditor.hpp"
+#include "TextEditor.hpp"
+// #include "../include/TextEditor.hpp"
 
 
 bool checkForAfterElement(Element* afterElement, Element* checkElement) {
@@ -9,10 +9,40 @@ bool checkForAfterElement(Element* afterElement, Element* checkElement) {
     return checkElement->count == afterElement->count && checkElement->UserId == afterElement->UserId;
 };
 
-void WorkWithLines::insertInPositionInLine(size_t positionToInsert, size_t lineWhereInsert, Element* insertElement) {
+bool checkForBeforeLess(Element* elementBefore, Element* elementAfter) {
+    return elementBefore->UserId < elementAfter->UserId;
+};
+
+
+AnswerForInsertAction WorkWithLines::whatPosition(Element* beforeInsert, Element* insertElement, Element* afterElement, StartOfLine* line) {
+    AnswerForInsertAction answer;
+    StartOfLine* tmpLine = line;
     
-    size_t positionToInsert = 
-    
+    while (beforeInsert->next && checkForBeforeLess(beforeInsert->next, insertElement) && !checkForAfterElement(afterElement, beforeInsert->next)) {
+        if (beforeInsert->isVisible) {
+            answer.quantOfElementsBefore++;
+
+            if (beforeInsert->_value == '\n') {
+                answer.isEnterBefore = true;
+                answer.quantOfElementsBefore = 0;
+            }
+        }
+        
+        if (tmpLine && checkForAfterElement(tmpLine->_elementStart, beforeInsert)) {
+            answer.quantOfLine++;
+            answer.isEnterBefore = false;
+            answer.quantOfElementsBefore = 1;
+            
+            tmpLine = tmpLine->next;
+        }
+        
+        beforeInsert = beforeInsert->next;
+    }
+
+    return answer;
+};
+
+void WorkWithLines::insertInPositionInLine(size_t positionToInsert, size_t lineWhereInsert, Element* insertElement, Element* beforeInsert) {
     if (lineWhereInsert == 0) {
         // input in first line
         
@@ -114,7 +144,6 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
     } else {
         if (beggining) {
             // elements exist
-            // TODO check for position to input
             tmpBefore = beggining;
         } else {
             // elements doesnt exist
@@ -127,37 +156,7 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
     }
 
     // search for start position
-    while (tmpBefore->next && !checkForAfterElement(afterElement, tmpBefore->next)) {
-        if (tmpBefore->isVisible) {
-            answer.quantOfElementsBefore++;
-
-            if (tmpBefore->_value == '\n') {
-                answer.isEnterBefore = true;
-                answer.quantOfElementsBefore = 0;
-            }
-        }
-        
-        if (tmpLine && checkForAfterElement(tmpLine->_elementStart, tmpBefore)) {
-            answer.quantOfLine++;
-            answer.isEnterBefore = false;
-            answer.quantOfElementsBefore = 1;
-            
-            tmpLine = tmpLine->next;
-        }
-        
-        tmpBefore = tmpBefore->next;
-    }
-
-// Can be done in another method
-    Element* tmpElementForPosition = tmpBefore;
-    if (!tmpElementForPosition->next) {
-        // next doesnt exist
-        tmpElementForPosition->next = insertElement;
-        tmpLine->_sizeOfLine++;
-    }
-    while (tmpBefore)
-
-// 
+    answer = whatPosition(tmpBefore, insertElement, afterElement, tmpLine);
 
     insertInPositionInLine(answer.elementBeforeInsert, answer.quantOfLine, insertElement);
 

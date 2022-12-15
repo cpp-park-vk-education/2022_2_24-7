@@ -73,6 +73,7 @@ class WorkWithLines : public IWorkWithText {
     void insertInPositionInLine(size_t positionToInsert, size_t lineWhereInsert, Element* insertElement);
 
     void insertEnter(AnswerForInsertAction& receivedAnswer);
+    AnswerForInsertAction whatPosition(Element* beforeInsert, Element* insertElement, Element* afterElement, StartOfLine* line);
 
     StartOfLine* lines;
 
