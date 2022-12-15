@@ -162,9 +162,15 @@ int main() {
     WorkWithData a;
     a.userFirst(0,0);
 
-    a.operationWithData("i:a:0");
-    a.operationWithData("i:b:1");
-    a.operationWithData("i:\n:1");
+    // a.operationWithData("i:a:0");
+    // a.operationWithData("i:b:1");
+    // a.operationWithData("i:\n:1");
+    a.operationWithData("i:1|0|a:0", 1);
+    a.operationWithData("i:1|1|b:0", 1);
+    a.operationWithData("i:2|0|w:1|0:1", 1);
+    a.operationWithData("i:3|0|\n:1|0:2|0:3", 1);
+    a.operationWithData("i:2|1|\n:3|0:2|0:3", 1);
+
     // for (auto i : insertCommands) {
     //     a.operationWithData(i, 1);
     // }

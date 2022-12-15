@@ -1,5 +1,5 @@
-#include "TextEditor.hpp"
-// #include "../include/TextEditor.hpp"
+// #include "TextEditor.hpp"
+#include "../include/TextEditor.hpp"
 
 
 bool checkForAfterElement(Element* afterElement, Element* checkElement) {
@@ -18,6 +18,20 @@ AnswerForInsertAction WorkWithLines::whatPosition(Element* beforeInsert, Element
     AnswerForInsertAction answer;
     StartOfLine* tmpLine = line;
     
+    if (!beforeInsert->next) {
+        if (checkForBeforeLess(beforeInsert, insertElement)) {
+            // less than insert
+            answer.quantOfElementsBefore = 1;
+            answer.elementBeforeInsert = beforeInsert;
+        }
+        return answer;
+    }
+
+    if (checkForBeforeLess(insertElement, beforeInsert->next) || checkForAfterElement(afterElement, beforeInsert->next)) {
+        answer.quantOfElementsBefore = 1;
+    }
+
+
     while (beforeInsert->next && checkForBeforeLess(beforeInsert->next, insertElement) && !checkForAfterElement(afterElement, beforeInsert->next)) {
         if (beforeInsert->isVisible) {
             answer.quantOfElementsBefore++;
@@ -37,6 +51,7 @@ AnswerForInsertAction WorkWithLines::whatPosition(Element* beforeInsert, Element
         }
         
         beforeInsert = beforeInsert->next;
+        answer.elementBeforeInsert = beforeInsert;
     }
 
     return answer;
@@ -168,11 +183,11 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
 
     insertInPositionInLine(answer.quantOfElementsBefore, answer.quantOfLine, insertElement, answer.elementBeforeInsert);
 
-    insertEnter(answer);
+    insertEnter(answer, insertElement);
 };
 
 void WorkWithLines::insertEnter(AnswerForInsertAction& receivedAnswer, Element* insertElement) {
-    if (!receivedAnswer.elementBeforeInsert->next->_value == '\n') {
+    if (insertElement->_value != '\n') {
         return;
     }
     // insert after \n
@@ -183,8 +198,26 @@ void WorkWithLines::insertEnter(AnswerForInsertAction& receivedAnswer, Element* 
         tmpLine = tmpLine->next;
     }
 
-    StartOfLine* newLine = new StartOfLine(insertElement, 1);
-    newLine->_sizeOfLine += tmpLine->_sizeOfLine - receivedAnswer.quantOfElementsBefore;
+    Element* startOfLine = insertElement->next;
+    bool isNewLine = false;
+
+    while (startOfLine && !startOfLine->isVisible) {
+        startOfLine = startOfLine->next;
+        
+        if (tmpLine->next && startOfLine == tmpLine->next->_elementStart) {
+            isNewLine = true;
+            break;
+        }
+    }
+    
+    StartOfLine* newLine;
+    if (isNewLine) {
+        newLine = new StartOfLine();
+    } else {
+        newLine = new StartOfLine(startOfLine, 1);
+    }
+    
+    newLine->_sizeOfLine += tmpLine->_sizeOfLine - receivedAnswer.quantOfElementsBefore - 2;
     tmpLine->_sizeOfLine -= newLine->_sizeOfLine;
 
     newLine->next = tmpLine->next;
@@ -705,70 +738,9 @@ std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, s
 
 std::string WorkWithLines::insertElementInPosition(std::string command) {
     Command com(command);
-    Answer answerWhereElementBefore = searchForElement(beggining, com._afterElemenet,lines);
+    // Answer answerWhereElementBefore = searchForElement(beggining, com._afterElemenet,lines);
 
-    if (beggining) {
-        // elements exist
-        if (lines) {
-            searchForElement(answerWhereElementBefore, com, &lines, &beggining);
-        } else {
-            // lines doesnt exist
-            Element* tmp = beggining;
-            if (answerWhereElementBefore.answerElement) {
-                tmp = answerWhereElementBefore.answerElement;
-            }
-            bool isSearch = false;
-            while (tmp->next && tmp->next->UserId < com._insertElement->UserId && funcWithBefore(tmp->next, com._beforeElement)) {
-                tmp = tmp->next;
-                isSearch = true;
-            }
-            
-            if (isSearch) {
-                com._insertElement->next = tmp->next;
-                tmp->next = com._insertElement;
-            } else {
-                if (answerWhereElementBefore.answerElement) {
-                    com._insertElement->next = tmp->next;
-                    tmp->next = com._insertElement;
-                    
-                    lines = new StartOfLine(com._insertElement, 1);
-                    lineCount++;
-                } else {
-                    insertBeforeFirstElement(com._insertElement, &beggining, &lines);
-                    lineCount++;
-                }
-            }
-        }
-    } else {
-        // elements doens't exist
-        beggining = com._insertElement;
-
-        lines = new StartOfLine(com._insertElement, 1);
-        lineCount++;
-    }
-    
-
-    // insert after \n
-    if (com._insertElement && com._insertElement->_value == '\n') {
-        Element* tmp = com._insertElement->next;
-        bool isNewLine = false;
-        
-        while (tmp && !tmp->isVisible) {
-            if (tmp == answerWhereElementBefore.answerLine->next->_elementStart) {
-                isNewLine = true;
-                break;
-            }
-            tmp = tmp->next;
-        }
-
-        if (!(tmp && !isNewLine)) {
-            StartOfLine* tmpCreatedLine = new StartOfLine();
-            lineCount++;
-            
-            tmpCreatedLine->next = answerWhereElementBefore.answerLine->next;
-            answerWhereElementBefore.answerLine->next = tmpCreatedLine;
-        };
-    }
+    insertElement(com._insertElement, com._afterElemenet, com._beforeElement);
 
     return command;
 };
