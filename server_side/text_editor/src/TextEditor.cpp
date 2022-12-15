@@ -50,6 +50,10 @@ void WorkWithLines::insertInPositionInLine(size_t positionToInsert, size_t lineW
             // first line exist
 
             if (positionToInsert == 0) {
+                if (lines->_sizeOfLine == 0) {
+                    delete lines->_elementStart;
+                }
+
                 insertElement->next = beggining;
                 beggining = insertElement;
                 
@@ -97,6 +101,10 @@ void WorkWithLines::insertInPositionInLine(size_t positionToInsert, size_t lineW
         if (positionToInsert == 0) {
             while (before->next != insertLine->next->_elementStart) {
                 before = before->next;
+            }
+
+            if (insertLine->_sizeOfLine == 0) {
+                delete insertLine->_elementStart;                
             }
 
             insertElement->next = before->next;
@@ -158,12 +166,31 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
     // search for start position
     answer = whatPosition(tmpBefore, insertElement, afterElement, tmpLine);
 
-    insertInPositionInLine(answer.elementBeforeInsert, answer.quantOfLine, insertElement);
+    insertInPositionInLine(answer.quantOfElementsBefore, answer.quantOfLine, insertElement, answer.elementBeforeInsert);
 
+    insertEnter(answer);
 };
 
-void insertEnter(AnswerForInsertAction& receivedAnswer) {
-    // if (receivedAnswer.elementBeforeInsert)
+void WorkWithLines::insertEnter(AnswerForInsertAction& receivedAnswer, Element* insertElement) {
+    if (!receivedAnswer.elementBeforeInsert->next->_value == '\n') {
+        return;
+    }
+    // insert after \n
+
+    StartOfLine* tmpLine = lines;
+
+    for (size_t i = 0; i < receivedAnswer.quantOfLine; ++i) {
+        tmpLine = tmpLine->next;
+    }
+
+    StartOfLine* newLine = new StartOfLine(insertElement, 1);
+    newLine->_sizeOfLine += tmpLine->_sizeOfLine - receivedAnswer.quantOfElementsBefore;
+    tmpLine->_sizeOfLine -= newLine->_sizeOfLine;
+
+    newLine->next = tmpLine->next;
+    tmpLine->next = newLine;
+    
+    lineCount++;
 };
 
 

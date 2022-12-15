@@ -70,9 +70,9 @@ class WorkWithLines : public IWorkWithText {
 
     private:
     AnswerForInsertAction insertElement(Element* insertElement, Element* afterElement = nullptr, Element* beforeElement = nullptr);
-    void insertInPositionInLine(size_t positionToInsert, size_t lineWhereInsert, Element* insertElement);
+    void insertInPositionInLine(size_t positionToInsert, size_t lineWhereInsert, Element* insertElement, Element* beforeInsert);
 
-    void insertEnter(AnswerForInsertAction& receivedAnswer);
+    void insertEnter(AnswerForInsertAction& receivedAnswer, insertElement);
     AnswerForInsertAction whatPosition(Element* beforeInsert, Element* insertElement, Element* afterElement, StartOfLine* line);
 
     StartOfLine* lines;
