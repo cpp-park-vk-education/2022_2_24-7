@@ -2,6 +2,173 @@
 #include "../include/TextEditor.hpp"
 
 
+bool checkForAfterElement(Element* afterElement, Element* checkElement) {
+    if (!afterElement) {
+        return 1;
+    }
+    return checkElement->count == afterElement->count && checkElement->UserId == afterElement->UserId;
+};
+
+void WorkWithLines::insertInPositionInLine(size_t positionToInsert, size_t lineWhereInsert, Element* insertElement) {
+    
+    size_t positionToInsert = 
+    
+    if (lineWhereInsert == 0) {
+        // input in first line
+        
+        if (lines) {
+            // first line exist
+
+            if (positionToInsert == 0) {
+                insertElement->next = beggining;
+                beggining = insertElement;
+                
+                lines->_elementStart = beggining;
+                lines->_sizeOfLine++;
+                return;
+            }
+
+            Element* tmpElement = lines->_elementStart;
+
+            size_t elementPosition = 1;
+            while (elementPosition < positionToInsert) {
+                tmpElement = tmpElement->next;
+
+                if (tmpElement->isVisible) {
+                    elementPosition++;
+                }
+            }
+
+            insertElement->next = tmpElement->next;
+            tmpElement->next = insertElement;
+            
+            lines->_sizeOfLine++;
+        } else {
+            // first line doesnt exist
+            lines = new StartOfLine(insertElement, 1);
+            lineCount++;
+        }
+    } else {
+        // not first line
+
+        StartOfLine* insertLine = lines;
+        size_t linePos = lineWhereInsert;
+
+        if (positionToInsert == 0) {
+            lineWhereInsert--;
+        }
+
+        for (size_t i = 0; i < lineWhereInsert; i++) {
+            insertLine = insertLine->next;
+        }
+        
+        Element* before = insertLine->_elementStart;
+        
+        if (positionToInsert == 0) {
+            while (before->next != insertLine->next->_elementStart) {
+                before = before->next;
+            }
+
+            insertElement->next = before->next;
+            before->next = insertElement;
+
+            insertLine->next->_sizeOfLine++;
+            insertLine->next->_elementStart = insertElement;
+
+        } else {
+            size_t positionNow = 1;
+
+            while (positionNow < positionToInsert) {
+                before = before->next;
+
+                if (before->isVisible) {
+                    positionNow++;
+                }
+            }
+
+            insertElement->next = before->next;
+            before->next = insertElement;
+
+            insertLine->_sizeOfLine++;
+        }
+        
+    }
+};
+
+AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Element* afterElement, Element* beforeElement) {
+    // первый блок, вставляется элемент
+    AnswerForInsertAction answer;
+
+    Element* tmpBefore = nullptr;
+    Element* tmpAfter = nullptr;
+    
+    StartOfLine* tmpLine = lines;
+
+    if (beforeElement) {
+        // element before exist
+        tmpBefore = beggining;
+        while (tmpBefore && !checkForAfterElement(beforeElement, tmpBefore)) {
+            tmpBefore = tmpBefore->next;
+        }
+
+    } else {
+        if (beggining) {
+            // elements exist
+            // TODO check for position to input
+            tmpBefore = beggining;
+        } else {
+            // elements doesnt exist
+            // what position
+            beggining = insertElement;
+            lines = new StartOfLine(insertElement, 1);
+            return answer;
+        }
+
+    }
+
+    // search for start position
+    while (tmpBefore->next && !checkForAfterElement(afterElement, tmpBefore->next)) {
+        if (tmpBefore->isVisible) {
+            answer.quantOfElementsBefore++;
+
+            if (tmpBefore->_value == '\n') {
+                answer.isEnterBefore = true;
+                answer.quantOfElementsBefore = 0;
+            }
+        }
+        
+        if (tmpLine && checkForAfterElement(tmpLine->_elementStart, tmpBefore)) {
+            answer.quantOfLine++;
+            answer.isEnterBefore = false;
+            answer.quantOfElementsBefore = 1;
+            
+            tmpLine = tmpLine->next;
+        }
+        
+        tmpBefore = tmpBefore->next;
+    }
+
+// Can be done in another method
+    Element* tmpElementForPosition = tmpBefore;
+    if (!tmpElementForPosition->next) {
+        // next doesnt exist
+        tmpElementForPosition->next = insertElement;
+        tmpLine->_sizeOfLine++;
+    }
+    while (tmpBefore)
+
+// 
+
+    insertInPositionInLine(answer.elementBeforeInsert, answer.quantOfLine, insertElement);
+
+};
+
+void insertEnter(AnswerForInsertAction& receivedAnswer) {
+    // if (receivedAnswer.elementBeforeInsert)
+};
+
+
+
 bool funcWithBefore(Element* el, Element* beforeElement) {
     if (beforeElement)  {
         return el->count == beforeElement->count && beforeElement->UserId == el->UserId;
@@ -330,11 +497,36 @@ std::string WorkWithLines::insertElementInPosition(size_t lineWhereToPlace, size
             // not beggining
             if (lineWhereToPlace == 0) {
                 // first line
-                afterThis->next->next = newLine->_elementStart;
-                newLine->next = lines->next;
-                lines->next = newLine;
+                Element* tmp = afterThis;
+                
+                while (tmp->next && !tmp->next->isVisible) {
+                    tmp = tmp->next;
+                }
+
+                if (!lines->next) {
+                    afterThis->next->next = newLine->_elementStart;
+                    newLine->next = lines->next;
+                    lines->next = newLine;
+                }
+                else if (lines->next->_elementStart == tmp) {
+                    // not elements
+                    newLine->next = lines->next;
+                    lines->next = newLine;
+                } else {
+                    if (tmp->next) {
+                        // elements exist
+                        newLine->_elementStart = tmp->next;
+                        newLine->next = lines->next;
+                        lines->next = newLine;
+                    } else {
+                        // doesnt exist
+                        newLine->next = lines->next;
+                        lines->next = newLine;
+                    }
+                }
+
             } else {
-                // not first line
+                // not first line TOOD check
                 StartOfLine* lineSearchBefore = lines;
                 for (size_t i = 0; i < lineWhereToPlace; ++i) {
                     lineSearchBefore = lineSearchBefore->next;

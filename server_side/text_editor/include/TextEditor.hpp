@@ -7,6 +7,18 @@
 #include "Command.hpp"
 // #include "SearcherForPlace.hpp"
 
+struct AnswerForInsertAction {
+    AnswerForInsertAction() : quantOfElementsBefore(0) , quantOfLine(0), elementBeforeInsert(nullptr), isEnterBefore(false) {};
+    
+    size_t quantOfElementsBefore;
+    size_t quantOfLine;
+    
+    Element* elementBeforeInsert;
+    
+    bool isEnterBefore;
+};
+
+
 struct StartOfLine {
     StartOfLine(Element* element = nullptr, const size_t sizeOfLine = 0) {
         _elementStart = element;
@@ -57,6 +69,11 @@ class WorkWithLines : public IWorkWithText {
     ~WorkWithLines();
 
     private:
+    AnswerForInsertAction insertElement(Element* insertElement, Element* afterElement = nullptr, Element* beforeElement = nullptr);
+    void insertInPositionInLine(size_t positionToInsert, size_t lineWhereInsert, Element* insertElement);
+
+    void insertEnter(AnswerForInsertAction& receivedAnswer);
+
     StartOfLine* lines;
 
     // point to beggining of lines
