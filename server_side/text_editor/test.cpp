@@ -201,7 +201,7 @@ int main() {
     commandsInResult.push_back(work.insertElementInPosition(1,0,"m"));
     commandsInResult.push_back(work.insertElementInPosition(1,1,"u"));
     commandsInResult.push_back(work.insertElementInPosition(1,2,"s"));
-    commandsInResult.push_back(work.insertElementInPosition(1,3,"\n"));
+    commandsInResult.push_back(work.insertElementInPosition(1,2,"\n"));
 
     commandsInResult.push_back(work.insertElementInPosition(2,0,"\n"));
 
@@ -220,18 +220,30 @@ int main() {
         workCommand.insertElementInPosition(i);
     }
 
-
     Element* tmpForTransfer = work.getStartOfLine(0);
     Element* tmpForTransfer1 = workCommand.getStartOfLine(0);
 
     while (tmpForTransfer && tmpForTransfer1) {
         if (tmpForTransfer1->_value == tmpForTransfer->_value) {
             std::cout << "1 " << tmpForTransfer1->_value << " " << tmpForTransfer->_value << std::endl; 
+        } else {
+            std::cout << "2 " << tmpForTransfer1->_value << " " << tmpForTransfer->_value << std::endl; 
         }
         
         tmpForTransfer1 = tmpForTransfer1->next;
         tmpForTransfer = tmpForTransfer->next;
     }
     
+    tmpForTransfer = work.getStartOfLine(0);
+    tmpForTransfer1 = workCommand.getStartOfLine(0);
+
+    size_t i = 0;
+    while (tmpForTransfer && tmpForTransfer1) {
+        ++i;    
+        std::cout << i << " " << tmpForTransfer1->_value << " " << tmpForTransfer->_value << std::endl; 
+        tmpForTransfer1 = tmpForTransfer1->next;
+        tmpForTransfer = tmpForTransfer->next;
+    }
+
     return 0;
 }

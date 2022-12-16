@@ -11,8 +11,7 @@ bool checkForAfterElement(Element* afterElement, Element* checkElement) {
 
 bool checkForBeforeLess(Element* elementBefore, Element* elementAfter) {
     if (!elementBefore || !elementAfter) {
-        // TODO попадает nullptr
-        std::cout << "SSS";
+        return false;
     }
     return elementBefore->UserId < elementAfter->UserId;
 };
@@ -22,12 +21,12 @@ AnswerForInsertAction WorkWithLines::whatPosition(Element* beforeInsert, Element
     AnswerForInsertAction answer;
     StartOfLine* tmpLine = line;
     
-    if (!beforeInsert->next) {
-        if (checkForBeforeLess(beforeInsert, insertElement)) {
-            // less than insert
-            answer.quantOfElementsBefore = 1;
+    if (beforeInsert->next == nullptr) {
+        if (beforeInsert->isVisible && beforeInsert->_value != '\n') {
             answer.elementBeforeInsert = beforeInsert;
+            answer.quantOfElementsBefore = 1;
         }
+
         return answer;
     }
 
@@ -118,12 +117,16 @@ void WorkWithLines::insertInPositionInLine(size_t positionToInsert, size_t lineW
         Element* before = insertLine->_elementStart;
         
         if (positionToInsert == 0) {
-            while (before->next != insertLine->next->_elementStart) {
+            while (before && !(before->isVisible && before->_value == '\n')) {
                 before = before->next;
             }
 
-            if (insertLine->_sizeOfLine == 0) {
-                delete insertLine->_elementStart;                
+            while (before->next && !before->next->isVisible) {
+                before = before->next;
+            }
+
+            if (insertLine->next->_sizeOfLine == 0) {
+                delete insertLine->next->_elementStart;                
             }
 
             insertElement->next = before->next;
@@ -131,7 +134,6 @@ void WorkWithLines::insertInPositionInLine(size_t positionToInsert, size_t lineW
 
             insertLine->next->_sizeOfLine++;
             insertLine->next->_elementStart = insertElement;
-
         } else {
             size_t positionNow = 1;
 
@@ -161,19 +163,61 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
     
     StartOfLine* tmpLine = lines;
 
+    size_t countVisibleBefore = 0;
+    size_t lineCountBefore = 0;
+
     if (beforeElement) {
         // element before exist
         tmpBefore = beggining;
+        StartOfLine* tmpLine = lines;
+
         while (tmpBefore && !checkForAfterElement(beforeElement, tmpBefore)) {
+            if (tmpBefore->isVisible) {
+                countVisibleBefore++;
+                
+                if (tmpBefore->_value == '\n') {
+                    lineCountBefore++;
+                    countVisibleBefore = 0;
+                    
+                    tmpLine = tmpLine->next;
+                }
+            }
             tmpBefore = tmpBefore->next;
         }
+        
+        if (tmpBefore->_value == '\n') {
+            lineCountBefore++;
+            countVisibleBefore = 0;
 
+            tmpLine = tmpLine->next;
+        }
 
     } else {
 
         if (beggining) {
             // elements exist
             tmpBefore = beggining;
+
+            while (checkForBeforeLess(tmpBefore, insertElement)) {
+                if (tmpBefore->isVisible) {
+                    countVisibleBefore++;
+                    
+                    if (tmpBefore->_value == '\n') {
+                        lineCountBefore++;
+                        countVisibleBefore = 0;
+                        
+                        tmpLine = tmpLine->next;
+                    }
+                }
+                tmpBefore = tmpBefore->next;
+            }
+        
+            if (tmpBefore->_value == '\n') {
+                lineCountBefore++;
+                countVisibleBefore = 0;
+
+                tmpLine = tmpLine->next;
+            }
         } else {
             // elements doesnt exist
             // what position
@@ -185,7 +229,12 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
     }
 
     // search for start position
-    answer = whatPosition(tmpBefore, insertElement, afterElement, tmpLine);
+    if (beforeElement) {
+        answer = whatPosition(tmpBefore, insertElement, afterElement, tmpLine);
+    }
+
+    answer.quantOfElementsBefore += countVisibleBefore;
+    answer.quantOfLine += lineCountBefore;
 
     insertInPositionInLine(answer.quantOfElementsBefore, answer.quantOfLine, insertElement, answer.elementBeforeInsert);
 
@@ -210,6 +259,11 @@ void WorkWithLines::insertEnter(AnswerForInsertAction& receivedAnswer, Element* 
     Element* startOfLine = insertElement->next;
     bool isNewLine = false;
 
+    if (!startOfLine) {
+        isNewLine = true;
+    }
+
+    // Todo найти есть ли элемент для начала 
     while (startOfLine && !startOfLine->isVisible) {
         startOfLine = startOfLine->next;
         
@@ -225,8 +279,8 @@ void WorkWithLines::insertEnter(AnswerForInsertAction& receivedAnswer, Element* 
     } else {
         newLine = new StartOfLine(startOfLine, 1);
     }
-
-    newLine->_sizeOfLine += tmpLine->_sizeOfLine - receivedAnswer.quantOfElementsBefore - 2;
+    // TODO IF 0 ELEMENT BEFORE???
+    newLine->_sizeOfLine += tmpLine->_sizeOfLine - receivedAnswer.quantOfElementsBefore - 1;
     tmpLine->_sizeOfLine -= newLine->_sizeOfLine;
 
     newLine->next = tmpLine->next;

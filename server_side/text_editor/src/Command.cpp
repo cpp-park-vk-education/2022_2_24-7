@@ -60,7 +60,8 @@ Command::Command(std::string str) {
                 userAfter = std::stoul(afterElementInStrings[1]);
 
                 char tmpSymbol = ' ';
-                _afterElemenet = new Element(&tmpSymbol, &countAfter, &userAfter);
+                // _afterElemenet = new Element(&tmpSymbol, &countAfter, &userAfter);
+                _beforeElement = new Element(&tmpSymbol, &countAfter, &userAfter);
 
                 // before element
                 std::vector <std::string> beforeElementInStrings = parseString(parsedString[3], '|');
@@ -72,7 +73,8 @@ Command::Command(std::string str) {
                 userBefore = std::stoul(beforeElementInStrings[1]);
 
                 tmpSymbol = ' ';
-                _beforeElement = new Element(&tmpSymbol, &countBefore, &userBefore);
+                // _beforeElement = new Element(&tmpSymbol, &countBefore, &userBefore);
+                _afterElemenet = new Element(&tmpSymbol, &countBefore, &userBefore);
 
                 // insert element
             }
