@@ -564,8 +564,8 @@ Answer searchForElement(Element* fromWhere, Element* whatSearch, StartOfLine* fi
 
 WorkWithLines::WorkWithLines(size_t UserId, size_t counter) : beggining(nullptr), lines(nullptr), lineCount(0), _counter(counter), _UserId(UserId) {
     // searcher = new Searcher(this);
-    // lines = nullptr;
-    // beggining = nullptr;
+    lines = nullptr;
+    beggining = nullptr;
 };
 
 void insertElement(Element* startOfLine, Element* whatInsert, Element* afterWhatInsert, Element* beforeWhatInsert, StartOfLine** lines) {
@@ -634,6 +634,16 @@ std::string WorkWithLines::insertElementInPosition(size_t position, std::string 
     AnswerForInsertAction answer;
     // answer = insertElement(_insertElement, positionElement.line, positionElement.pos);
     answer = insertElement(_insertElement, positionElement.line, positionElement.pos);
+
+    if (_insertElement->next) {
+        std::cout << "After EXIST" << std::endl;
+    }
+
+    if (answer.elementBeforeInsert) {
+        std::cout << "Element Before" << std::endl;
+    }
+
+    std::cout << "INSERT " << _insertElement->_value << std::endl;
 
     return createCommand(false, _insertElement, answer.elementBeforeInsert, _insertElement->next);
 };
@@ -812,6 +822,22 @@ WorkWithLines::~WorkWithLines() {
 std::string WorkWithLines::createCommand(bool isDelete, Element* elementOperation, Element* beforeElement, Element* afterElement) {
     // TODO rewrite
     
+    // 
+    // std::string str = "";
+    // if (beforeElement) {
+    //     str += "BEEFORE " + beforeElement->_value;
+    //     std::cout << std::endl << "BBBBBB" << std::endl;
+    // }
+
+    // if (afterElement) {
+    //     str += "After " + afterElement->_value;
+    //     std::cout << std::endl << "AAAAAA" << std::endl;
+    // }
+
+    // str += "INSERT " + elementOperation->_value;
+    // std::cout << str << std::endl;
+    // 
+
     // first part of command
     std::string firstPartOfCommand = std::to_string(elementOperation->count) + '|' + std::to_string(elementOperation->UserId);
     std::string returnCommand;
@@ -829,15 +855,15 @@ std::string WorkWithLines::createCommand(bool isDelete, Element* elementOperatio
 
     if (afterElement) {
         afterElementString = std::to_string(afterElement->count) + '|' + std::to_string(afterElement->UserId) + ":";
-        parts += 1;
+        parts += 2;
     }
 
     if (beforeElement) {
         beforeElementString = std::to_string(beforeElement->count) + '|' + std::to_string(beforeElement->UserId) + ":";
-        parts += 2;
+        parts += 1;
     }
 
-    returnCommand += afterElementString + beforeElementString + std::to_string(parts);
+    returnCommand += "i:" + firstPartOfCommand + "|" + elementOperation->_value + ":" + afterElementString + beforeElementString + std::to_string(parts);
     return returnCommand;
 };
 
@@ -1004,7 +1030,7 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, size_
     answer.quantOfLine = lineWhereInsert;
 
 
-    if (beggining) {
+    if (beggining != nullptr) {
         // elements exist
         StartOfLine* BeforeInsertLine = lines;
 

@@ -3,8 +3,8 @@
 #include "src/Command.cpp"
 #include "include/TextEditor.hpp"
 #include "src/TextEditor.cpp"
-#include "include/WorkWithData.hpp"
-#include "src/WorkWithData.cpp"
+// #include "include/WorkWithData.hpp"
+// #include "src/WorkWithData.cpp"
 
 #include <iostream>
 int main() {
@@ -224,15 +224,26 @@ int main() {
 
     commandsInResult.push_back(work.insertElementInPosition(15,"\n"));    
 
-    // WorkWithLines workCommand;
-    // for (auto i: commandsInResult) {
-    //     workCommand.insertElementInPosition(i);
-    // }
     for (auto i: commandsInResult) {
         std::cout << i << std::endl;
     }
+    
+    WorkWithLines workCommand;
+    for (auto i: commandsInResult) {
+        workCommand.insertElementInPosition(i);
+    }
 
     Element* tmpForTransfer = work.getStartOfLine(0);
+    while (tmpForTransfer) {
+        std::cout << tmpForTransfer->_value;
+        tmpForTransfer = tmpForTransfer->next;
+    }
+    std::cout << "OUT\n";
+    tmpForTransfer = workCommand.getStartOfLine(0);
+    while (tmpForTransfer) {
+        std::cout << tmpForTransfer->_value;
+        tmpForTransfer = tmpForTransfer->next;
+    }
     // Element* tmpForTransfer1 = workCommand.getStartOfLine(0);
 
     // while (tmpForTransfer && tmpForTransfer1) {
