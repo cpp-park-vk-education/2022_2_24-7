@@ -227,6 +227,140 @@ void WorkWithLines::insertEnter(AnswerForInsertAction& receivedAnswer, Element* 
 };
 
 
+AnswerForInsertAction WorkWithLines::whatPositionDelete(Element* elementToDelete) {
+    AnswerForInsertAction answer;
+
+    if (checkForAfterElement(beggining, elementToDelete)) {
+        return answer;
+    }
+
+    answer.elementBeforeInsert = lines->_elementStart;
+
+    StartOfLine* tmpLine = lines;
+    Element* tmpElement = beggining;
+
+    while (!checkForAfterElement(tmpElement, elementToDelete)) {
+        
+        if (tmpLine->_elementStart == tmpElement) {
+            answer.quantOfLine++;
+            answer.isEnterBefore = false;
+            
+            tmpLine = tmpLine->next;
+        }
+        
+        if (tmpElement->isVisible && tmpElement->_value == '\n') {
+            answer.isEnterBefore = true;
+        }
+
+        answer.elementBeforeInsert = tmpElement;
+        tmpElement = tmpElement->next;
+    }
+
+    return answer;
+};
+
+AnswerForInsertAction WorkWithLines::deleteElement(Element* elementToDelete) {
+    AnswerForInsertAction answer;
+    bool firstPos = false;
+    
+    AnswerForInsertAction positions = whatPositionDelete(elementToDelete);
+
+    if (positions.quantOfLine == 0 && positions.quantOfElementsBefore == 0) {
+        firstPos = true;
+    }
+    
+    StartOfLine* tmpLine = lines;
+    StartOfLine* lineBefore = nullptr;
+    
+    if (positions.quantOfLine != 0) {
+        for (size_t i = 1; i < positions.quantOfLine - 1; ++i) {
+            tmpLine = tmpLine->next;
+        }
+        lineBefore = tmpLine;
+        tmpLine = tmpLine->next;
+    }
+
+    if (positions.isEnterBefore || firstPos) {
+        // first element
+
+        if (tmpLine->_sizeOfLine == 1) {
+            // last sumbol
+            answer.isEnterBefore = true;
+            tmpLine->_elementStart->isVisible = false;
+
+            if (lineBefore) {
+                if (tmpLine->next) {
+                    // not last line
+                    lineBefore->next = tmpLine->next;
+                    
+                    delete tmpLine;
+                } else {
+                    // last line
+                    tmpLine->_sizeOfLine = 0;
+                }
+            } else {
+                // first line
+                if (!tmpLine->next) {
+                    lineCount--;
+                    
+                    delete lines;
+                } else {
+                    lines = lines->next;
+                    lineCount--;
+                    
+                    delete tmpLine;
+                }
+            }
+
+        } else {
+            // not last symbol
+            Element* firstVisible = tmpLine->_elementStart->next;
+            
+            while (!firstVisible->isVisible) {
+                firstVisible = firstVisible->next;
+            }
+
+            tmpLine->_sizeOfLine--;
+            tmpLine->_elementStart->isVisible = false;
+            tmpLine->_elementStart = firstVisible;
+        }
+
+    } else {
+        // not first element
+        
+        tmpLine->_sizeOfLine--;
+        positions.elementBeforeInsert->next->isVisible = false;
+    }
+
+    if (!answer.isEnterBefore) {
+        deleteEnter(answer, tmpLine);
+    }
+};
+
+void WorkWithLines::deleteEnter(AnswerForInsertAction answer, StartOfLine* line) {
+    Element* tmpElement;
+    if (!answer.elementBeforeInsert) {
+        tmpElement = beggining;
+    } else {
+        tmpElement = answer.elementBeforeInsert->next;
+    }
+    
+    if (tmpElement->_value != '\n') {
+        return;
+    }
+
+    StartOfLine* tmpDelete = line->next;
+    line->_sizeOfLine += line->next->_sizeOfLine;
+    line->next = line->next->next;
+
+    if (tmpDelete->_sizeOfLine == 0) {
+        delete tmpDelete->_elementStart;
+    }
+
+    delete tmpDelete;
+};
+
+
 
 bool funcWithBefore(Element* el, Element* beforeElement) {
     if (beforeElement)  {
@@ -747,123 +881,10 @@ std::string WorkWithLines::insertElementInPosition(std::string command) {
 
 std::string WorkWithLines::deleteElementFromPosition(std::string command) {
     Command com(command);
-    bool DeleteLine = false;
-    AnswerDelete answerWhereElementBefore = searchForBeforeDeleteElement(beggining, com._insertElement, &lines);
     
-    if (answerWhereElementBefore.isDeleteBeggining) {
-        if (lines->_sizeOfLine == 1) {
-            // last symbol beggining
-            StartOfLine* tmp = lines;
-            lines = lines->next;
+    deleteElement(com._insertElement);
 
-            lineCount--;
-            delete tmp;
-        } else {
-            // not last symbol
-            Element* tmp = answerWhereElementBefore.answerElement->next;
-            while (tmp && !tmp->isVisible) {
-                tmp = tmp->next;
-            }
-            lines->_elementStart = tmp;
-            lines->_sizeOfLine--;
-        }
-    } else {
-        // not beggining delete
-        if (answerWhereElementBefore.answerLine->next && answerWhereElementBefore.answerLine->next->_elementStart == answerWhereElementBefore.answerElement->next) {
-            // start of new line
-            // answerWhereElementBefore.answerLine->next->_elementStart->isVisible = false;
-            
-            if (answerWhereElementBefore.answerLine->next->_sizeOfLine == 1) {
-                //delete last symbol
-
-                StartOfLine* tmpLine = answerWhereElementBefore.answerLine->next;
-                answerWhereElementBefore.answerLine->next = tmpLine->next;
-
-                lineCount--;
-                DeleteLine = true;
-                delete tmpLine;
-            } else {
-                // delete not last symbol
-
-                Element* tmp = answerWhereElementBefore.answerLine->next->_elementStart->next;
-                while(tmp && !tmp->isVisible) {
-                    tmp = tmp->next;
-                }
-
-                answerWhereElementBefore.answerLine->next->_elementStart = tmp;
-                answerWhereElementBefore.answerLine->next->_sizeOfLine--;
-            }
-
-        } else {
-            // not new line
-
-            if (answerWhereElementBefore.isNext) {
-                if (answerWhereElementBefore.answerLine->next->_sizeOfLine == 1) {
-                    // last symbol beggining
-                    StartOfLine* tmp = answerWhereElementBefore.answerLine->next;
-                    // lines = lines->next;
-                    answerWhereElementBefore.answerLine->next = tmp->next;
-
-                    lineCount--;
-                    DeleteLine = true;
-                    delete tmp;
-                } else {
-                    // not last symbol
-                    Element* tmp = answerWhereElementBefore.answerElement->next;
-                    while (tmp && !tmp->isVisible) {
-                        tmp = tmp->next;
-                    }
-                    answerWhereElementBefore.answerLine->next->_elementStart = tmp;
-                    answerWhereElementBefore.answerLine->next->_sizeOfLine--;
-                
-                }
-            } else {
-                if (answerWhereElementBefore.answerLine->_sizeOfLine == 1) {
-                    // last symbol beggining
-                    // StartOfLine* tmp = answerWhereElementBefore.answerLine->next;
-                    // lines = lines->next;
-                    lines = answerWhereElementBefore.answerLine->next;
-                    DeleteLine = true;
-                    // answerWhereElementBefore.answerLine->next = tmp->next;
-                    delete answerWhereElementBefore.answerLine;
-
-                    lineCount--;
-                    // delete tmp;
-                } else {
-                    // not last symbol
-                    Element* tmp = answerWhereElementBefore.answerElement->next;
-                    while (tmp && !tmp->isVisible) {
-                        tmp = tmp->next;
-                    }
-                    answerWhereElementBefore.answerLine->_elementStart = tmp;
-                    answerWhereElementBefore.answerLine->_sizeOfLine--;
-                
-                }
-            }
-            
-            // answerWhereElementBefore.answerLine->_sizeOfLine--;
-            
-            // answerWhereElementBefore.answerElement->next->isVisible = false;
-        };
-    }
-
-    if (answerWhereElementBefore.answerElement->next->_value == '\n' && answerWhereElementBefore.answerElement->next->isVisible && !DeleteLine) {
-        StartOfLine* tmpLine = answerWhereElementBefore.answerLine->next;
-        
-        answerWhereElementBefore.answerLine->_sizeOfLine += answerWhereElementBefore.answerLine->next->_sizeOfLine;
-        answerWhereElementBefore.answerLine->next = answerWhereElementBefore.answerLine->next->next;
-
-        delete tmpLine;
-    }
-
-    if (answerWhereElementBefore.isDeleteBeggining) {
-        answerWhereElementBefore.answerElement->isVisible = false;    
-    } else {
-        answerWhereElementBefore.answerElement->next->isVisible = false;
-    }
-
-    std::string commandToReturn = command;
-    return commandToReturn;
+    return command;
 };
 
 size_t WorkWithLines::getQuantityOfLines() {

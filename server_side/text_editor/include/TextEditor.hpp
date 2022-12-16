@@ -75,6 +75,12 @@ class WorkWithLines : public IWorkWithText {
     void insertEnter(AnswerForInsertAction& receivedAnswer, Element* insertElement);
     AnswerForInsertAction whatPosition(Element* beforeInsert, Element* insertElement, Element* afterElement, StartOfLine* line);
 
+
+    AnswerForInsertAction deleteElement(Element* elementToDelete);
+    AnswerForInsertAction whatPositionDelete(Element* elementToDelete);
+
+    void deleteEnter(AnswerForInsertAction answer, StartOfLine* line);
+    
     StartOfLine* lines;
 
     // point to beggining of lines
