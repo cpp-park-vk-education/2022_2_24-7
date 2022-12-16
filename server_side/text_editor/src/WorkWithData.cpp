@@ -25,7 +25,7 @@ std::string WorkWithData::operationWithData(std::string operation, bool isComman
             AnswerLinePos answ;
             size_t post = std::stoul(vecs[2]);
             answ = textEditor->getLinePosFromPos(post);
-            return textEditor->insertElementInPosition(answ.line, answ.pos, &vecs[1][0]);
+            return textEditor->insertElementInPosition(std::stoul(vecs[2]), &vecs[1][0]);
         } else {
             AnswerLinePos answ;
             answ = textEditor->getLinePosFromPos(std::stoul(vecs[1]));

@@ -9,7 +9,7 @@
 
 struct AnswerForInsertAction {
     AnswerForInsertAction() : quantOfElementsBefore(0) , quantOfLine(0), elementBeforeInsert(nullptr), isEnterBefore(false) {};
-    
+
     size_t quantOfElementsBefore;
     size_t quantOfLine;
     
@@ -39,7 +39,7 @@ struct StartOfLine {
 };
 
 // struct AnswerLinePos {
-//     AnswerLinePos() :line(0), pos(0);
+//     AnswerLinePos() :line(0), pos(0) {};
 
 //     size_t line;
 //     size_t pos;
@@ -53,7 +53,7 @@ class WorkWithLines : public IWorkWithText {
     WorkWithLines(size_t UserId = 0, size_t counter = 0);
 
     // for client part
-    std::string insertElementInPosition(size_t lineWhereToPlace, size_t positionInLine, std::string symbol) override;
+    std::string insertElementInPosition(size_t position, std::string symbol) override;
     std::string deleteElementFromPosition(size_t lineWhereToDelete, size_t positionInLine) override;
 
     // for server side
@@ -81,6 +81,13 @@ class WorkWithLines : public IWorkWithText {
 
     void deleteEnter(AnswerForInsertAction answer, StartOfLine* line);
     
+    
+    AnswerForInsertAction insertElement(Element* insertElement, size_t lineWhereInsert, size_t positionWhereInsert);
+    
+    
+    AnswerLinePos getPosition(size_t position);
+    std::string createCommand(bool isDelete, Element* elementOperation, Element* beforeElement  = nullptr, Element* afterElement = nullptr);
+
     StartOfLine* lines;
 
     // point to beggining of lines

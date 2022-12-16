@@ -230,6 +230,7 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
 
     // search for start position
     if (beforeElement) {
+        // answer = whatPosition(tmpBefore, insertElement, afterElement, tmpLine);
         answer = whatPosition(tmpBefore, insertElement, afterElement, tmpLine);
     }
 
@@ -561,10 +562,10 @@ Answer searchForElement(Element* fromWhere, Element* whatSearch, StartOfLine* fi
     return answer;
 };
 
-WorkWithLines::WorkWithLines(size_t UserId, size_t counter) :  lineCount(0), _counter(counter), _UserId(UserId) {
+WorkWithLines::WorkWithLines(size_t UserId, size_t counter) : beggining(nullptr), lines(nullptr), lineCount(0), _counter(counter), _UserId(UserId) {
     // searcher = new Searcher(this);
-    lines = nullptr;
-    beggining = nullptr;
+    // lines = nullptr;
+    // beggining = nullptr;
 };
 
 void insertElement(Element* startOfLine, Element* whatInsert, Element* afterWhatInsert, Element* beforeWhatInsert, StartOfLine** lines) {
@@ -625,208 +626,16 @@ void insertElement(Element* startOfLine, Element* whatInsert, Element* afterWhat
 }
 
 
-std::string WorkWithLines::insertElementInPosition(size_t lineWhereToPlace, size_t positionInLine, std::string symbol) {
-    Element* afterThis = nullptr;
-    // TODO убрать всё в Searcher
-
-    if (positionInLine == 0) {
-        if (lineWhereToPlace == 0) {
-            // first line first position
-            if (!beggining) {
-                // first input
-                beggining = new Element(&symbol[0], &(++_counter), &_UserId);
-                lines = new StartOfLine(beggining, 1);
-                lineCount++;
-            } else {
-                // not first input
-                if (lines) {
-                    // lines exist
-                    Element* searchElement = beggining;
-                
-                    for (size_t i = 0; i < 1; ) {
-                        if (searchElement->next && searchElement->next->isVisible) {
-                            ++i;
-                        } else if (searchElement->isVisible) {
-                            ++i;
-                        } else {
-                            searchElement = searchElement->next;
-                        }
-                    }
-                    if (searchElement->isVisible) {
-                        // beeggining
-                        Element* tmp = beggining;
-                        beggining = new Element(&symbol[0], &(++_counter), &_UserId);
-                        beggining->next = tmp;
-
-                        lines->_elementStart = beggining;
-                        lines->_sizeOfLine++;
-                    } else {
-                        Element* tmp = new Element(&symbol[0], &(++_counter), &_UserId);
-                        tmp->next = searchElement->next;
-                        searchElement->next = tmp;
-                        lines->_sizeOfLine++;
-                        
-                        afterThis = searchElement;
-                    }
-
-                } else {
-                    // lines doesnt exist
-                    Element* tmp = new Element(&symbol[0], &(++_counter), &_UserId);
-                    lines = new StartOfLine(tmp, 1);
-                    tmp->next = beggining->next;
-                    beggining->next = tmp;
-                    lineCount++;
-
-                    afterThis = beggining;
-                }
-                
-                
-            }
-        } else {
-            // first position
-            StartOfLine *searchLineBefore = lines;
-            for (size_t i = 0; i < lineWhereToPlace - 1; ++i) {
-                searchLineBefore = searchLineBefore->next;
-            }
-
-            Element* searchElementBefore = searchLineBefore->_elementStart;
-            while (!(searchElementBefore->_value == '\n' && searchElementBefore->isVisible)) {
-                searchElementBefore = searchElementBefore->next;
-            }
-            
-            Element* tmp = new Element(&symbol[0], &(++_counter), &_UserId);
-            
-            tmp->next = searchElementBefore->next;
-            searchElementBefore->next = tmp;
-            
-            if (searchLineBefore->next->_sizeOfLine == 0) {
-                tmp->next = searchLineBefore->next->_elementStart->next;
-                delete searchLineBefore->next->_elementStart;
-            }
-
-            searchLineBefore->next->_elementStart = tmp;
-            searchLineBefore->next->_sizeOfLine++;
-            
-
-            afterThis = searchElementBefore;
-        }
-    } else {
-        // not first position
-        StartOfLine *searchLine = lines;
-        if (lineWhereToPlace != 0) {
-            for (size_t i = 0; i < lineWhereToPlace; ++i) {
-                searchLine = searchLine->next;
-            }
-        }
-
-        Element* searchElementBefore = searchLine->_elementStart;
-        for (size_t i = 0; i < positionInLine - 1; ) {
-            if (searchElementBefore->isVisible) {
-                ++i;
-            }
-            searchElementBefore = searchElementBefore->next;
-        }
-
-        // if (positionInLine == 1) {
-        //     searchElementBefore = searchElementBefore->next;
-        // }
-
-        Element* tmp = new Element(&symbol[0], &(++_counter), &_UserId);
-        
-        tmp->next = searchElementBefore->next;
-        searchElementBefore->next = tmp;
-
-        searchLine->_sizeOfLine++;
-
-        afterThis = searchElementBefore;
-    }
-
-    if (symbol[0] == '\n') {
-        StartOfLine* newLine = new StartOfLine();
-        lineCount++;
-        if (!afterThis) {
-            // beggining
-            beggining->next = newLine->_elementStart;
-            newLine = lines->next;
-            lines->next = newLine;
-        } else {
-            // not beggining
-            if (lineWhereToPlace == 0) {
-                // first line
-                Element* tmp = afterThis;
-                
-                while (tmp->next && !tmp->next->isVisible) {
-                    tmp = tmp->next;
-                }
-
-                if (!lines->next) {
-                    afterThis->next->next = newLine->_elementStart;
-                    newLine->next = lines->next;
-                    lines->next = newLine;
-                }
-                else if (lines->next->_elementStart == tmp) {
-                    // not elements
-                    newLine->next = lines->next;
-                    lines->next = newLine;
-                } else {
-                    if (tmp->next) {
-                        // elements exist
-                        newLine->_elementStart = tmp->next;
-                        newLine->next = lines->next;
-                        lines->next = newLine;
-                    } else {
-                        // doesnt exist
-                        newLine->next = lines->next;
-                        lines->next = newLine;
-                    }
-                }
-
-            } else {
-                // not first line TOOD check
-                StartOfLine* lineSearchBefore = lines;
-                for (size_t i = 0; i < lineWhereToPlace; ++i) {
-                    lineSearchBefore = lineSearchBefore->next;
-                }
-
-                newLine->next = lineSearchBefore->next;
-                lineSearchBefore->next = newLine;
-            }
-        }
-    }
-
-    // first part of command
-    std::string firstPartOfCommand = std::to_string(_counter) + '|' + std::to_string(_UserId) + '|' + symbol[0];
-    std::string secondPartOfCommand = "";
-    std::string thirdPartOfCommand = "";
-    size_t partsCount = 0;
-
-    std::string commandToReturn = "i:" + firstPartOfCommand;
-    if (afterThis) {
-        //before element exist
-        secondPartOfCommand = std::to_string(afterThis->count) + '|' + std::to_string(afterThis->UserId);
-        commandToReturn += ':' + secondPartOfCommand;
-        partsCount += 1;
-
-        if (afterThis->next->next && afterThis->next->next->count != 0) {
-            // after element exist
-            thirdPartOfCommand = std::to_string(afterThis->next->next->count) + '|' + std::to_string(afterThis->next->next->UserId);
-            commandToReturn += ':' + thirdPartOfCommand;
-            
-            partsCount += 2;
-        }
-    } else {
-        if (beggining->next) {
-            // after element exist
-            thirdPartOfCommand = std::to_string(beggining->next->count) + '|' + std::to_string(beggining->next->UserId);
-            commandToReturn += ':' + thirdPartOfCommand;
-
-            partsCount += 2;
-        }
-    }
-    commandToReturn += ':' + std::to_string(partsCount);
-
+std::string WorkWithLines::insertElementInPosition(size_t position, std::string symbol) {
+    Element* _insertElement = new Element(&symbol[0], &++_counter, &_UserId);
     // TODO подставить сразу без переменной
-    return commandToReturn;
+    AnswerLinePos positionElement = getPosition(position);
+
+    AnswerForInsertAction answer;
+    // answer = insertElement(_insertElement, positionElement.line, positionElement.pos);
+    answer = insertElement(_insertElement, positionElement.line, positionElement.pos);
+
+    return createCommand(false, _insertElement, answer.elementBeforeInsert, _insertElement->next);
 };
 
 std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, size_t positionInLine) {
@@ -1000,11 +809,37 @@ WorkWithLines::~WorkWithLines() {
 };
 
 
-// void searchWithoutLines(Answer* answer, Command& command, StartOfLine** line, Element* beggining) {
+std::string WorkWithLines::createCommand(bool isDelete, Element* elementOperation, Element* beforeElement, Element* afterElement) {
+    // TODO rewrite
+    
+    // first part of command
+    std::string firstPartOfCommand = std::to_string(elementOperation->count) + '|' + std::to_string(elementOperation->UserId);
+    std::string returnCommand;
 
-// }
+    if (isDelete) {
+        // delete command
+        
+        returnCommand = "d:" + firstPartOfCommand;
+        return returnCommand;
+    }
+    
+    size_t parts = 0;
+    std::string beforeElementString = "";
+    std::string afterElementString = "";
 
+    if (afterElement) {
+        afterElementString = std::to_string(afterElement->count) + '|' + std::to_string(afterElement->UserId) + ":";
+        parts += 1;
+    }
 
+    if (beforeElement) {
+        beforeElementString = std::to_string(beforeElement->count) + '|' + std::to_string(beforeElement->UserId) + ":";
+        parts += 2;
+    }
+
+    returnCommand += afterElementString + beforeElementString + std::to_string(parts);
+    return returnCommand;
+};
 
 void searchForElement(Answer& answerWhereElementBefore, Command& com, StartOfLine** line, Element** begginng) {
     Element* tmp = (*begginng);
@@ -1161,3 +996,138 @@ AnswerLinePos WorkWithLines::getLinePosFromPos(size_t pos) {
     return answ;
 };
 
+AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, size_t lineWhereInsert, size_t positionWhereInsert) {
+    AnswerForInsertAction answer;
+
+    answer.elementBeforeInsert = nullptr;
+    answer.quantOfElementsBefore = positionWhereInsert;
+    answer.quantOfLine = lineWhereInsert;
+
+
+    if (beggining) {
+        // elements exist
+        StartOfLine* BeforeInsertLine = lines;
+
+        if (lineWhereInsert > 0) {
+            for (size_t i = 0; i < lineWhereInsert - 1; ++i) {
+                BeforeInsertLine = BeforeInsertLine->next;
+            }
+        }
+
+        if (positionWhereInsert == 0) {
+            if (lineWhereInsert == 0) {
+                Element* tmpEl = beggining;
+
+                if (tmpEl->isVisible) {
+                    insertElement->next = beggining;
+                    beggining = insertElement;
+
+                } else {
+                    while (tmpEl->next && !tmpEl->next->isVisible) {
+                        tmpEl = tmpEl->next;
+                    }
+
+                    insertElement->next = tmpEl->next;
+                    tmpEl->next = insertElement;
+
+                    answer.elementBeforeInsert = tmpEl;
+                }
+
+                lines->_elementStart = insertElement;
+                lines->_sizeOfLine++;
+
+            } else {
+                // first symbol not first line
+
+                Element* tmpElement = BeforeInsertLine->_elementStart;
+                
+                while (!(tmpElement->_value == '\n' && tmpElement->isVisible)) {
+                    tmpElement = tmpElement->next;
+                }
+                
+                if (BeforeInsertLine->next->_sizeOfLine == 0) {
+                    delete BeforeInsertLine->next->_elementStart;
+                }
+
+                insertElement->next = tmpElement->next;
+                tmpElement->next = insertElement;
+
+                BeforeInsertLine->next->_sizeOfLine++;
+                BeforeInsertLine->next->_elementStart = insertElement;   
+
+                answer.elementBeforeInsert = tmpElement;             
+            }
+        } else {
+            // not first element
+            Element* tmpEl;
+            StartOfLine* tmpLine;
+            
+            if (BeforeInsertLine->next) {
+                tmpLine = BeforeInsertLine->next;
+            } else {
+                tmpLine = BeforeInsertLine;
+            }
+
+            tmpEl = tmpLine->_elementStart;
+
+            size_t positionNow = 1;
+            while (positionNow < positionWhereInsert) {
+                tmpEl = tmpEl->next;
+
+                if (tmpEl->isVisible) {
+                    positionNow++;
+                }
+            }
+
+            insertElement->next = tmpEl->next;
+            tmpEl->next = insertElement;
+
+            tmpLine->_sizeOfLine++;
+
+            answer.elementBeforeInsert = tmpEl;
+        }
+
+    } else {
+        beggining = insertElement;
+        
+        lines = new StartOfLine(insertElement, 1);
+        lineCount++;
+    }
+    
+    // Check for \n
+    insertEnter(answer, insertElement);
+    
+    return answer;
+};
+
+AnswerLinePos WorkWithLines::getPosition(size_t position) {
+    AnswerLinePos answer;
+    StartOfLine* tmpLine = lines;
+    
+    while (tmpLine && position > tmpLine->_sizeOfLine) {
+        position -= tmpLine->_sizeOfLine;
+        answer.line++;
+        tmpLine = tmpLine->next;
+    }
+
+    if (tmpLine && position == tmpLine->_sizeOfLine) {
+        Element* tmpElement = tmpLine->_elementStart;
+        size_t positionNow = 0;
+        
+        while(positionNow < position) {
+            if (tmpElement->isVisible) {
+                positionNow++;
+                if (tmpElement->_value == '\n') {
+                    answer.line++;
+                    position -= positionNow;
+                    break;
+                }
+            }
+            tmpElement = tmpElement->next;
+        }
+    }
+
+    answer.pos = position;
+
+    return answer;
+};
