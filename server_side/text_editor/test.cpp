@@ -159,26 +159,26 @@ int main() {
 
 
 
-    WorkWithData a;
-    a.userFirst(0,0);
+    // WorkWithData a;
+    // a.userFirst(0,0);
 
-    // a.operationWithData("i:a:0");
-    // a.operationWithData("i:b:1");
-    // a.operationWithData("i:\n:1");
-    a.operationWithData("i:1|0|a:0", 1);
-    a.operationWithData("i:1|1|b:0", 1);
-    a.operationWithData("i:2|0|w:1|0:1", 1);
-    a.operationWithData("i:3|0|\n:1|0:2|0:3", 1);
-    a.operationWithData("i:2|1|\n:3|0:2|0:3", 1);
-    a.operationWithData("i:3|1|y:2|1:1", 1);
+    // // a.operationWithData("i:a:0");
+    // // a.operationWithData("i:b:1");
+    // // a.operationWithData("i:\n:1");
+    // a.operationWithData("i:1|0|a:0", 1);
+    // a.operationWithData("i:1|1|b:0", 1);
+    // a.operationWithData("i:2|0|w:1|0:1", 1);
+    // a.operationWithData("i:3|0|\n:1|0:2|0:3", 1);
+    // a.operationWithData("i:2|1|\n:3|0:2|0:3", 1);
+    // a.operationWithData("i:3|1|y:2|1:1", 1);
 
 
-    a.operationWithData("d:1|0",1);
-    a.operationWithData("d:3|1",1);
-    a.operationWithData("d:3|0",1);
-    a.operationWithData("d:2|1",1);
-    a.operationWithData("d:2|0",1);
-    a.operationWithData("d:1|1",1);
+    // a.operationWithData("d:1|0",1);
+    // a.operationWithData("d:3|1",1);
+    // a.operationWithData("d:3|0",1);
+    // a.operationWithData("d:2|1",1);
+    // a.operationWithData("d:2|0",1);
+    // a.operationWithData("d:1|1",1);
 
     // for (auto i : insertCommands) {
     //     a.operationWithData(i, 1);
@@ -187,6 +187,51 @@ int main() {
     // for (auto i : commandsDelete) {
     //     a.operationWithData(i, 1);
     // }
+
+
+    std::vector<std::string> commandsInResult;
+    
+    WorkWithLines work;
+
+    commandsInResult.push_back(work.insertElementInPosition(0, 0, "k"));
+    commandsInResult.push_back(work.insertElementInPosition(0,0,"e"));
+    commandsInResult.push_back(work.insertElementInPosition(0,0,"l"));
+    commandsInResult.push_back(work.insertElementInPosition(0,3,"\n"));
+
+    commandsInResult.push_back(work.insertElementInPosition(1,0,"m"));
+    commandsInResult.push_back(work.insertElementInPosition(1,1,"u"));
+    commandsInResult.push_back(work.insertElementInPosition(1,2,"s"));
+    commandsInResult.push_back(work.insertElementInPosition(1,3,"\n"));
+
+    commandsInResult.push_back(work.insertElementInPosition(2,0,"\n"));
+
+    commandsInResult.push_back(work.insertElementInPosition(3,0,"x"));
+    commandsInResult.push_back(work.insertElementInPosition(3,1,"y"));
+    commandsInResult.push_back(work.insertElementInPosition(3,2,"z"));
+    commandsInResult.push_back(work.insertElementInPosition(3,3,"\n"));
+
+    commandsInResult.push_back(work.insertElementInPosition(4,0,"x"));
+    commandsInResult.push_back(work.insertElementInPosition(4,1,"\n"));
+
+    commandsInResult.push_back(work.insertElementInPosition(5,0,"\n"));    
+
+    WorkWithLines workCommand;
+    for (auto i: commandsInResult) {
+        workCommand.insertElementInPosition(i);
+    }
+
+
+    Element* tmpForTransfer = work.getStartOfLine(0);
+    Element* tmpForTransfer1 = workCommand.getStartOfLine(0);
+
+    while (tmpForTransfer && tmpForTransfer1) {
+        if (tmpForTransfer1->_value == tmpForTransfer->_value) {
+            std::cout << "1 " << tmpForTransfer1->_value << " " << tmpForTransfer->_value << std::endl; 
+        }
+        
+        tmpForTransfer1 = tmpForTransfer1->next;
+        tmpForTransfer = tmpForTransfer->next;
+    }
     
     return 0;
 }

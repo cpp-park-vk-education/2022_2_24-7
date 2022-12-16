@@ -1,6 +1,6 @@
 // #include "TextEditor.hpp"
 #include "../include/TextEditor.hpp"
-
+#include <iostream>
 
 bool checkForAfterElement(Element* afterElement, Element* checkElement) {
     if (!afterElement) {
@@ -10,6 +10,10 @@ bool checkForAfterElement(Element* afterElement, Element* checkElement) {
 };
 
 bool checkForBeforeLess(Element* elementBefore, Element* elementAfter) {
+    if (!elementBefore || !elementAfter) {
+        // TODO попадает nullptr
+        std::cout << "SSS";
+    }
     return elementBefore->UserId < elementAfter->UserId;
 };
 
@@ -164,7 +168,9 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
             tmpBefore = tmpBefore->next;
         }
 
+
     } else {
+
         if (beggining) {
             // elements exist
             tmpBefore = beggining;
@@ -184,10 +190,13 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
     insertInPositionInLine(answer.quantOfElementsBefore, answer.quantOfLine, insertElement, answer.elementBeforeInsert);
 
     insertEnter(answer, insertElement);
+    
+    return answer;
 };
 
 void WorkWithLines::insertEnter(AnswerForInsertAction& receivedAnswer, Element* insertElement) {
-    if (insertElement->_value != '\n') {
+
+    if (insertElement && insertElement->_value != '\n') {
         return;
     }
     // insert after \n
@@ -209,14 +218,14 @@ void WorkWithLines::insertEnter(AnswerForInsertAction& receivedAnswer, Element* 
             break;
         }
     }
-    
+
     StartOfLine* newLine;
     if (isNewLine) {
         newLine = new StartOfLine();
     } else {
         newLine = new StartOfLine(startOfLine, 1);
     }
-    
+
     newLine->_sizeOfLine += tmpLine->_sizeOfLine - receivedAnswer.quantOfElementsBefore - 2;
     tmpLine->_sizeOfLine -= newLine->_sizeOfLine;
 
@@ -874,8 +883,8 @@ std::string WorkWithLines::insertElementInPosition(std::string command) {
     Command com(command);
     // Answer answerWhereElementBefore = searchForElement(beggining, com._afterElemenet,lines);
 
-    insertElement(com._insertElement, com._afterElemenet, com._beforeElement);
-
+    // insertElement(com._insertElement, com._afterElemenet, com._beforeElement);
+    insertElement(com._insertElement, com._beforeElement,com._afterElemenet);
     return command;
 };
 
@@ -913,7 +922,6 @@ size_t WorkWithLines::getSizeOfLine(size_t lineNumber) {
         for(size_t i = 0; i < lineNumber; ++i) {
             searchForStart = searchForStart->next;
         }
-        
         return searchForStart->_sizeOfLine;
     }
     return 0;
