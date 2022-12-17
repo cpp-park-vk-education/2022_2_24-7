@@ -635,16 +635,6 @@ std::string WorkWithLines::insertElementInPosition(size_t position, std::string 
     // answer = insertElement(_insertElement, positionElement.line, positionElement.pos);
     answer = insertElement(_insertElement, positionElement.line, positionElement.pos);
 
-    if (_insertElement->next) {
-        std::cout << "After EXIST" << std::endl;
-    }
-
-    if (answer.elementBeforeInsert) {
-        std::cout << "Element Before" << std::endl;
-    }
-
-    std::cout << "INSERT " << _insertElement->_value << std::endl;
-
     return createCommand(false, _insertElement, answer.elementBeforeInsert, _insertElement->next);
 };
 
@@ -691,7 +681,7 @@ std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, s
                 deletionLine->_elementStart->isVisible = false;
                 deletionElement = deletionLine->_elementStart;
 
-                if (lineWhereToDelete == lineCount - 1) {
+                if (lineWhereToDelete == lineCount) {
                     // last line
                     beforeDeletionLine->next = new StartOfLine();
                     deletionElement->next = beforeDeletionLine->next->_elementStart;
@@ -863,7 +853,7 @@ std::string WorkWithLines::createCommand(bool isDelete, Element* elementOperatio
         parts += 1;
     }
 
-    returnCommand += "i:" + firstPartOfCommand + "|" + elementOperation->_value + ":" + afterElementString + beforeElementString + std::to_string(parts);
+    returnCommand += "i:" + firstPartOfCommand + "|" + elementOperation->_value + ":" + beforeElementString + afterElementString + std::to_string(parts);
     return returnCommand;
 };
 

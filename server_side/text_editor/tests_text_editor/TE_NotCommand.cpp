@@ -8,16 +8,16 @@ TEST(TextEditor, insertElemnetsNotCommand) {
     std::vector<std::string> commandsInResult;
     
     WorkWithLines work;
-    commandsInResult.push_back(work.insertElementInPosition(0, 0, "a"));
-    commandsInResult.push_back(work.insertElementInPosition(0,0,"b"));
+    commandsInResult.push_back(work.insertElementInPosition(0, "a"));
+    commandsInResult.push_back(work.insertElementInPosition(0,"b"));
     
-    commandsInResult.push_back(work.insertElementInPosition(0,2,"\n"));
+    commandsInResult.push_back(work.insertElementInPosition(2,"\n"));
     
-    commandsInResult.push_back(work.insertElementInPosition(1,0,"\n"));
+    commandsInResult.push_back(work.insertElementInPosition(3,"\n"));
     
-    commandsInResult.push_back(work.insertElementInPosition(2,0,"x"));
-    commandsInResult.push_back(work.insertElementInPosition(2,0,"y"));
-    commandsInResult.push_back(work.insertElementInPosition(2,1,"\n"));
+    commandsInResult.push_back(work.insertElementInPosition(4,"x"));
+    commandsInResult.push_back(work.insertElementInPosition(4,"y"));
+    commandsInResult.push_back(work.insertElementInPosition(5,"\n"));
     
     // transfer line!!! TODO
 
@@ -38,24 +38,24 @@ TEST(TextEditor, insertElemnetsNotCommand) {
 TEST(TextEditor, deleteElementsNotCommand) {
     WorkWithLines work;
 
-    work.insertElementInPosition(0, 0, "k");
-    work.insertElementInPosition(0,0,"e");
-    work.insertElementInPosition(0,0,"l");
-    work.insertElementInPosition(0,3,"\n");
+    work.insertElementInPosition(0, "k");
+    work.insertElementInPosition(0,"e");
+    work.insertElementInPosition(0,"l");
+    work.insertElementInPosition(3,"\n");
 
-    work.insertElementInPosition(1,0,"m");
-    work.insertElementInPosition(1,1,"u");
-    work.insertElementInPosition(1,2,"s");
-    work.insertElementInPosition(1,3,"\n");
+    work.insertElementInPosition(4,"m");
+    work.insertElementInPosition(5,"u");
+    work.insertElementInPosition(6,"s");
+    work.insertElementInPosition(7,"\n");
 
-    work.insertElementInPosition(2,0,"\n");
+    work.insertElementInPosition(8,"\n");
 
-    work.insertElementInPosition(3,0,"x");
-    work.insertElementInPosition(3,1,"y");
-    work.insertElementInPosition(3,2,"z");
-    work.insertElementInPosition(3,3,"\n");
+    work.insertElementInPosition(9,"x");
+    work.insertElementInPosition(10,"y");
+    work.insertElementInPosition(11,"z");
+    work.insertElementInPosition(12,"\n");
 
-    work.insertElementInPosition(4,0,"x");
+    work.insertElementInPosition(13,"x");
     
     std::vector<std::string> neededCommand = {"d:9|0|", "d:14|0|", "d:10|0|",
          "d:12|0|", "d:3|0|", "d:1|0|", "d:2|0|", "d:4|0|"};
@@ -196,33 +196,29 @@ TEST(TextEditor, insertCommand) {
     
     WorkWithLines work;
 
-    commandsInResult.push_back(work.insertElementInPosition(0, 0, "k"));
-    commandsInResult.push_back(work.insertElementInPosition(0,0,"e"));
-    commandsInResult.push_back(work.insertElementInPosition(0,0,"l"));
-    commandsInResult.push_back(work.insertElementInPosition(0,3,"\n"));
+    commandsInResult.push_back(work.insertElementInPosition(0, "k"));
+    commandsInResult.push_back(work.insertElementInPosition(0,"e"));
+    commandsInResult.push_back(work.insertElementInPosition(0,"l"));
+    commandsInResult.push_back(work.insertElementInPosition(3,"\n"));
 
-    commandsInResult.push_back(work.insertElementInPosition(1,0,"m"));
-    commandsInResult.push_back(work.insertElementInPosition(1,1,"u"));
-    commandsInResult.push_back(work.insertElementInPosition(1,2,"s"));
-    commandsInResult.push_back(work.insertElementInPosition(1,3,"\n"));
+    commandsInResult.push_back(work.insertElementInPosition(4,"m"));
+    commandsInResult.push_back(work.insertElementInPosition(5,"u"));
+    commandsInResult.push_back(work.insertElementInPosition(6,"s"));
+    commandsInResult.push_back(work.insertElementInPosition(7,"\n"));
 
-    commandsInResult.push_back(work.insertElementInPosition(2,0,"\n"));
+    commandsInResult.push_back(work.insertElementInPosition(8,"\n"));
 
-    commandsInResult.push_back(work.insertElementInPosition(3,0,"x"));
-    commandsInResult.push_back(work.insertElementInPosition(3,1,"y"));
-    commandsInResult.push_back(work.insertElementInPosition(3,2,"z"));
-    commandsInResult.push_back(work.insertElementInPosition(3,3,"\n"));
+    commandsInResult.push_back(work.insertElementInPosition(9,"x"));
+    commandsInResult.push_back(work.insertElementInPosition(10,"y"));
+    commandsInResult.push_back(work.insertElementInPosition(11,"z"));
+    commandsInResult.push_back(work.insertElementInPosition(12,"\n"));
 
-    commandsInResult.push_back(work.insertElementInPosition(4,0,"x"));
-    commandsInResult.push_back(work.insertElementInPosition(4,1,"\n"));
-
-    commandsInResult.push_back(work.insertElementInPosition(5,0,"\n"));    
+    commandsInResult.push_back(work.insertElementInPosition(13,"x"));
 
     WorkWithLines workCommand;
     for (auto i: commandsInResult) {
         workCommand.insertElementInPosition(i);
     }
-
 
     Element* tmpForTransfer = work.getStartOfLine(1);
     Element* tmpForTransfer1 = workCommand.getStartOfLine(1);
@@ -235,29 +231,29 @@ TEST(TextEditor, insertCommand) {
     }
 }
 
-TEST(TextEditor, DISABLED_deleteCommand) {
+TEST(TextEditor, deleteCommand) {
     WorkWithLines work;
 
     std::vector <std::string> insertCommands;
 
-    insertCommands.push_back(work.insertElementInPosition(0, 0, "k"));
-    insertCommands.push_back(work.insertElementInPosition(0,0,"e"));
-    insertCommands.push_back(work.insertElementInPosition(0,0,"l"));
-    insertCommands.push_back(work.insertElementInPosition(0,3,"\n"));
+    insertCommands.push_back(work.insertElementInPosition(0, "k"));
+    insertCommands.push_back(work.insertElementInPosition(0,"e"));
+    insertCommands.push_back(work.insertElementInPosition(0,"l"));
+    insertCommands.push_back(work.insertElementInPosition(3,"\n"));
 
-    insertCommands.push_back(work.insertElementInPosition(1,0,"m"));
-    insertCommands.push_back(work.insertElementInPosition(1,1,"u"));
-    insertCommands.push_back(work.insertElementInPosition(1,2,"s"));
-    insertCommands.push_back(work.insertElementInPosition(1,3,"\n"));
+    insertCommands.push_back(work.insertElementInPosition(4,"m"));
+    insertCommands.push_back(work.insertElementInPosition(5,"u"));
+    insertCommands.push_back(work.insertElementInPosition(6,"s"));
+    insertCommands.push_back(work.insertElementInPosition(7,"\n"));
 
-    insertCommands.push_back(work.insertElementInPosition(2,0,"\n"));
+    insertCommands.push_back(work.insertElementInPosition(8,"\n"));
 
-    insertCommands.push_back(work.insertElementInPosition(3,0,"x"));
-    insertCommands.push_back(work.insertElementInPosition(3,1,"y"));
-    insertCommands.push_back(work.insertElementInPosition(3,2,"z"));
-    insertCommands.push_back(work.insertElementInPosition(3,3,"\n"));
+    insertCommands.push_back(work.insertElementInPosition(9,"x"));
+    insertCommands.push_back(work.insertElementInPosition(10,"y"));
+    insertCommands.push_back(work.insertElementInPosition(11,"z"));
+    insertCommands.push_back(work.insertElementInPosition(12,"\n"));
 
-    insertCommands.push_back(work.insertElementInPosition(4,0,"x"));
+    insertCommands.push_back(work.insertElementInPosition(13,"x"));
     
     WorkWithLines workWithCommands;
 
@@ -290,7 +286,7 @@ TEST(TextEditor, DISABLED_deleteCommand) {
     std::vector<std::string> neededResults8 = {"m", "u", "s", "\n", "y", "\n"};
 
     Element* tmpCheck = workWithCommands.getStartOfLine(0);
-    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(2,0));
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[0]));
     for (size_t i = 0; i < neededResults1.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults1[i][0]);
@@ -300,6 +296,7 @@ TEST(TextEditor, DISABLED_deleteCommand) {
 
         tmpCheck = tmpCheck->next;
     }
+
 
     tmpCheck = workWithCommands.getStartOfLine(0);
     commandsDelete.push_back(workWithCommands.deleteElementFromPosition(3,0));
@@ -312,7 +309,7 @@ TEST(TextEditor, DISABLED_deleteCommand) {
 
         tmpCheck = tmpCheck->next;
     }
-
+    
     tmpCheck = workWithCommands.getStartOfLine(0);
     commandsDelete.push_back(workWithCommands.deleteElementFromPosition(2,0));
     for (size_t i = 0; i < neededResults3.size(); ++i) {

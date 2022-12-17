@@ -1,272 +1,170 @@
-// #include "include/TextEditor.hpp"
+ #include "include/TextEditor.hpp"
 #include "include/Command.hpp"
 #include "src/Command.cpp"
 #include "include/TextEditor.hpp"
 #include "src/TextEditor.cpp"
-// #include "include/WorkWithData.hpp"
+ #include "include/WorkWithData.hpp"
 // #include "src/WorkWithData.cpp"
+
+void expect_eq(char a, char b) {
+    if (a != b) {
+        std::cout << a << ' ' << b << std::endl;
+    }
+}
 
 #include <iostream>
 int main() {
-    /*
-    std::vector<std::string> commandsInResult;
+  WorkWithLines work;
+
+    std::vector <std::string> insertCommands;
+
+    insertCommands.push_back(work.insertElementInPosition(0, "k"));
+    insertCommands.push_back(work.insertElementInPosition(0,"e"));
+    insertCommands.push_back(work.insertElementInPosition(0,"l"));
+    insertCommands.push_back(work.insertElementInPosition(3,"\n"));
+
+    insertCommands.push_back(work.insertElementInPosition(4,"m"));
+    insertCommands.push_back(work.insertElementInPosition(5,"u"));
+    insertCommands.push_back(work.insertElementInPosition(6,"s"));
+    insertCommands.push_back(work.insertElementInPosition(7,"\n"));
+
+    insertCommands.push_back(work.insertElementInPosition(8,"\n"));
+
+    insertCommands.push_back(work.insertElementInPosition(9,"x"));
+    insertCommands.push_back(work.insertElementInPosition(10,"y"));
+    insertCommands.push_back(work.insertElementInPosition(11,"z"));
+    insertCommands.push_back(work.insertElementInPosition(12,"\n"));
+
+    insertCommands.push_back(work.insertElementInPosition(13,"x"));
     
-    WorkWithLines work;
-    
-    work.insertElementInPosition(0, 0, "k");
-    work.insertElementInPosition(0,0,"e");
-    work.insertElementInPosition(0,0,"l");
-    work.insertElementInPosition(0,3,"\n");
+    WorkWithLines workWithCommands;
 
-    work.insertElementInPosition(1,0,"m");
-    work.insertElementInPosition(1,1,"u");
-    work.insertElementInPosition(1,2,"s");
-    work.insertElementInPosition(1,3,"\n");
-
-    work.insertElementInPosition(2,0,"\n");
-
-    work.insertElementInPosition(3,0,"x");
-    work.insertElementInPosition(3,1,"y");
-    work.insertElementInPosition(3,2,"z");
-    work.insertElementInPosition(3,3,"\n");
-
-    work.insertElementInPosition(4,0,"x");
-    work.insertElementInPosition(4,1,"\n");
-
-    work.insertElementInPosition(5,0,"\n");
-    
-    // work.deleteElementFromPosition(4,1);
-    // work.deleteElementFromPosition(4,1);
-    // work.insertElementInPosition(4,0,"\n");
-
-    commandsInResult.push_back(work.insertElementInPosition(0, 0, "k"));
-    commandsInResult.push_back(work.insertElementInPosition(0,0,"e"));
-    commandsInResult.push_back(work.insertElementInPosition(0,0,"l"));
-    commandsInResult.push_back(work.insertElementInPosition(0,3,"\n"));
-
-    commandsInResult.push_back(work.insertElementInPosition(1,0,"m"));
-    commandsInResult.push_back(work.insertElementInPosition(1,1,"u"));
-    commandsInResult.push_back(work.insertElementInPosition(1,2,"s"));
-    commandsInResult.push_back(work.insertElementInPosition(1,3,"\n"));
-
-    commandsInResult.push_back(work.insertElementInPosition(2,0,"\n"));
-
-    commandsInResult.push_back(work.insertElementInPosition(3,0,"x"));
-    commandsInResult.push_back(work.insertElementInPosition(3,1,"y"));
-    commandsInResult.push_back(work.insertElementInPosition(3,2,"z"));
-    commandsInResult.push_back(work.insertElementInPosition(3,3,"\n"));
-
-    commandsInResult.push_back(work.insertElementInPosition(4,0,"x"));
-    commandsInResult.push_back(work.insertElementInPosition(4,1,"\n"));
-
-    commandsInResult.push_back(work.insertElementInPosition(5,0,"\n"));
-
-    WorkWithLines work1;
-    for(auto i: commandsInResult) {
-        work1.insertElementInPosition(i);
+    for (auto i : insertCommands) {
+        workWithCommands.insertElementInPosition(i);
     }
     
-    work1.deleteElementFromPosition("d:1|0");
-    */
-
+    std::vector<std::string> commandsDelete;
     
-    // WorkWithLines work;
+    std::vector<std::string> neededCommand = {"d:9|0|", "d:14|0|", "d:10|0|",
+         "d:12|0|", "d:3|0|", "d:1|0|", "d:2|0|", "d:4|0|"};
 
-    // std::vector <std::string> insertCommands;
-
-    // insertCommands.push_back(work.insertElementInPosition(0, 0, "k"));
-    // insertCommands.push_back(work.insertElementInPosition(0,0,"e"));
-    // insertCommands.push_back(work.insertElementInPosition(0,0,"l"));
-    // insertCommands.push_back(work.insertElementInPosition(0,3,"\n"));
-
-    // insertCommands.push_back(work.insertElementInPosition(1,0,"m"));
-    // insertCommands.push_back(work.insertElementInPosition(1,1,"u"));
-    // insertCommands.push_back(work.insertElementInPosition(1,2,"s"));
-    // insertCommands.push_back(work.insertElementInPosition(1,3,"\n"));
-
-    // insertCommands.push_back(work.insertElementInPosition(2,0,"\n"));
-
-    // insertCommands.push_back(work.insertElementInPosition(3,0,"x"));
-    // insertCommands.push_back(work.insertElementInPosition(3,1,"y"));
-    // insertCommands.push_back(work.insertElementInPosition(3,2,"z"));
-    // insertCommands.push_back(work.insertElementInPosition(3,3,"\n"));
-
-    // insertCommands.push_back(work.insertElementInPosition(4,0,"x"));
+    // first
+    std::vector<std::string> neededResults = {"l", "e", "k", "\n", "m", "u", "s", "\n", "\n", "x", "y", "z", "\n", "x"};
+    // delete 2
+    std::vector<std::string> neededResults1 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "x", "y", "z", "\n", "x"};
+    // delete 4
+    std::vector<std::string> neededResults2 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "x", "y", "z", "\n"};
+    // delete x from 3
+    std::vector<std::string> neededResults3 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "y", "z", "\n"};
+    // delete z from 3
+    std::vector<std::string> neededResults4 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "y", "\n"};
+    // delete l
+    std::vector<std::string> neededResults5 = {"e", "k", "\n", "m", "u", "s", "\n", "y", "\n"};
+    // delete k
+    std::vector<std::string> neededResults6 = {"e", "\n", "m", "u", "s", "\n", "y", "\n"};
+    // delete e
+    std::vector<std::string> neededResults7 = {"\n", "m", "u", "s", "\n", "y", "\n"};
+    // delete \n
+    std::vector<std::string> neededResults8 = {"m", "u", "s", "\n", "y", "\n"};
     
-    // WorkWithLines workWithCommands;
 
-    // for (auto i : insertCommands) {
-    //     workWithCommands.insertElementInPosition(i);
-    // }
-    
-    // std::vector<std::string> commandsDelete;
-    
-    // std::vector<std::string> neededCommand = {"d:9|0|", "d:14|0|", "d:10|0|",
-    //      "d:12|0|", "d:3|0|", "d:1|0|", "d:2|0|", "d:4|0|"};
+    Element* tmpCheck = workWithCommands.getStartOfLine(0);
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[0]));
+    for (size_t i = 0; i < neededResults1.size(); ++i) {
+        if (tmpCheck->isVisible) {
+            expect_eq(tmpCheck->_value, neededResults1[i][0]);s
+        } else {
+        }
 
-    // // first
-    // std::vector<std::string> neededResults = {"l", "e", "k", "\n", "m", "u", "s", "\n", "\n", "x", "y", "z", "\n", "x"};
-    // // delete 2
-    // std::vector<std::string> neededResults1 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "x", "y", "z", "\n", "x"};
-    // // delete 4
-    // std::vector<std::string> neededResults2 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "x", "y", "z", "\n"};
-    // // delete x from 3
-    // std::vector<std::string> neededResults3 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "y", "z", "\n"};
-    // // delete z from 3
-    // std::vector<std::string> neededResults4 = {"l", "e", "k", "\n", "m", "u", "s", "\n", "y", "\n"};
-    // // delete l
-    // std::vector<std::string> neededResults5 = {"e", "k", "\n", "m", "u", "s", "\n", "y", "\n"};
-    // // delete k
-    // std::vector<std::string> neededResults6 = {"e", "\n", "m", "u", "s", "\n", "y", "\n"};
-    // // delete e
-    // std::vector<std::string> neededResults7 = {"\n", "m", "u", "s", "\n", "y", "\n"};
-    // // delete \n
-    // std::vector<std::string> neededResults8 = {"m", "u", "s", "\n", "y", "\n"};
-
-    // Element* tmpCheck = workWithCommands.getStartOfLine(0);
-    // for (size_t i = 0; i < 14; ++i) {
-    //     commandsDelete.push_back(workWithCommands.deleteElementFromPosition(insertCommands[i]));
-    // }
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(3,0));
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(2,0));
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(2,1));
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
-    
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,1));
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
-
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
-
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
-    // // commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
-
-    // if (nullptr == workWithCommands.getStartOfLine(0)) {
-    //     std::cout << "XA" << std::endl;
-    // };
-
-    // WorkWithData a1;
-    // a1.userFirst(0,0);
-
-    // a1.operationWithData("i:a:0");
-    // a1.operationWithData("i:h:0");
-    // a1.operationWithData("d:1");
-
-
-
-    // WorkWithData a;
-    // a.userFirst(0,0);
-
-    // // a.operationWithData("i:a:0");
-    // // a.operationWithData("i:b:1");
-    // // a.operationWithData("i:\n:1");
-    // a.operationWithData("i:1|0|a:0", 1);
-    // a.operationWithData("i:1|1|b:0", 1);
-    // a.operationWithData("i:2|0|w:1|0:1", 1);
-    // a.operationWithData("i:3|0|\n:1|0:2|0:3", 1);
-    // a.operationWithData("i:2|1|\n:3|0:2|0:3", 1);
-    // a.operationWithData("i:3|1|y:2|1:1", 1);
-
-
-    // a.operationWithData("d:1|0",1);
-    // a.operationWithData("d:3|1",1);
-    // a.operationWithData("d:3|0",1);
-    // a.operationWithData("d:2|1",1);
-    // a.operationWithData("d:2|0",1);
-    // a.operationWithData("d:1|1",1);
-
-    // for (auto i : insertCommands) {
-    //     a.operationWithData(i, 1);
-    // }
-
-    // for (auto i : commandsDelete) {
-    //     a.operationWithData(i, 1);
-    // }
-
-
-    std::vector<std::string> commandsInResult;
-    
-    WorkWithLines work;
-/*
-    lek\n
-    mus\n
-    \n
-    xyz\n
-    x\n
-    \n
-*/
-
-
-    commandsInResult.push_back(work.insertElementInPosition(0, "k"));
-    commandsInResult.push_back(work.insertElementInPosition(0,"e"));
-    commandsInResult.push_back(work.insertElementInPosition(0,"l"));
-    commandsInResult.push_back(work.insertElementInPosition(3,"\n"));
-
-    commandsInResult.push_back(work.insertElementInPosition(4,"m"));
-    commandsInResult.push_back(work.insertElementInPosition(5,"u"));
-    commandsInResult.push_back(work.insertElementInPosition(6,"s"));
-    commandsInResult.push_back(work.insertElementInPosition(7,"\n"));
-
-    commandsInResult.push_back(work.insertElementInPosition(8,"\n"));
-
-    commandsInResult.push_back(work.insertElementInPosition(9,"x"));
-    commandsInResult.push_back(work.insertElementInPosition(10,"y"));
-    commandsInResult.push_back(work.insertElementInPosition(11,"z"));
-    commandsInResult.push_back(work.insertElementInPosition(12,"\n"));
-
-    commandsInResult.push_back(work.insertElementInPosition(13,"x"));
-    commandsInResult.push_back(work.insertElementInPosition(14,"\n"));
-
-    commandsInResult.push_back(work.insertElementInPosition(15,"\n"));    
-
-    for (auto i: commandsInResult) {
-        std::cout << i << std::endl;
+        tmpCheck = tmpCheck->next;
     }
-    
-    WorkWithLines workCommand;
-    for (auto i: commandsInResult) {
-        workCommand.insertElementInPosition(i);
-    }
+    std::cout << "1.1" << std::endl;
 
-    Element* tmpForTransfer = work.getStartOfLine(0);
-    while (tmpForTransfer) {
-        std::cout << tmpForTransfer->_value;
-        tmpForTransfer = tmpForTransfer->next;
-    }
-    std::cout << "OUT\n";
-    tmpForTransfer = workCommand.getStartOfLine(0);
-    while (tmpForTransfer) {
-        std::cout << tmpForTransfer->_value;
-        tmpForTransfer = tmpForTransfer->next;
-    }
-    // Element* tmpForTransfer1 = workCommand.getStartOfLine(0);
+    tmpCheck = workWithCommands.getStartOfLine(0);
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[1]));
+    for (size_t i = 0; i < neededResults2.size(); ++i) {
+        if (tmpCheck->isVisible) {
+            expect_eq(tmpCheck->_value, neededResults2[i][0]);
+        } else {
+            --i;
+        }
 
-    // while (tmpForTransfer && tmpForTransfer1) {
-    //     if (tmpForTransfer1->_value == tmpForTransfer->_value) {
-    //         std::cout << "1 " << tmpForTransfer1->_value << " " << tmpForTransfer->_value << std::endl; 
-    //     } else {
-    //         std::cout << "2 " << tmpForTransfer1->_value << " " << tmpForTransfer->_value << std::endl; 
-    //     }
-        
-    //     tmpForTransfer1 = tmpForTransfer1->next;
-    //     tmpForTransfer = tmpForTransfer->next;
-    // }
-    
-    // tmpForTransfer = work.getStartOfLine(0);
-    // tmpForTransfer1 = workCommand.getStartOfLine(0);
+        tmpCheck = tmpCheck->next;
+    }
+std::cout << "1.2" << std::endl;
+    tmpCheck = workWithCommands.getStartOfLine(0);
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[2]));
+    for (size_t i = 0; i < neededResults3.size(); ++i) {
+        if (tmpCheck->isVisible) {
+            expect_eq(tmpCheck->_value, neededResults3[i][0]);
+        } else {
+            --i;
+        }
 
-    // size_t i = 0;
-    // while (tmpForTransfer && tmpForTransfer1) {
-    //     ++i;    
-    //     std::cout << i << " " << tmpForTransfer1->_value << " " << tmpForTransfer->_value << std::endl; 
-    //     tmpForTransfer1 = tmpForTransfer1->next;
-    //     tmpForTransfer = tmpForTransfer->next;
-    // }
+        tmpCheck = tmpCheck->next;
+    }
+std::cout << "1.3" << std::endl;
+    tmpCheck = workWithCommands.getStartOfLine(0);
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[3]));
+    for (size_t i = 0; i < neededResults4.size(); ++i) {
+        if (tmpCheck->isVisible) {
+            expect_eq(tmpCheck->_value, neededResults4[i][0]);
+        } else {
+            --i;
+        }
+
+        tmpCheck = tmpCheck->next;
+    }
+std::cout << "1.4" << std::endl;
+     tmpCheck = workWithCommands.getStartOfLine(0);
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[4]));
+    for (size_t i = 0; i < neededResults5.size(); ++i) {
+        if (tmpCheck->isVisible) {
+            expect_eq(tmpCheck->_value, neededResults5[i][0]);
+        } else {
+            --i;
+        }
+
+        tmpCheck = tmpCheck->next;
+    }
+std::cout << "1.5" << std::endl;
+     tmpCheck = workWithCommands.getStartOfLine(0);
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[5]));
+    for (size_t i = 0; i < neededResults6.size(); ++i) {
+        if (tmpCheck->isVisible) {
+            expect_eq(tmpCheck->_value, neededResults6[i][0]);
+        } else {
+            --i;
+        }
+
+        tmpCheck = tmpCheck->next;
+    }
+std::cout << "1.6" << std::endl;
+     tmpCheck = workWithCommands.getStartOfLine(0);
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[6]));
+    for (size_t i = 0; i < neededResults7.size(); ++i) {
+        if (tmpCheck->isVisible) {
+            expect_eq(tmpCheck->_value, neededResults7[i][0]);
+        } else {
+            --i;
+        }
+
+        tmpCheck = tmpCheck->next;
+    }
+std::cout << "1.7" << std::endl;
+     tmpCheck = workWithCommands.getStartOfLine(0);
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[7]));
+    for (size_t i = 0; i < neededResults8.size(); ++i) {
+        if (tmpCheck->isVisible) {
+            expect_eq(tmpCheck->_value, neededResults8[i][0]);
+        } else {
+            --i;
+        }
+
+        tmpCheck = tmpCheck->next;
+    }
+    std::cout << "1.8" << std::endl;
+
 
     return 0;
 }
