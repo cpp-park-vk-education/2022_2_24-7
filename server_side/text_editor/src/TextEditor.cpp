@@ -670,7 +670,6 @@ std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, s
 
                 deletionLine->_elementStart->isVisible = false;
                 deletionElement = deletionLine->_elementStart;
-
             
                 delete deletionLine;
             } else {
@@ -702,6 +701,7 @@ std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, s
             
             deletionLine->_elementStart->isVisible = false;
             deletionLine->_elementStart = nextVisible;
+            deletionLine->_sizeOfLine--;
         }
     } else {
         // not first element delete
@@ -719,6 +719,7 @@ std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, s
         deletionElement = tmp;
 
         tmp->isVisible = false;
+        deletionLine->_sizeOfLine--;
     }
 
     if (deletionElement->_value == '\n' && !isDeleteLine) {
@@ -754,9 +755,27 @@ std::string WorkWithLines::insertElementInPosition(std::string command) {
 std::string WorkWithLines::deleteElementFromPosition(std::string command) {
     Command com(command);
     
-    deleteElement(com._insertElement);
+    size_t position = 0;
+    Element* nowEl = beggining;
+    
+    while (nowEl && !(nowEl->isVisible && checkForAfterElement(nowEl, com._insertElement))) {
+        if (nowEl->isVisible) {
+            position++;
+        }
+        nowEl = nowEl->next;
+    }
+    // position++;
 
-    return command;
+    AnswerLinePos pos = getPosition(position);
+
+    return deleteElementFromPosition(pos.line, pos.pos);
+    // TODO
+    // сделать тут поиск строки и места по элементу, передать в deleteElementFromPosition
+    // deleteElementFromPosition()
+    // deleteElement(com._insertElement);
+
+
+    // return command;
 };
 
 size_t WorkWithLines::getQuantityOfLines() {

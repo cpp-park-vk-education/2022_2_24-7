@@ -299,7 +299,7 @@ TEST(TextEditor, deleteCommand) {
 
 
     tmpCheck = workWithCommands.getStartOfLine(0);
-    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(3,0));
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[1]));
     for (size_t i = 0; i < neededResults2.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults2[i][0]);
@@ -311,7 +311,7 @@ TEST(TextEditor, deleteCommand) {
     }
     
     tmpCheck = workWithCommands.getStartOfLine(0);
-    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(2,0));
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[2]));
     for (size_t i = 0; i < neededResults3.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults3[i][0]);
@@ -323,7 +323,7 @@ TEST(TextEditor, deleteCommand) {
     }
 
     tmpCheck = workWithCommands.getStartOfLine(0);
-    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(2,1));
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[3]));
     for (size_t i = 0; i < neededResults4.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults4[i][0]);
@@ -335,7 +335,7 @@ TEST(TextEditor, deleteCommand) {
     }
 
      tmpCheck = workWithCommands.getStartOfLine(0);
-    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[4]));
     for (size_t i = 0; i < neededResults5.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults5[i][0]);
@@ -347,7 +347,7 @@ TEST(TextEditor, deleteCommand) {
     }
 
      tmpCheck = workWithCommands.getStartOfLine(0);
-    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,1));
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[5]));
     for (size_t i = 0; i < neededResults6.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults6[i][0]);
@@ -359,7 +359,7 @@ TEST(TextEditor, deleteCommand) {
     }
 
      tmpCheck = workWithCommands.getStartOfLine(0);
-    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[6]));
     for (size_t i = 0; i < neededResults7.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults7[i][0]);
@@ -371,7 +371,7 @@ TEST(TextEditor, deleteCommand) {
     }
 
      tmpCheck = workWithCommands.getStartOfLine(0);
-    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(0,0));
+    commandsDelete.push_back(workWithCommands.deleteElementFromPosition(neededCommand[7]));
     for (size_t i = 0; i < neededResults8.size(); ++i) {
         if (tmpCheck->isVisible) {
             EXPECT_EQ(tmpCheck->_value, neededResults8[i][0]);
