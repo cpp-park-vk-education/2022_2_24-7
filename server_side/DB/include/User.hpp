@@ -7,13 +7,13 @@
 using ConnectionPtr = boost::shared_ptr<IConnection>;
 
 struct User {
-    User(std::string _userID, int _countUser = 0,
-         ConnectionPtr _newConnection = nullptr)
+    User(int _userID, ConnectionPtr _newConnection = nullptr,
+          int _countUser = 1)
         : userID(_userID),
           userConnection(_newConnection),
-          countUserChanges(_countUser){};
+          countUserChanges(_countUser) {};
 
-    std::string userID;
-    int countUserChanges;  //количество изменений
-    ConnectionPtr userConnection;
+    int userID;
+    const ConnectionPtr& userConnection; //указатель на соединение с пользователем
+    int countUserChanges;  //количество изменений, сделанных пользователем
 };

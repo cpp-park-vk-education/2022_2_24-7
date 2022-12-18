@@ -1,47 +1,41 @@
 #pragma once
 
-#include <iostream>
 #include <string>
 #include <unordered_map>
+#include <iostream>
 
 #include "Handlers.hpp"
 #include "IRouter.hpp"
-#include "Parser.hpp"
+#include "IProject.hpp"
+#include "Project.hpp"
 #include "Reply.hpp"
 #include "Request.hpp"
 #include "User.hpp"
-
-using Handler = Reply (*)(const IResponse &request, const std::string filePath);
+ 
+using Handler = Reply (*)(const IResponse& request, const std::string filePath);
 
 class Router : public IRouter {
    public:
-    Router(Parser &_parser, std::vector<ConnectionPtr> &_connections,
-           std::vector<User> &_users, std::string _filesPath = "./")
-        : parser(_parser),
-          connections(_connections),
-          projectUsers(_users),
-          filesPath(_filesPath) {
-        usersCount = 0;
+    Router();
+
+    bool addHandler(const std::string& method,
+                            const Handler& handler) override {};
+
+    bool processRoute(const Request &request, const ConnectionPtr &userConnection) override {
         addHandler("i", InsertSymbol);
-        addHandler("d", DeleteSymbol);
+        return true;        
     };
+ 
+    
+    bool createProject(std::string _filesPath = "./files") { return true; };
 
-    void addHandler(const std::string &method, const Handler &handler) override;
+    const Project GetProject() const { return project; };
+    const std::unordered_map<std::string, Handler> GetHandlers() const { return handlersMap; };
 
-    Reply processRoute(const Request &request) override;
-
-    void sendToAllProjectUsers(const Reply &reply) override;
-
-    void sendToUser(const User &user);
-    // bool connectUser(const User &user) override;
-    // bool disconnectUser(const User &user) override;
-    void getPrivat();
-
+    bool sendToAllProjectUsers(const Reply &reply, const ConnectionPtr& userConnection) override { };
+    bool sendToUser(const Reply &reply, const ConnectionPtr& userConnection) override { };
    private:
-    Parser &parser;
-    std::vector<ConnectionPtr> &connections;
-    std::vector<User> &projectUsers;
     std::unordered_map<std::string, Handler> handlersMap;
-    std::string filesPath;
-    int usersCount;
+    Project project;
+
 };

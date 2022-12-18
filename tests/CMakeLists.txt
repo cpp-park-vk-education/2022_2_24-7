@@ -17,7 +17,7 @@ FetchContent_MakeAvailable(googletest)
 set(SOURCES "testExampleLib/tests.cpp")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${mutual_editing_lib} GTest::gtest_main) 
+target_link_libraries(${PROJECT_NAME} ${mutual_editing_lib} GTest::gtest_main GTest::gmock) 
 target_include_directories(${PROJECT_NAME} PUBLIC ${mutual_editing_include_directories})
 
 include(GoogleTest)

@@ -3,5 +3,5 @@
 #include <string>
 
 struct IResponse {
-    virtual std::string GetMethod() = 0;
+    virtual char GetMethod() = 0;
 };
