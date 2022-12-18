@@ -1,3 +1,4 @@
+#pragma once
 #include "IWorkWithFile.hpp"
 
 #include <iostream>

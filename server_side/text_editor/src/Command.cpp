@@ -1,5 +1,5 @@
-// #include "Command.hpp"
-#include "../include/Command.hpp"
+#include "Command.hpp"
+// #include "../include/Command.hpp"
 
 #include <iostream>
 

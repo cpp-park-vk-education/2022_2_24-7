@@ -4,5 +4,6 @@
 #include "element.hpp"
 
 class ITranslator {
+    public:
     virtual std::string returnStringFromDataType(Element* from) = 0;
 };

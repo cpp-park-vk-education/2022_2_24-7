@@ -2,7 +2,7 @@
 #include "WorkWithData.hpp"
 
 WorkWithData::WorkWithData() {
-    // translator = new TranslatorFromList;
+    translator = new TranslatorFromList;
     workWithCPP = new WorkWithCppFile;
     workWithLog = new WorkWithLogFile;
 };
@@ -43,18 +43,7 @@ void WorkWithData::userFirst(size_t UserId, size_t userCount) {
 };
 
 std::string WorkWithData::getLine(size_t numberOfLine) {
-    Element* tmp = textEditor->getStartOfLine(numberOfLine);
-    std::string returnString;
-    while (tmp && tmp->isVisible) {
-        returnString.push_back(tmp->_value);
-        
-        if (tmp->_value == '\n') {
-            break;
-        }
-        
-        tmp = tmp->next;
-    }
-    return returnString;
+    return translator->returnStringFromDataType(textEditor->getStartOfLine(numberOfLine));
 };
 
 void WorkWithData::addFile(std::string path) {
@@ -73,7 +62,7 @@ std::string WorkWithData::getFileWithDataDricetory() {
     workWithCPP->clearFile();
     
     for (size_t i = 0; i < textEditor->getQuantityOfLines(); ++i) {
-        workWithCPP->writeToFile(getLine(i));
+        workWithCPP->writeToFile(translator->returnStringFromDataType(textEditor->getStartOfLine(i)));
     }
 
     return workWithCPP->getPath();

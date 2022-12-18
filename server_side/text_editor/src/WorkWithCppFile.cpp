@@ -2,10 +2,12 @@
 
 bool WorkWithCppFile::addExtension(std::string extensionToAdd) {
     _extension = extensionToAdd;
+    return 1;
 };
 
 bool WorkWithCppFile::addPathFile(std::string addPathToFile) {
     _path = addPathToFile;
+    return 1;
 };
 
 bool WorkWithCppFile::writeToFile(std::string whatToWrite) {
@@ -17,13 +19,17 @@ bool WorkWithCppFile::writeToFile(std::string whatToWrite) {
     if (out.is_open())
     {
         out << whatToWrite << std::endl;
+    } else {
+        return 0;
     }
 
     out.close();
+    return 1;
 };
 
 bool WorkWithCppFile::clearFile() {
     std::remove((_path + "res" + _extension).c_str());
+    return 1;
 };
 
 std::string WorkWithCppFile::getPath() {

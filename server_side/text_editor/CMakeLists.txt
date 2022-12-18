@@ -7,19 +7,33 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/TextEditor.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Command.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/SearcherForPlace.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/TranslatorFromList.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/WorkWithData.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/WorkWithLogFile.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/WorkWithCppFile.cpp"
     )
 
-set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/ITextEditor.hpp"
+set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/SearcherForPlace.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/TextEditor.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/Command.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/element.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/IWorkWithData.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/TranslatorFromList.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/WorkWithData.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/WorkWithFile.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/WorkWithLogFile.hpp"
+    
+    "${CMAKE_CURRENT_SOURCE_DIR}/interfaces/Answer.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/interfaces/Command.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/interfaces/element.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/interfaces/ISearchForPlace.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/interfaces/ITextEditor.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/interfaces/ITranslator.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/interfaces/IWorkWithData.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/interfaces/IWorkWithFile.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/interfaces/StartOfLine.hpp"
     )
 
 set(TEXT_EDITOR_LIB "${PROJECT_NAME}_lib")
-set(TEXT_EDITOR_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(TEXT_EDITOR_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CURRENT_SOURCE_DIR}/interfaces")
 
 set(TEXT_EDITOR_LIB ${TEXT_EDITOR_LIB} PARENT_SCOPE)
 set(TEXT_EDITOR_SOURCES_HEADERS_LIB ${SOURCES} ${HEADERS} PARENT_SCOPE)
