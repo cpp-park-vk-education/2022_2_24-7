@@ -1,37 +1,41 @@
-#include "../include/WorkWithData.hpp"
-// #include "WorkWithData.hpp"
+// #include "../include/WorkWithData.hpp"
+#include "WorkWithData.hpp"
 
 WorkWithData::WorkWithData() {
     // translator = new TranslatorFromList;
-    // workWithCPP = new WorkWithCppFile;
+    workWithCPP = new WorkWithCppFile;
+    workWithLog = new WorkWithLogFile;
 };
 
 std::string WorkWithData::operationWithData(std::string operation, bool isCommand) {
     bool isInsert = false;
+    
     std::vector<std::string> vecs = parseString(operation, ':');
     if (vecs[0][0] == 'i') {
         isInsert = true;
     }
 
+    std::string stringToWriteInLogs;
+
     if (isCommand) {
         if (isInsert){
-            return textEditor->insertElementInPosition(operation);
+            stringToWriteInLogs = textEditor->insertElementInPosition(operation);
         } else {
-            return textEditor->deleteElementFromPosition(operation);
+            stringToWriteInLogs = textEditor->deleteElementFromPosition(operation);
         }
     } else {
-        // TODO
         if (isInsert){
-            AnswerLinePos answ;
             size_t post = std::stoul(vecs[2]);
-            answ = textEditor->getLinePosFromPos(post);
-            return textEditor->insertElementInPosition(std::stoul(vecs[2]), &vecs[1][0]);
+
+            stringToWriteInLogs = textEditor->insertElementInPosition(post, vecs[1]);
         } else {
-            AnswerLinePos answ;
-            answ = textEditor->getLinePosFromPos(std::stoul(vecs[1]));
-            return textEditor->deleteElementFromPosition(answ.line,answ.pos);
+            stringToWriteInLogs = textEditor->deleteElementFromPosition(std::stoul(vecs[1]));
         }
     }
+    
+    workWithLog->writeToFile(stringToWriteInLogs);
+    
+    return stringToWriteInLogs;
 };
 
 void WorkWithData::userFirst(size_t UserId, size_t userCount) {
@@ -39,7 +43,6 @@ void WorkWithData::userFirst(size_t UserId, size_t userCount) {
 };
 
 std::string WorkWithData::getLine(size_t numberOfLine) {
-    // return translator->returnStringFromDataType(textEditor->getStartOfLine(numberOfLine));
     Element* tmp = textEditor->getStartOfLine(numberOfLine);
     std::string returnString;
     while (tmp && tmp->isVisible) {
@@ -55,14 +58,23 @@ std::string WorkWithData::getLine(size_t numberOfLine) {
 };
 
 void WorkWithData::addFile(std::string path) {
-    // workWithCPP->addExtension("cpp");
-    // workWithCPP->addPathFile(path);
+    workWithCPP->addExtension("cpp");
+    workWithCPP->addPathFile(path);
+
+    workWithLog->addExtension("txt");
+    workWithLog->addPathFile(path);
 };
 
 std::string WorkWithData::getLogFileDirectory() {
-    // TODO
+    return workWithLog->getPath();
 };
 
 std::string WorkWithData::getFileWithDataDricetory() {
-    // TODO
+    workWithCPP->clearFile();
+    
+    for (size_t i = 0; i < textEditor->getQuantityOfLines(); ++i) {
+        workWithCPP->writeToFile(getLine(i));
+    }
+
+    return workWithCPP->getPath();
 };

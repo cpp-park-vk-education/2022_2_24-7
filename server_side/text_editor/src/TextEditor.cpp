@@ -1,5 +1,5 @@
-// #include "TextEditor.hpp"
-#include "../include/TextEditor.hpp"
+#include "TextEditor.hpp"
+// #include "../include/TextEditor.hpp"
 #include <iostream>
 
 bool checkForAfterElement(Element* afterElement, Element* checkElement) {
@@ -281,7 +281,7 @@ void WorkWithLines::insertEnter(AnswerForInsertAction& receivedAnswer, Element* 
         newLine = new StartOfLine(startOfLine, 1);
     }
     // TODO IF 0 ELEMENT BEFORE???
-    newLine->_sizeOfLine += tmpLine->_sizeOfLine - receivedAnswer.quantOfElementsBefore - 1;
+    newLine->_sizeOfLine = tmpLine->_sizeOfLine - receivedAnswer.quantOfElementsBefore - 1;
     tmpLine->_sizeOfLine -= newLine->_sizeOfLine;
 
     newLine->next = tmpLine->next;
@@ -638,109 +638,10 @@ std::string WorkWithLines::insertElementInPosition(size_t position, std::string 
     return createCommand(false, _insertElement, answer.elementBeforeInsert, _insertElement->next);
 };
 
-std::string WorkWithLines::deleteElementFromPosition(size_t lineWhereToDelete, size_t positionInLine) {
-    Element* afterWhatElement = nullptr;
-    Element* deletionElement = nullptr;
-    
-    StartOfLine* beforeDeletionLine = nullptr;
-    StartOfLine* deletionLine = nullptr;
-    bool isDeleteLine = false;
+std::string WorkWithLines::deleteElementFromPosition(size_t position) {
+    AnswerLinePos pos = getPosition(position);
 
-    if (lineWhereToDelete != 0) {
-        beforeDeletionLine = lines;
-        for (size_t i = 0; i < lineWhereToDelete - 1; ++i) {
-            beforeDeletionLine = beforeDeletionLine->next;
-        }
-        deletionLine = beforeDeletionLine->next;
-    } else {
-        deletionLine = lines;
-    }
-    
-    if (positionInLine == 0) {
-        // first element delete 
-        if (deletionLine->_sizeOfLine == 1) {
-            // last symbol delete
-            
-            isDeleteLine = true;
-            lineCount--;
-            
-            if (lineWhereToDelete == 0) {
-                // delete from first line
-                lines = lines->next;
-
-                deletionLine->_elementStart->isVisible = false;
-                deletionElement = deletionLine->_elementStart;
-            
-                delete deletionLine;
-            } else {
-                // delete not from first line
-
-                beforeDeletionLine->next = deletionLine->next;
-
-                deletionLine->_elementStart->isVisible = false;
-                deletionElement = deletionLine->_elementStart;
-
-                if (lineWhereToDelete == lineCount) {
-                    // last line
-                    beforeDeletionLine->next = new StartOfLine();
-                    deletionElement->next = beforeDeletionLine->next->_elementStart;
-                    lineCount++;
-                }
-
-                delete deletionLine;
-            }
-        } else {
-            // not last symbol delete
-        
-            Element* nextVisible = deletionLine->_elementStart->next;
-            while (!nextVisible->isVisible) {
-                nextVisible = nextVisible->next;
-            }
-
-            deletionElement = deletionLine->_elementStart;
-            
-            deletionLine->_elementStart->isVisible = false;
-            deletionLine->_elementStart = nextVisible;
-            deletionLine->_sizeOfLine--;
-        }
-    } else {
-        // not first element delete
-        
-        Element* tmp = deletionLine->_elementStart;
-        for (size_t i = 0; i < positionInLine; ) {
-            if (tmp->isVisible) {
-                ++i;
-            }
-            tmp = tmp->next;
-        }
-        while (!tmp->isVisible) {
-            tmp = tmp->next;
-        }
-        deletionElement = tmp;
-
-        tmp->isVisible = false;
-        deletionLine->_sizeOfLine--;
-    }
-
-    if (deletionElement->_value == '\n' && !isDeleteLine) {
-        // ERROR can be error
-        
-        StartOfLine* tmp = deletionLine->next;
-        deletionLine->next = deletionLine->next->next;
-        
-        lineCount--;
-        delete tmp;
-    }
-    
-    // output command
-    // first part of command
-    _counter++;
-
-    std::string firstPartOfCommand = std::to_string(deletionElement->count) + '|' + std::to_string(deletionElement->UserId) + '|' ;
-
-    std::string commandToReturn = "d:" + firstPartOfCommand;
-
-    return commandToReturn;
+    return createCommand(true, deleteElementFromLineAndPos(pos.line, pos.pos).elementBeforeInsert);
 };
 
 std::string WorkWithLines::insertElementInPosition(std::string command) {
@@ -768,7 +669,7 @@ std::string WorkWithLines::deleteElementFromPosition(std::string command) {
 
     AnswerLinePos pos = getPosition(position);
 
-    return deleteElementFromPosition(pos.line, pos.pos);
+    return createCommand(true, deleteElementFromLineAndPos(pos.line, pos.pos).elementBeforeInsert);
     // TODO
     // сделать тут поиск строки и места по элементу, передать в deleteElementFromPosition
     // deleteElementFromPosition()
@@ -829,24 +730,6 @@ WorkWithLines::~WorkWithLines() {
 
 
 std::string WorkWithLines::createCommand(bool isDelete, Element* elementOperation, Element* beforeElement, Element* afterElement) {
-    // TODO rewrite
-    
-    // 
-    // std::string str = "";
-    // if (beforeElement) {
-    //     str += "BEEFORE " + beforeElement->_value;
-    //     std::cout << std::endl << "BBBBBB" << std::endl;
-    // }
-
-    // if (afterElement) {
-    //     str += "After " + afterElement->_value;
-    //     std::cout << std::endl << "AAAAAA" << std::endl;
-    // }
-
-    // str += "INSERT " + elementOperation->_value;
-    // std::cout << str << std::endl;
-    // 
-
     // first part of command
     std::string firstPartOfCommand = std::to_string(elementOperation->count) + '|' + std::to_string(elementOperation->UserId);
     std::string returnCommand;
@@ -854,7 +737,7 @@ std::string WorkWithLines::createCommand(bool isDelete, Element* elementOperatio
     if (isDelete) {
         // delete command
         
-        returnCommand = "d:" + firstPartOfCommand;
+        returnCommand = "d:" + firstPartOfCommand + '|';
         return returnCommand;
     }
     
@@ -1164,5 +1047,115 @@ AnswerLinePos WorkWithLines::getPosition(size_t position) {
 
     answer.pos = position;
 
+    return answer;
+};
+
+AnswerForInsertAction WorkWithLines::deleteElementFromLineAndPos(size_t lineWhereToDelete, size_t positionInLine) {
+    AnswerForInsertAction answer;
+    
+    Element* afterWhatElement = nullptr;
+    Element* deletionElement = nullptr;
+    
+    StartOfLine* beforeDeletionLine = nullptr;
+    StartOfLine* deletionLine = nullptr;
+    bool isDeleteLine = false;
+
+    if (lineWhereToDelete != 0) {
+        beforeDeletionLine = lines;
+        for (size_t i = 0; i < lineWhereToDelete - 1; ++i) {
+            beforeDeletionLine = beforeDeletionLine->next;
+        }
+        deletionLine = beforeDeletionLine->next;
+    } else {
+        deletionLine = lines;
+    }
+    
+    if (positionInLine == 0) {
+        // first element delete 
+        if (deletionLine->_sizeOfLine == 1) {
+            // last symbol delete
+            
+            isDeleteLine = true;
+            lineCount--;
+            
+            if (lineWhereToDelete == 0) {
+                // delete from first line
+                lines = lines->next;
+
+                answer.elementBeforeInsert = deletionLine->_elementStart;
+
+                deletionLine->_elementStart->isVisible = false;
+                deletionElement = deletionLine->_elementStart;
+            
+                delete deletionLine;
+            } else {
+                // delete not from first line
+
+                beforeDeletionLine->next = deletionLine->next;
+
+                answer.elementBeforeInsert = deletionLine->_elementStart;
+
+                deletionLine->_elementStart->isVisible = false;
+                deletionElement = deletionLine->_elementStart;
+
+                if (lineWhereToDelete == lineCount) {
+                    // last line
+                    beforeDeletionLine->next = new StartOfLine();
+                    deletionElement->next = beforeDeletionLine->next->_elementStart;
+                    lineCount++;
+                }
+
+                delete deletionLine;
+            }
+        } else {
+            // not last symbol delete
+        
+            Element* nextVisible = deletionLine->_elementStart->next;
+            while (!nextVisible->isVisible) {
+                nextVisible = nextVisible->next;
+            }
+
+            deletionElement = deletionLine->_elementStart;
+            
+            answer.elementBeforeInsert = deletionLine->_elementStart;
+            
+            deletionLine->_elementStart->isVisible = false;
+            deletionLine->_elementStart = nextVisible;
+            deletionLine->_sizeOfLine--;
+        }
+    } else {
+        // not first element delete
+        
+        Element* tmp = deletionLine->_elementStart;
+        for (size_t i = 0; i < positionInLine; ) {
+            if (tmp->isVisible) {
+                ++i;
+            }
+            tmp = tmp->next;
+        }
+        while (!tmp->isVisible) {
+            tmp = tmp->next;
+        }
+        deletionElement = tmp;
+
+        answer.elementBeforeInsert = tmp;
+
+        tmp->isVisible = false;
+        deletionLine->_sizeOfLine--;
+    }
+
+    if (deletionElement->_value == '\n' && !isDeleteLine) {
+        // ERROR can be error
+        
+        StartOfLine* tmp = deletionLine->next;
+        deletionLine->next = deletionLine->next->next;
+        
+        lineCount--;
+        delete tmp;
+    }
+    
+    // output command
+    // first part of command
+    
     return answer;
 };

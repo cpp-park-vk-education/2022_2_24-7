@@ -14,7 +14,7 @@ class IWorkWithText {
     public:
     // for client part
     virtual std::string insertElementInPosition(size_t position, std::string symbol) = 0;
-    virtual std::string deleteElementFromPosition(size_t lineWhereToDelete, size_t positionInLine) = 0;
+    virtual std::string deleteElementFromPosition(size_t position) = 0;
 
     // for server side
     virtual std::string insertElementInPosition(std::string command) = 0;

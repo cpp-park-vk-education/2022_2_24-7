@@ -1,6 +1,7 @@
 #pragma once
 #include "IWorkWithData.hpp"
 #include "WorkWithFile.hpp"
+#include "WorkWithLogFile.hpp"
 
 #include "TextEditor.hpp"
 // #include "TranslatorFromList.hpp"
@@ -20,7 +21,8 @@ class WorkWithData : public IWorkWithData {
 
     private:
     // ITranslator* translator;
-    // IWorkWithFile* workWithCPP;
+    IWorkWithFile* workWithCPP;
+    IWorkWithFile* workWithLog;
 
     IWorkWithText* textEditor;
 };

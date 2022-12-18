@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 
-class WorkWithCppFile: public IWorkWithFile{
+class WorkWithLogFile: public IWorkWithFile{
     public:
     bool addExtension(std::string extensionToAdd) override;
     bool addPathFile(std::string addPathToFile) override;

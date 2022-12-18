@@ -54,7 +54,7 @@ class WorkWithLines : public IWorkWithText {
 
     // for client part
     std::string insertElementInPosition(size_t position, std::string symbol) override;
-    std::string deleteElementFromPosition(size_t lineWhereToDelete, size_t positionInLine) override;
+    std::string deleteElementFromPosition(size_t position) override;
 
     // for server side
     std::string insertElementInPosition(std::string command) override;
@@ -81,6 +81,7 @@ class WorkWithLines : public IWorkWithText {
 
     void deleteEnter(AnswerForInsertAction answer, StartOfLine* line);
     
+    AnswerForInsertAction deleteElementFromLineAndPos(size_t lineWhereToDelete, size_t positionInLine);
     
     AnswerForInsertAction insertElement(Element* insertElement, size_t lineWhereInsert, size_t positionWhereInsert);
     
