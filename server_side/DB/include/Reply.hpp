@@ -7,5 +7,9 @@ struct Reply : IResponse {
 
   Reply(std::string __string) : command(__string)  {};
 
+  bool operator==(Reply repl) const {
+        return (command == repl.command);
+  }
+
   std::string command;
 };

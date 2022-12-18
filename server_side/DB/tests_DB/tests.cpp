@@ -115,3 +115,48 @@ TEST(HandlersTest, DeleteTest) {
     Reply replyIt("d");
     EXPECT_EQ(replyIt.GetMethod(), DeleteSymbol(requestIt, filePath).GetMethod());
 }
+
+class MockRouter : public IRouter {
+public:
+    MOCK_METHOD(
+        bool,
+        addHandler,
+        (const std::string& method, const Handler& handler),
+        (override)
+    );
+
+    MOCK_METHOD(
+        bool,
+        processRoute,
+        (const Request &request, const ConnectionPtr &userConnection),
+        (override)
+    );
+
+    MOCK_METHOD(
+        bool,
+        sendToUser,
+        (const Reply &reply, const ConnectionPtr& userConnection),
+        (override)
+    );
+
+    MOCK_METHOD(
+        bool,
+        sendToAllProjectUsers,
+        (const Reply &reply, const ConnectionPtr& userConnection),
+        (override)
+    );
+};
+
+TEST(GMockTests, RouterGMock) {
+    MockRouter mockRouter;
+    Reply replyIt("i");
+    Request requestIt("d");
+    ConnectionPtr myConnectionPtr{};
+    EXPECT_CALL(mockRouter, sendToUser(replyIt, myConnectionPtr)).Times(1);
+    EXPECT_CALL(mockRouter, addHandler("i", InsertSymbol)).Times(1);
+    EXPECT_CALL(mockRouter, processRoute(requestIt, myConnectionPtr)).Times(1);
+
+    mockRouter.sendToUser(replyIt, myConnectionPtr);
+    mockRouter.addHandler("i", InsertSymbol);
+    mockRouter.processRoute(requestIt, myConnectionPtr);
+}

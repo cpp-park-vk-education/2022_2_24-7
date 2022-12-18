@@ -7,5 +7,9 @@ struct Request : IResponse {
 
     Request(std::string __string) : command(__string) {};
 
+    bool operator==(Request req) const {
+        return (command == req.command);
+    }
+
     std::string command;
 };

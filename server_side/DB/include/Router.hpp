@@ -22,6 +22,7 @@ class Router : public IRouter {
                             const Handler& handler) override {};
 
     bool processRoute(const Request &request, const ConnectionPtr &userConnection) override {
+        addHandler("i", InsertSymbol);
         return true;        
     };
  
@@ -31,8 +32,8 @@ class Router : public IRouter {
     const Project GetProject() const { return project; };
     const std::unordered_map<std::string, Handler> GetHandlers() const { return handlersMap; };
 
-    bool sendToAllProjectUsers(const Reply &reply, const ConnectionPtr& userConnection) override { return true; };
-    bool sendToUser(const Reply &reply, const ConnectionPtr& userConnection) override { return true; };
+    bool sendToAllProjectUsers(const Reply &reply, const ConnectionPtr& userConnection) override { };
+    bool sendToUser(const Reply &reply, const ConnectionPtr& userConnection) override { };
    private:
     std::unordered_map<std::string, Handler> handlersMap;
     Project project;
