@@ -1,6 +1,7 @@
 #pragma once
 
 #include <boost/shared_ptr.hpp>
+
 class IConnection {
    public:
     virtual void handle_read() = 0;
@@ -10,3 +11,4 @@ class IConnection {
 };
 
 using ConnectionPtr = boost::shared_ptr<IConnection>;
+// это интерфейс сущности из сервера проекта, он служит для последующей интеграции

@@ -12,3 +12,4 @@ class IWorkWithData {
     virtual std::string getLogFileDirectory() = 0;
     virtual std::string getFileWithDataDirectory() = 0;
 };
+// это интерфейс сущности из системы проекта, он служит для последующей интеграции
