@@ -7,11 +7,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/Router.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/Handlers.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/Project.cpp"
 )
 
 set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/Handlers.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/IConnection.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/IProject.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/Project.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/IResponse.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/IWorkWithData.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/Reply.hpp"

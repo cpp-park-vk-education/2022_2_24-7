@@ -19,13 +19,13 @@ bool Project::UserExist(const ConnectionPtr& userConnection) {
     return false;
 };
 
-int Project::GetCounter() const { return userIdCounter; }
-
 std::vector<User> Project::GetUsers() const { return projectUsers; };
 
 const std::string Project::GetPath() const { return filesPath; };
 
 const std::string Project::GetName() const { return projectName; }
+
+int Project::GetCounter() const { return userIdCounter; }
 
 bool Project::ConnectUser(const ConnectionPtr& userConnection) {
     User tempUser(userIdCounter, userConnection, 1);
@@ -35,12 +35,14 @@ bool Project::ConnectUser(const ConnectionPtr& userConnection) {
 };
 
 bool Project::DisconnectUser(const ConnectionPtr& userConnection) {
-    for (auto i = projectUsers.begin(); i != projectUsers.end(); ++i) {
-        if (i->userConnection == userConnection) {
-            projectUsers.erase(i);
+    if(projectUsers.size() == 0) {
+        return 0;
+    }
+    for(int i = 0; i < projectUsers.size(); ++i) {
+        if(projectUsers[i].userConnection == userConnection) {
+            //projectUsers.erase(projectUsers.begin() + i);
             return true;
         }
     }
-
     return false;
 };

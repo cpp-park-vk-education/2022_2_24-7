@@ -12,9 +12,11 @@ struct User {
         : userID(_userID),
           userConnection(_newConnection),
           countUserChanges(_countUser){};
+        
+
 
     int userID;
     const ConnectionPtr&
-        userConnection;  //указатель на соединение с пользователем
+        userConnection;  //ссылка на соединение с пользователем
     int countUserChanges;  //количество изменений, сделанных пользователем
 };
