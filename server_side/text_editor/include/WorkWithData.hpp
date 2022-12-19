@@ -1,9 +1,10 @@
 #pragma once
 #include "IWorkWithData.hpp"
 #include "WorkWithFile.hpp"
+#include "WorkWithLogFile.hpp"
 
 #include "TextEditor.hpp"
-// #include "TranslatorFromList.hpp"
+#include "TranslatorFromList.hpp"
 
 class WorkWithData : public IWorkWithData {
     public:
@@ -18,9 +19,12 @@ class WorkWithData : public IWorkWithData {
     std::string getLogFileDirectory() override;
     std::string getFileWithDataDricetory() override;
 
+    ~WorkWithData();
+
     private:
-    // ITranslator* translator;
-    // IWorkWithFile* workWithCPP;
+    ITranslator* translator;
+    IWorkWithFile* workWithCPP;
+    IWorkWithFile* workWithLog;
 
     IWorkWithText* textEditor;
 };

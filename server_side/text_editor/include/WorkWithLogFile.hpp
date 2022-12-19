@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-class WorkWithCppFile: public IWorkWithFile{
+class WorkWithLogFile: public IWorkWithFile{
     public:
     bool addExtension(std::string extensionToAdd) override;
     bool addPathFile(std::string addPathToFile) override;
@@ -14,7 +14,7 @@ class WorkWithCppFile: public IWorkWithFile{
 
     std::string getPath() override;
 
-    virtual ~WorkWithCppFile() = default;
+    virtual ~WorkWithLogFile() = default;
 
     private:
     std::string _path;

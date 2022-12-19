@@ -14,10 +14,5 @@ struct Command {
     Element* _afterElemenet;
     Element* _beforeElement;
 
-    ~Command() {
-        // ERROR may be error not init
-        delete _afterElemenet;
-        delete _beforeElement;
-    }
+    ~Command();
 };
-

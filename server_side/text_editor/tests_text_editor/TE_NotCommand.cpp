@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
+#include "WorkWithData.hpp"
 #include "TextEditor.hpp"
 
 
@@ -18,8 +19,6 @@ TEST(TextEditor, insertElemnetsNotCommand) {
     commandsInResult.push_back(work.insertElementInPosition(4,"x"));
     commandsInResult.push_back(work.insertElementInPosition(4,"y"));
     commandsInResult.push_back(work.insertElementInPosition(5,"\n"));
-    
-    // transfer line!!! TODO
 
     std::vector<std::string> neededCommand = {"i:1|0|a:0", "i:2|0|b:1|0:2", "i:3|0|\n:1|0:1",
          "i:4|0|\n:3|0:1", "i:5|0|x:4|0:1", "i:6|0|y:4|0:5|0:3", "i:7|0|\n:6|0:5|0:3"};
@@ -89,7 +88,7 @@ TEST(TextEditor, deleteElementsNotCommand) {
         tmpCheck = tmpCheck->next;
     }
 
-    commandsInResult.push_back(work.deleteElementFromPosition(2,0));
+    commandsInResult.push_back(work.deleteElementFromPosition(8));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults1.size(); ++i) {
         if (tmpCheck->isVisible) {
@@ -101,7 +100,7 @@ TEST(TextEditor, deleteElementsNotCommand) {
         tmpCheck = tmpCheck->next;
     }
 
-    commandsInResult.push_back(work.deleteElementFromPosition(3,0));
+    commandsInResult.push_back(work.deleteElementFromPosition(12));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults2.size(); ++i) {
         if (tmpCheck->isVisible) {
@@ -113,7 +112,7 @@ TEST(TextEditor, deleteElementsNotCommand) {
         tmpCheck = tmpCheck->next;
     }
 
-    commandsInResult.push_back(work.deleteElementFromPosition(2,0));
+    commandsInResult.push_back(work.deleteElementFromPosition(8));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults3.size(); ++i) {
         if (tmpCheck->isVisible) {
@@ -125,7 +124,7 @@ TEST(TextEditor, deleteElementsNotCommand) {
         tmpCheck = tmpCheck->next;
     }
 
-    commandsInResult.push_back(work.deleteElementFromPosition(2,1));
+    commandsInResult.push_back(work.deleteElementFromPosition(9));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults4.size(); ++i) {
         if (tmpCheck->isVisible) {
@@ -137,7 +136,7 @@ TEST(TextEditor, deleteElementsNotCommand) {
         tmpCheck = tmpCheck->next;
     }
 
-    commandsInResult.push_back(work.deleteElementFromPosition(0,0));
+    commandsInResult.push_back(work.deleteElementFromPosition(0));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults5.size(); ++i) {
         if (tmpCheck->isVisible) {
@@ -149,7 +148,7 @@ TEST(TextEditor, deleteElementsNotCommand) {
         tmpCheck = tmpCheck->next;
     }
 
-    commandsInResult.push_back(work.deleteElementFromPosition(0,1));
+    commandsInResult.push_back(work.deleteElementFromPosition(1));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults6.size(); ++i) {
         if (tmpCheck->isVisible) {
@@ -161,7 +160,7 @@ TEST(TextEditor, deleteElementsNotCommand) {
         tmpCheck = tmpCheck->next;
     }
 
-    commandsInResult.push_back(work.deleteElementFromPosition(0,0));
+    commandsInResult.push_back(work.deleteElementFromPosition(0));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults7.size(); ++i) {
         if (tmpCheck->isVisible) {
@@ -173,7 +172,7 @@ TEST(TextEditor, deleteElementsNotCommand) {
         tmpCheck = tmpCheck->next;
     }
 
-    commandsInResult.push_back(work.deleteElementFromPosition(0,0));
+    commandsInResult.push_back(work.deleteElementFromPosition(0));
     tmpCheck = work.getStartOfLine(0);
     for (size_t i = 0; i < neededResults8.size(); ++i) {
         if (tmpCheck->isVisible) {
