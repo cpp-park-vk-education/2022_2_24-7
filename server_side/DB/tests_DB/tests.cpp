@@ -52,7 +52,7 @@ TEST(RouterFunctionsTest, ProcessRouteTest) {
 TEST(RouterFunctionsTest, CreateProjectTest) {
     Router routerTest;
     std::string path1 = "./test";
-    EXPECT_EQ(routerTest.createProject(path1), true);
+    
     std::string path2 = routerTest.GetProject().GetPath();
     EXPECT_EQ(path1, path2);
 }

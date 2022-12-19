@@ -27,7 +27,7 @@ class Router : public IRouter {
         return true;
     };
 
-    bool createProject(std::string _filesPath = "./files");
+
 
     const Project GetProject() const { return project; };
     const std::unordered_map<std::string, Handler> GetHandlers() const {
