@@ -17,7 +17,15 @@ bool Router::sendToUser(const Reply& reply,
 
 bool Router::sendToAllProjectUsers(const Reply& reply,
                                    const ConnectionPtr& userConnection) {
+    if(project.GetUsers().size() == 0) {
+        return 0;
+    }
+    for(int i = 0; i < project.GetUsers().size(); ++i) {
+        if(project.GetUsers()[i].userConnection != userConnection) {
+            sendToUser(reply, project.GetUsers()[i].userConnection);
+        }
+    }
+
     return 1;
 };
 
-bool Router::createProject(std::string _filesPath) { return 0; };
