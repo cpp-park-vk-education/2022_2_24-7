@@ -6,15 +6,6 @@
 #include "StartOfLine.hpp"
 #include "Functors.hpp"
 
-struct AnswerForLineAndElementVisible {
-    AnswerForLineAndElementVisible() : lineCount(0), visibleCount(0), line(nullptr), element(nullptr) {};
-
-    size_t lineCount;
-    size_t visibleCount;
-
-    StartOfLine* line;
-    Element* element;
-};
 
 class ISearchForPlace {
     public:

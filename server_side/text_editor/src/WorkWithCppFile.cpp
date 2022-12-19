@@ -11,7 +11,6 @@ bool WorkWithCppFile::addPathFile(std::string addPathToFile) {
 };
 
 bool WorkWithCppFile::writeToFile(std::string whatToWrite) {
-    // TODO write to file dont create file
     std::ofstream out;
 
     out.open(_path + "res" + _extension, std::ios::app);

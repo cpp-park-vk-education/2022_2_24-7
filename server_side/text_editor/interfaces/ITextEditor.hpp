@@ -2,13 +2,8 @@
 #include <string>
 
 #include "element.hpp"
+#include "Answer.hpp"
 
-struct AnswerLinePos {
-    AnswerLinePos() :line(0), pos(0) {};
-
-    size_t line;
-    size_t pos;
-};
 
 class IWorkWithText {
     public:
@@ -22,8 +17,6 @@ class IWorkWithText {
 
     virtual size_t getQuantityOfLines() = 0;
     virtual Element* getStartOfLine(size_t lineNumber) = 0;
-    // virtual size_t getSizeOfLine(size_t lineNumber) = 0;
 
     virtual ~IWorkWithText() = default;
-    // virtual AnswerLinePos getLinePosFromPos(size_t pos) = 0;
 };
