@@ -28,16 +28,7 @@ void WorkWithLines::insertInPositionInLine(size_t positionToInsert, size_t lineW
                 return;
             }
 
-            Element* tmpElement = lines->_elementStart;
-
-            size_t elementPosition = 1;
-            while (elementPosition < positionToInsert) {
-                tmpElement = tmpElement->next;
-
-                if (tmpElement->isVisible) {
-                    elementPosition++;
-                }
-            }
+            Element* tmpElement = searcher->getToPosition(lines->_elementStart, positionToInsert);
 
             insertElement->next = tmpElement->next;
             tmpElement->next = insertElement;
@@ -58,20 +49,13 @@ void WorkWithLines::insertInPositionInLine(size_t positionToInsert, size_t lineW
             lineWhereInsert--;
         }
 
-        for (size_t i = 0; i < lineWhereInsert; i++) {
-            insertLine = insertLine->next;
-        }
+        insertLine = searcher->getToLine(insertLine, lineWhereInsert);
         
         Element* before = insertLine->_elementStart;
         
         if (positionToInsert == 0) {
-            while (before && !(before->isVisible && before->_value == '\n')) {
-                before = before->next;
-            }
-
-            while (before->next && !before->next->isVisible) {
-                before = before->next;
-            }
+            before = searcher->getToEndOfLine(before);
+            before = searcher->skipInvisibleElements(before);
 
             if (insertLine->next->_sizeOfLine == 0) {
                 delete insertLine->next->_elementStart;                
@@ -83,22 +67,13 @@ void WorkWithLines::insertInPositionInLine(size_t positionToInsert, size_t lineW
             insertLine->next->_sizeOfLine++;
             insertLine->next->_elementStart = insertElement;
         } else {
-            size_t positionNow = 1;
-
-            while (positionNow < positionToInsert) {
-                before = before->next;
-
-                if (before->isVisible) {
-                    positionNow++;
-                }
-            }
+            before = searcher->getToPosition(before, positionToInsert);
 
             insertElement->next = before->next;
             before->next = insertElement;
 
             insertLine->_sizeOfLine++;
-        }
-        
+        }      
     }
 };
 
@@ -119,26 +94,15 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
         tmpBefore = beggining;
         StartOfLine* tmpLine = lines;
 
-        while (tmpBefore && !checkForAfterElement(beforeElement, tmpBefore)) {
-            if (tmpBefore->isVisible) {
-                countVisibleBefore++;
-                
-                if (tmpBefore->_value == '\n') {
-                    lineCountBefore++;
-                    countVisibleBefore = 0;
-                    
-                    tmpLine = tmpLine->next;
-                }
-            }
-            tmpBefore = tmpBefore->next;
-        }
-        
-        if (tmpBefore->_value == '\n') {
-            lineCountBefore++;
-            countVisibleBefore = 0;
+        checkForNotEqual notEq;
 
-            tmpLine = tmpLine->next;
-        }
+        AnswerForLineAndElementVisible answer = searcher->searchForLineAndPos(tmpBefore, beforeElement, tmpLine, &notEq);
+            
+        tmpBefore = answer.element;
+        tmpLine = answer.line;
+
+        countVisibleBefore = answer.visibleCount;
+        lineCountBefore = answer.lineCount;
 
     } else {
 
@@ -146,26 +110,15 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
             // elements exist
             tmpBefore = beggining;
 
-            while (checkForBeforeLess(tmpBefore, insertElement)) {
-                if (tmpBefore->isVisible) {
-                    countVisibleBefore++;
-                    
-                    if (tmpBefore->_value == '\n') {
-                        lineCountBefore++;
-                        countVisibleBefore = 0;
-                        
-                        tmpLine = tmpLine->next;
-                    }
-                }
-                tmpBefore = tmpBefore->next;
-            }
-        
-            if (tmpBefore->_value == '\n') {
-                lineCountBefore++;
-                countVisibleBefore = 0;
+            checkForLess less;
 
-                tmpLine = tmpLine->next;
-            }
+            AnswerForLineAndElementVisible answer = searcher->searchForLineAndPos(tmpBefore, insertElement, tmpLine, &less);
+            
+            tmpBefore = answer.element;
+            tmpLine = answer.line;
+
+            countVisibleBefore = answer.visibleCount;
+            lineCountBefore = answer.lineCount;
         } else {
             // elements doesnt exist
             // what position
@@ -199,11 +152,12 @@ void WorkWithLines::insertEnter(AnswerForInsertAction& receivedAnswer, Element* 
     }
     // insert after \n
 
-    StartOfLine* tmpLine = lines;
+    // StartOfLine* tmpLine = lines;
+    StartOfLine* tmpLine = searcher->getToLine(lines, receivedAnswer.quantOfLine);
 
-    for (size_t i = 0; i < receivedAnswer.quantOfLine; ++i) {
-        tmpLine = tmpLine->next;
-    }
+    // for (size_t i = 0; i < receivedAnswer.quantOfLine; ++i) {
+    //     tmpLine = tmpLine->next;
+    // }
 
     Element* startOfLine = insertElement->next;
     bool isNewLine = false;
@@ -274,62 +228,62 @@ WorkWithLines::WorkWithLines(size_t UserId, size_t counter) : beggining(nullptr)
     searcher = new Searcher;
 };
 
-void insertElement(Element* startOfLine, Element* whatInsert, Element* afterWhatInsert, Element* beforeWhatInsert, StartOfLine** lines) {
-    // сделать проверку про 
-    // TODO проверить на before element, чтобы можно вставить перед элементами других людей
-    if (afterWhatInsert) {
-        // after insert
-        if (beforeWhatInsert) {
-            // after and before insert
-            Element* tmp = afterWhatInsert;
-            // beggining exist
-            while (tmp->UserId < whatInsert->UserId) {
-                // skip another elements with less userid
-                tmp = tmp->next;
-            }
-            whatInsert->next = tmp->next;
-            tmp->next = whatInsert;
-        } else {
-            // only after insert
-            Element* tmp = afterWhatInsert;
-            // beggining exist
-            while (tmp->UserId < whatInsert->UserId) {
-                // skip another elements with less userid
-                tmp = tmp->next;
-            }
-            whatInsert->next = tmp->next;
-            tmp->next = whatInsert;
-        }
-    } else {
-        if (beforeWhatInsert) {
-            // before insert
-            Element* tmp = startOfLine;
-            // beggining exist
-            while (tmp->UserId < whatInsert->UserId) {
-                // skip another elements with less userid
-                tmp = tmp->next;
-            }
-            whatInsert->next = tmp->next;
-            tmp->next = whatInsert;
-        } else {
-            // insert into beggining
-            if (startOfLine) {
-                Element* tmp = startOfLine;
-                // beggining exist
-                while (tmp->UserId < whatInsert->UserId) {
-                    // skip another elements with less userid
-                    tmp = tmp->next;
-                }
-                whatInsert->next = tmp->next;
-                tmp->next = whatInsert;
+// void insertElement(Element* startOfLine, Element* whatInsert, Element* afterWhatInsert, Element* beforeWhatInsert, StartOfLine** lines) {
+//     // сделать проверку про 
+//     // TODO проверить на before element, чтобы можно вставить перед элементами других людей
+//     if (afterWhatInsert) {
+//         // after insert
+//         if (beforeWhatInsert) {
+//             // after and before insert
+//             Element* tmp = afterWhatInsert;
+//             // beggining exist
+//             while (tmp->UserId < whatInsert->UserId) {
+//                 // skip another elements with less userid
+//                 tmp = tmp->next;
+//             }
+//             whatInsert->next = tmp->next;
+//             tmp->next = whatInsert;
+//         } else {
+//             // only after insert
+//             Element* tmp = afterWhatInsert;
+//             // beggining exist
+//             while (tmp->UserId < whatInsert->UserId) {
+//                 // skip another elements with less userid
+//                 tmp = tmp->next;
+//             }
+//             whatInsert->next = tmp->next;
+//             tmp->next = whatInsert;
+//         }
+//     } else {
+//         if (beforeWhatInsert) {
+//             // before insert
+//             Element* tmp = startOfLine;
+//             // beggining exist
+//             while (tmp->UserId < whatInsert->UserId) {
+//                 // skip another elements with less userid
+//                 tmp = tmp->next;
+//             }
+//             whatInsert->next = tmp->next;
+//             tmp->next = whatInsert;
+//         } else {
+//             // insert into beggining
+//             if (startOfLine) {
+//                 Element* tmp = startOfLine;
+//                 // beggining exist
+//                 while (tmp->UserId < whatInsert->UserId) {
+//                     // skip another elements with less userid
+//                     tmp = tmp->next;
+//                 }
+//                 whatInsert->next = tmp->next;
+//                 tmp->next = whatInsert;
 
-            } else {
-                // beggining doesnt exist
-                startOfLine = whatInsert;
-            }
-        }
-    }
-}
+//             } else {
+//                 // beggining doesnt exist
+//                 startOfLine = whatInsert;
+//             }
+//         }
+//     }
+// }
 
 
 std::string WorkWithLines::insertElementInPosition(size_t position, std::string symbol) {
@@ -385,10 +339,7 @@ Element* WorkWithLines::getStartOfLine(size_t lineNumber) {
     }
 
     if (lineNumber <= lineCount) {
-        StartOfLine* searchForStart = lines;   
-        for(size_t i = 0; i < lineNumber; ++i) {
-            searchForStart = searchForStart->next;
-        }
+        StartOfLine* searchForStart = searcher->getToLine(lines, lineNumber);
         
         return searchForStart->_elementStart;
     }
@@ -499,14 +450,7 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, size_
 
             tmpEl = tmpLine->_elementStart;
 
-            size_t positionNow = 1;
-            while (positionNow < positionWhereInsert) {
-                tmpEl = tmpEl->next;
-
-                if (tmpEl->isVisible) {
-                    positionNow++;
-                }
-            }
+            tmpEl = searcher->getToPosition(tmpEl, positionWhereInsert);
 
             insertElement->next = tmpEl->next;
             tmpEl->next = insertElement;

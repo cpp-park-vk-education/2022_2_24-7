@@ -12,6 +12,7 @@ set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/TextEditor.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/WorkWithData.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/WorkWithLogFile.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/WorkWithCppFile.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Functors.cpp"
     )
 
 set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/SearcherForPlace.hpp"
@@ -20,6 +21,7 @@ set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/SearcherForPlace.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/WorkWithData.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/WorkWithFile.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/WorkWithLogFile.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/Functors.hpp"
     
     "${CMAKE_CURRENT_SOURCE_DIR}/interfaces/Answer.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/interfaces/Command.hpp"

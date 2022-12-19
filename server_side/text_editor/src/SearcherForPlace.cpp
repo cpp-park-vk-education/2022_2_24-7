@@ -1,19 +1,5 @@
 #include "SearcherForPlace.hpp"
 
-bool checkForAfterElement(Element* afterElement, Element* checkElement) {
-    if (!afterElement) {
-        return 1;
-    }
-    return checkElement->count == afterElement->count && checkElement->UserId == afterElement->UserId;
-};
-
-bool checkForBeforeLess(Element* elementBefore, Element* elementAfter) {
-    if (!elementBefore || !elementAfter) {
-        return false;
-    }
-    return elementBefore->UserId < elementAfter->UserId;
-};
-
 AnswerForInsertAction Searcher::whatPositionDelete(Element* elementToDelete, Element* beggining, StartOfLine* lines) {
     AnswerForInsertAction answer;
 
@@ -45,7 +31,6 @@ AnswerForInsertAction Searcher::whatPositionDelete(Element* elementToDelete, Ele
 
     return answer;
 };
-
 
 AnswerForInsertAction Searcher::whatPosition(Element* beforeInsert, Element* insertElement, Element* afterElement, StartOfLine* line) {
     AnswerForInsertAction answer;
@@ -102,4 +87,63 @@ Element* Searcher::getToPosition(Element* fromWhere, size_t position) {
         }
     }
     return tmpElement;
+};
+
+StartOfLine* Searcher::getToLine(StartOfLine* line, size_t numberOfLine) {
+    StartOfLine* insertLine = line;
+    
+    for (size_t i = 0; i < numberOfLine; i++) {
+            insertLine = insertLine->next;
+    }
+
+    return insertLine;
+};
+
+Element* Searcher::getToEndOfLine(Element* start) {
+    Element* before = start;
+    while (before && !(before->isVisible && before->_value == '\n')) {
+        before = before->next;
+    }
+    return before;
+};
+
+Element* Searcher::skipInvisibleElements(Element* start) {
+    Element* before = start;
+    while (before->next && !before->next->isVisible) {
+        before = before->next;
+    }
+    return before;
+};
+
+AnswerForLineAndElementVisible Searcher::searchForLineAndPos(Element* start, Element* compareElement, StartOfLine* line, IcheckForLessOrEqual* func) {
+    AnswerForLineAndElementVisible answer;
+    
+    Element* tmpBefore = start;
+    StartOfLine* tmpLine = line;
+
+    while (tmpBefore && func->func(tmpBefore, compareElement)) {
+        if (tmpBefore->isVisible) {
+            answer.visibleCount++;
+            
+            if (tmpBefore->_value == '\n') {
+                answer.lineCount++;
+                answer.visibleCount = 0;
+                
+                tmpLine = tmpLine->next;
+            }
+        }
+        tmpBefore = tmpBefore->next;
+    }
+
+    if (tmpBefore && tmpLine && tmpBefore->_value == '\n') {
+        answer.lineCount++;
+        answer.visibleCount = 0;
+
+        tmpLine = tmpLine->next;
+    }
+
+    answer.element = tmpBefore;
+    answer.line = tmpLine;
+
+    return answer;
 };
