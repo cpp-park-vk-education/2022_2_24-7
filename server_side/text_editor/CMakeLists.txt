@@ -44,12 +44,6 @@ set(TEXT_EDITOR_INCLUDE_DIRS ${TEXT_EDITOR_INCLUDE_DIRS} PARENT_SCOPE)
 add_library(${TEXT_EDITOR_LIB} ${SOURCES} ${HEADERS})
 target_include_directories(${TEXT_EDITOR_LIB} PUBLIC ${TEXT_EDITOR_INCLUDE_DIRS})
 
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} " -g")
-add_executable(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/test.cpp" ${HEADERS} ${SOURCES})
-
-target_include_directories(${PROJECT_NAME} PUBLIC ${TEXT_EDITOR_INCLUDE_DIRS})
-target_link_directories(${PROJECT_NAME} PUBLIC ${TEXT_EDITOR_INCLUDE_DIRS})
-
 if(BUILD_TESTS OR BUILD_ALL)
     enable_testing()
     add_subdirectory(tests_text_editor)    
