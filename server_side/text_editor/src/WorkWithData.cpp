@@ -47,7 +47,7 @@ std::string WorkWithData::getLine(size_t numberOfLine) {
 };
 
 void WorkWithData::addFile(std::string path) {
-    workWithCPP->addExtension("cpp");
+    workWithCPP->addExtension("cpp");co
     workWithCPP->addPathFile(path);
 
     workWithLog->addExtension("txt");
