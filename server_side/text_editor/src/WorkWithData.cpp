@@ -47,7 +47,7 @@ std::string WorkWithData::getLine(size_t numberOfLine) {
 };
 
 void WorkWithData::addFile(std::string path) {
-    workWithCPP->addExtension("cpp");co
+    workWithCPP->addExtension("cpp");
     workWithCPP->addPathFile(path);
 
     workWithLog->addExtension("txt");
@@ -66,4 +66,12 @@ std::string WorkWithData::getFileWithDataDricetory() {
     }
 
     return workWithCPP->getPath();
+};
+
+
+WorkWithData::~WorkWithData() {
+    delete translator;
+    delete workWithCPP;
+    delete workWithLog;
+    delete textEditor;
 };

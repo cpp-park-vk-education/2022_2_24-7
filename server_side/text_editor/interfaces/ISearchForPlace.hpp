@@ -29,4 +29,6 @@ class ISearchForPlace {
     virtual Element* skipInvisibleElements(Element* start) = 0;
 
     virtual AnswerForLineAndElementVisible searchForLineAndPos(Element* start, Element* compareElement, StartOfLine* line, IcheckForLessOrEqual* func) = 0;
+
+    virtual ~ISearchForPlace() = default;
 };

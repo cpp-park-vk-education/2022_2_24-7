@@ -60,7 +60,7 @@ Command::Command(std::string str) {
                 userAfter = std::stoul(afterElementInStrings[1]);
 
                 char tmpSymbol = ' ';
-                // _afterElemenet = new Element(&tmpSymbol, &countAfter, &userAfter);
+                
                 _beforeElement = new Element(&tmpSymbol, &countAfter, &userAfter);
 
                 // before element
@@ -73,7 +73,7 @@ Command::Command(std::string str) {
                 userBefore = std::stoul(beforeElementInStrings[1]);
 
                 tmpSymbol = ' ';
-                // _beforeElement = new Element(&tmpSymbol, &countBefore, &userBefore);
+
                 _afterElemenet = new Element(&tmpSymbol, &countBefore, &userBefore);
 
                 // insert element
@@ -103,5 +103,13 @@ Command::Command(std::string str) {
             char a = ' ';
             _insertElement = new Element(&a, &countInsert, &userInsert);
         }
-    }
+}
     
+Command::~Command() {
+    if (_beforeElement) {
+    delete _beforeElement;
+    }
+    if(_afterElemenet) {   
+        delete _afterElemenet;
+    }
+};

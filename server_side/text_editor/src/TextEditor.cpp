@@ -166,7 +166,7 @@ void WorkWithLines::insertEnter(AnswerForInsertAction& receivedAnswer, Element* 
         isNewLine = true;
     }
 
-    // Todo найти есть ли элемент для начала 
+
     while (startOfLine && !startOfLine->isVisible) {
         startOfLine = startOfLine->next;
         
@@ -182,7 +182,7 @@ void WorkWithLines::insertEnter(AnswerForInsertAction& receivedAnswer, Element* 
     } else {
         newLine = new StartOfLine(startOfLine, 1);
     }
-    // TODO IF 0 ELEMENT BEFORE???
+    
     newLine->_sizeOfLine = tmpLine->_sizeOfLine - receivedAnswer.quantOfElementsBefore - 1;
     tmpLine->_sizeOfLine -= newLine->_sizeOfLine;
 
@@ -228,71 +228,11 @@ WorkWithLines::WorkWithLines(size_t UserId, size_t counter) : beggining(nullptr)
     searcher = new Searcher;
 };
 
-// void insertElement(Element* startOfLine, Element* whatInsert, Element* afterWhatInsert, Element* beforeWhatInsert, StartOfLine** lines) {
-//     // сделать проверку про 
-//     // TODO проверить на before element, чтобы можно вставить перед элементами других людей
-//     if (afterWhatInsert) {
-//         // after insert
-//         if (beforeWhatInsert) {
-//             // after and before insert
-//             Element* tmp = afterWhatInsert;
-//             // beggining exist
-//             while (tmp->UserId < whatInsert->UserId) {
-//                 // skip another elements with less userid
-//                 tmp = tmp->next;
-//             }
-//             whatInsert->next = tmp->next;
-//             tmp->next = whatInsert;
-//         } else {
-//             // only after insert
-//             Element* tmp = afterWhatInsert;
-//             // beggining exist
-//             while (tmp->UserId < whatInsert->UserId) {
-//                 // skip another elements with less userid
-//                 tmp = tmp->next;
-//             }
-//             whatInsert->next = tmp->next;
-//             tmp->next = whatInsert;
-//         }
-//     } else {
-//         if (beforeWhatInsert) {
-//             // before insert
-//             Element* tmp = startOfLine;
-//             // beggining exist
-//             while (tmp->UserId < whatInsert->UserId) {
-//                 // skip another elements with less userid
-//                 tmp = tmp->next;
-//             }
-//             whatInsert->next = tmp->next;
-//             tmp->next = whatInsert;
-//         } else {
-//             // insert into beggining
-//             if (startOfLine) {
-//                 Element* tmp = startOfLine;
-//                 // beggining exist
-//                 while (tmp->UserId < whatInsert->UserId) {
-//                     // skip another elements with less userid
-//                     tmp = tmp->next;
-//                 }
-//                 whatInsert->next = tmp->next;
-//                 tmp->next = whatInsert;
-
-//             } else {
-//                 // beggining doesnt exist
-//                 startOfLine = whatInsert;
-//             }
-//         }
-//     }
-// }
-
-
 std::string WorkWithLines::insertElementInPosition(size_t position, std::string symbol) {
     Element* _insertElement = new Element(&symbol[0], &++_counter, &_UserId);
-    // TODO подставить сразу без переменной
     AnswerLinePos positionElement = getPosition(position);
 
     AnswerForInsertAction answer;
-    // answer = insertElement(_insertElement, positionElement.line, positionElement.pos);
     answer = insertElement(_insertElement, positionElement.line, positionElement.pos);
 
     return createCommand(false, _insertElement, answer.elementBeforeInsert, _insertElement->next);
@@ -325,7 +265,9 @@ std::string WorkWithLines::deleteElementFromPosition(std::string command) {
     }
 
     AnswerLinePos pos = getPosition(position);
-
+    
+    delete com._insertElement;
+    
     return createCommand(true, deleteElementFromLineAndPos(pos.line, pos.pos).elementBeforeInsert);
 };
 
@@ -478,8 +420,9 @@ AnswerLinePos WorkWithLines::getPosition(size_t position) {
     StartOfLine* tmpLine = lines;
     
     while (tmpLine && position > tmpLine->_sizeOfLine) {
-        position -= tmpLine->_sizeOfLine;
         answer.line++;
+        
+        position -= tmpLine->_sizeOfLine;
         tmpLine = tmpLine->next;
     }
 
@@ -600,7 +543,6 @@ AnswerForInsertAction WorkWithLines::deleteElementFromLineAndPos(size_t lineWher
     }
 
     if (deletionElement->_value == '\n' && !isDeleteLine) {
-        // ERROR can be error
         
         StartOfLine* tmp = deletionLine->next;
         deletionLine->next = deletionLine->next->next;
@@ -632,5 +574,7 @@ WorkWithLines::~WorkWithLines() {
         
         delete tmp;
     }
+
+    delete searcher;
 };
 

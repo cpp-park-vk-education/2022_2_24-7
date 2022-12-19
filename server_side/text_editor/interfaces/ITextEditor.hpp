@@ -24,5 +24,6 @@ class IWorkWithText {
     virtual Element* getStartOfLine(size_t lineNumber) = 0;
     // virtual size_t getSizeOfLine(size_t lineNumber) = 0;
 
+    virtual ~IWorkWithText() = default;
     // virtual AnswerLinePos getLinePosFromPos(size_t pos) = 0;
 };

@@ -14,6 +14,8 @@ class WorkWithLogFile: public IWorkWithFile{
 
     std::string getPath() override;
 
+    virtual ~WorkWithLogFile() = default;
+
     private:
     std::string _path;
     std::string _extension;

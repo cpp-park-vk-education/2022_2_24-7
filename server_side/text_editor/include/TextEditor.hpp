@@ -26,7 +26,7 @@ class WorkWithLines : public IWorkWithText {
     size_t getQuantityOfLines() override;
     Element* getStartOfLine(size_t lineNumber) override;
     
-    ~WorkWithLines();
+    virtual ~WorkWithLines();
 
     private:
     AnswerLinePos getPosition(size_t position);

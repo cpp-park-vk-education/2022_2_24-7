@@ -19,6 +19,8 @@ class WorkWithData : public IWorkWithData {
     std::string getLogFileDirectory() override;
     std::string getFileWithDataDricetory() override;
 
+    ~WorkWithData();
+
     private:
     ITranslator* translator;
     IWorkWithFile* workWithCPP;

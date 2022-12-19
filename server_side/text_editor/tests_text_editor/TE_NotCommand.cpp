@@ -18,8 +18,6 @@ TEST(TextEditor, insertElemnetsNotCommand) {
     commandsInResult.push_back(work.insertElementInPosition(4,"x"));
     commandsInResult.push_back(work.insertElementInPosition(4,"y"));
     commandsInResult.push_back(work.insertElementInPosition(5,"\n"));
-    
-    // transfer line!!! TODO
 
     std::vector<std::string> neededCommand = {"i:1|0|a:0", "i:2|0|b:1|0:2", "i:3|0|\n:1|0:1",
          "i:4|0|\n:3|0:1", "i:5|0|x:4|0:1", "i:6|0|y:4|0:5|0:3", "i:7|0|\n:6|0:5|0:3"};
