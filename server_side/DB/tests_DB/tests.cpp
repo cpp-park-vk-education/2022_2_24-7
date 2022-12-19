@@ -1,23 +1,19 @@
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
 #include "includes.hpp"
 
-TEST(DefaultTestBack, Test) {
-    EXPECT_EQ((2 * 2), 4);
-}
+TEST(DefaultTestBack, Test) { EXPECT_EQ((2 * 2), 4); }
 
-TEST(BackendConstructorsTest, RouterTest) {
-    Router routerTest;
-}
+TEST(BackendConstructorsTest, RouterTest) { Router routerTest; }
 
-TEST(BackendConstructorsTest, ProjectTest) {
-    Project projectTest;
-}
+TEST(BackendConstructorsTest, ProjectTest) { Project projectTest; }
 
 TEST(BackendConstructorsTest, UserTest) {
-    boost::shared_ptr<IConnection> myConnectionPtr = boost::shared_ptr<IConnection>();
+    boost::shared_ptr<IConnection> myConnectionPtr =
+        boost::shared_ptr<IConnection>();
     User userTest(2, myConnectionPtr, 2);
-    userTest.countUserChanges ++;
+    userTest.countUserChanges++;
 
     EXPECT_EQ(userTest.userID, 2);
     EXPECT_EQ(userTest.countUserChanges, 3);
@@ -45,16 +41,13 @@ TEST(ResponseTest, TestAll) {
     EXPECT_EQ(requestIt.GetMethod(), reqString[0]);
 }
 
-
-
-
 TEST(RouterFunctionsTest, ProcessRouteTest) {
     Router routerTest;
     Request requestIt("d");
-    boost::shared_ptr<IConnection> myConnectionPtr = boost::shared_ptr<IConnection>();
+    boost::shared_ptr<IConnection> myConnectionPtr =
+        boost::shared_ptr<IConnection>();
     EXPECT_EQ(routerTest.processRoute(requestIt, myConnectionPtr), true);
 }
-
 
 TEST(RouterFunctionsTest, CreateProjectTest) {
     Router routerTest;
@@ -66,7 +59,8 @@ TEST(RouterFunctionsTest, CreateProjectTest) {
 
 TEST(RouterFunctionsTest, SendTest) {
     Router routerTest;
-    boost::shared_ptr<IConnection> myConnectionPtr = boost::shared_ptr<IConnection>();
+    boost::shared_ptr<IConnection> myConnectionPtr =
+        boost::shared_ptr<IConnection>();
     Reply replyIt("d");
     EXPECT_EQ(routerTest.sendToUser(replyIt, myConnectionPtr), true);
     EXPECT_EQ(routerTest.sendToAllProjectUsers(replyIt, myConnectionPtr), true);
@@ -80,11 +74,11 @@ TEST(ProjectFunctionsTest, GettersTest) {
     EXPECT_EQ(projectTest.GetCounter(), 0);
 }
 
-
 TEST(ProjectFunctionsTest, UserTest) {
     Project projectTest;
-    boost::shared_ptr<IConnection> myConnectionPtr1 = boost::shared_ptr<IConnection>();
-    
+    boost::shared_ptr<IConnection> myConnectionPtr1 =
+        boost::shared_ptr<IConnection>();
+
     projectTest.ConnectUser(myConnectionPtr1);
     EXPECT_EQ(projectTest.GetUsers().size(), 1);
     EXPECT_EQ(projectTest.GetCounter(), 1);
@@ -113,38 +107,27 @@ TEST(HandlersTest, DeleteTest) {
     Request requestIt("d");
     std::string filePath = "./files";
     Reply replyIt("d");
-    EXPECT_EQ(replyIt.GetMethod(), DeleteSymbol(requestIt, filePath).GetMethod());
+    EXPECT_EQ(replyIt.GetMethod(),
+              DeleteSymbol(requestIt, filePath).GetMethod());
 }
 
 class MockRouter : public IRouter {
-public:
-    MOCK_METHOD(
-        bool,
-        addHandler,
-        (const std::string& method, const Handler& handler),
-        (override)
-    );
+   public:
+    MOCK_METHOD(bool, addHandler,
+                (const std::string& method, const Handler& handler),
+                (override));
 
-    MOCK_METHOD(
-        bool,
-        processRoute,
-        (const Request &request, const ConnectionPtr &userConnection),
-        (override)
-    );
+    MOCK_METHOD(bool, processRoute,
+                (Request & request, const ConnectionPtr& userConnection),
+                (override));
 
-    MOCK_METHOD(
-        bool,
-        sendToUser,
-        (const Reply &reply, const ConnectionPtr& userConnection),
-        (override)
-    );
+    MOCK_METHOD(bool, sendToUser,
+                (const Reply& reply, const ConnectionPtr& userConnection),
+                (override));
 
-    MOCK_METHOD(
-        bool,
-        sendToAllProjectUsers,
-        (const Reply &reply, const ConnectionPtr& userConnection),
-        (override)
-    );
+    MOCK_METHOD(bool, sendToAllProjectUsers,
+                (const Reply& reply, const ConnectionPtr& userConnection),
+                (override));
 };
 
 TEST(GMockTests, RouterGMock) {

@@ -1,13 +1,15 @@
 #include "Handlers.hpp"
 
-Reply InsertSymbol(const IResponse& request, const std::string filePath) {
+Reply InsertSymbol(IResponse& request, const std::string filePath) {
     Reply reply("1");
+    reply.command = request.GetCommand();
     // Process request and crete reply
     return reply;
 };
 
-Reply DeleteSymbol(const IResponse& request, const std::string filePath) {
+Reply DeleteSymbol(IResponse& request, const std::string filePath) {
     Reply reply("1");
+    reply.command = request.GetCommand();
     // Process request and crete reply
     return reply;
 };

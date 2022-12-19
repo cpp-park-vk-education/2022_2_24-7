@@ -10,5 +10,13 @@ class IConnection {
     virtual void get_socket() = 0;
 };
 
+class Connection : IConnection {
+   public:
+    virtual void handle_read() override{};
+    virtual void handle_write() override{};
+    virtual void start() override{};
+    virtual void get_socket() override{};
+};
 using ConnectionPtr = boost::shared_ptr<IConnection>;
-// это интерфейс сущности из сервера проекта, он служит для последующей интеграции
+// это интерфейс сущности из сервера проекта, он служит для последующей
+// интеграции

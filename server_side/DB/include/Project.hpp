@@ -6,20 +6,27 @@
 
 class Project : IProject {
    public:
-    Project(std::string newProjectName = "project", std::string newFilesPath = "./files")
-     : projectName(newProjectName), filesPath(newFilesPath), projectUsers(), userIdCounter(0) {};
+    Project(std::string newProjectName = "project",
+            std::string newFilesPath = "./files")
+        : projectName(newProjectName),
+          filesPath(newFilesPath),
+          projectUsers(),
+          userIdCounter(0){};
 
-    bool ConnectUser(const ConnectionPtr& userConnection) override { return true; };
-    bool DisconnectUser(const ConnectionPtr& userConnection) override { return true; };
+    bool ConnectUser(const ConnectionPtr& userConnection) override;
+    bool DisconnectUser(const ConnectionPtr& userConnection) override;
 
-    std::vector<User> GetUsers() const override { return projectUsers; };
-    
-    const std::string GetPath() const { return filesPath; };
+    std::vector<User> GetUsers() const override;
 
-    const std::string GetName() const { return projectName; }
+    const std::string GetPath() const;
 
-    const int GetCounter() const { return userIdCounter; }
-    //IWorkWithData &WorkWithData;
+    const std::string GetName() const;
+
+    int GetCounter() const;
+
+    User FindUser(const ConnectionPtr& userConnection);
+    bool UserExist(const ConnectionPtr& userConnection);
+    // IWorkWithData &WorkWithData;
    private:
     std::string projectName;
     std::string filesPath;
