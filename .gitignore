@@ -180,4 +180,7 @@ _deps
 build
 valgrind.log
 
+.vscode
+settings.json
+tasks.json
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,cmake,gcov,linux,test
