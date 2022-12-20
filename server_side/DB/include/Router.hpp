@@ -16,21 +16,23 @@ using Handler = Reply (*)(IResponse& request, const std::string filePath);
 
 class Router : public IRouter {
    public:
-    Router();
+    Router(std::string filesPath = "./files");
 
     bool addHandler(const std::string& method,
                     const Handler& handler) override{};
 
     bool processRoute(Request& request,
                       const ConnectionPtr& userConnection) override {
-        addHandler("i", InsertSymbol);
+        char method = request.GetMethod();
+        handlersMap.at(method)(request, project.GetPath());
+
         return true;
     };
 
 
 
     const Project GetProject() const { return project; };
-    const std::unordered_map<std::string, Handler> GetHandlers() const {
+    const std::unordered_map<char, Handler> GetHandlers() const {
         return handlersMap;
     };
 
@@ -40,6 +42,6 @@ class Router : public IRouter {
                     const ConnectionPtr& userConnection) override;
 
    private:
-    std::unordered_map<std::string, Handler> handlersMap;
+    std::unordered_map<char, Handler> handlersMap;
     Project project;
 };

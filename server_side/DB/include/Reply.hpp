@@ -5,7 +5,7 @@
 struct Reply : IResponse {
     char GetMethod() override { return command[0]; }
 
-    Reply(std::string __string) : command(__string){};
+    Reply(std::string _command) : command(_command){};
 
     bool operator==(Reply repl) const { return (command == repl.command); }
 

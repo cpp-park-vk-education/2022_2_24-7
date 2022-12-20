@@ -14,9 +14,8 @@ struct User {
           countUserChanges(_countUser){};
         
 
-
     int userID;
-    const ConnectionPtr&
+    ConnectionPtr
         userConnection;  //ссылка на соединение с пользователем
     int countUserChanges;  //количество изменений, сделанных пользователем
 };

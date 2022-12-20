@@ -40,7 +40,7 @@ bool Project::DisconnectUser(const ConnectionPtr& userConnection) {
     }
     for(int i = 0; i < projectUsers.size(); ++i) {
         if(projectUsers[i].userConnection == userConnection) {
-            //projectUsers.erase(projectUsers.begin() + i);
+            projectUsers.erase(projectUsers.begin() + i);
             return true;
         }
     }

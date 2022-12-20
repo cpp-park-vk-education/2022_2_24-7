@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-Router::Router() {
-    project = Project();
+Router::Router(std::string filesPath) {
+    project = Project(filesPath);
     addHandler("i", InsertSymbol);
     addHandler("d", DeleteSymbol);
 };

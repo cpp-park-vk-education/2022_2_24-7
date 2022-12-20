@@ -6,10 +6,10 @@
 
 class Project : IProject {
    public:
-    Project(std::string newProjectName = "project",
-            std::string newFilesPath = "./files")
-        : projectName(newProjectName),
-          filesPath(newFilesPath),
+    Project(std::string newFilesPath = "./files",
+            std::string newProjectName = "project")
+        : filesPath(newFilesPath),
+          projectName(newProjectName),
           projectUsers(),
           userIdCounter(0){};
 
@@ -26,10 +26,11 @@ class Project : IProject {
 
     User FindUser(const ConnectionPtr& userConnection);
     bool UserExist(const ConnectionPtr& userConnection);
+    
     // IWorkWithData &WorkWithData;
    private:
-    std::string projectName;
     std::string filesPath;
+    std::string projectName;
     std::vector<User> projectUsers;
     int userIdCounter;
 };
