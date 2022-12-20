@@ -7,7 +7,7 @@ void Connection::handle_read(const boost::system::error_code& e) {
         Request request;
         serializer.save(readBuf, request);
 
-        Reply reply = router.processRoute(request);
+        Reply reply = router.processRoute(request, *this);
 
         serializer.load(writeBuf, reply);
 

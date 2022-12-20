@@ -21,7 +21,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${SERVER_LIB} GTest::gtest_main)
+target_link_libraries(${PROJECT_NAME} ${SERVER_LIB} GTest::gtest_main GTest::gmock)
 target_include_directories(${PROJECT_NAME} PRIVATE ${SERVER_INCLUDE_DIRS})
 
 include(GoogleTest)
