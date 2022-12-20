@@ -136,7 +136,7 @@ _deps
 *mies
 
 # Other names that would make sense
-#*tests
+*tests
 *testsdir
 *testsfile
 *testsfiles
@@ -179,7 +179,5 @@ _deps
 
 build
 valgrind.log
-zBackendTesting
-
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,cmake,gcov,linux,test

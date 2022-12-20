@@ -5,7 +5,10 @@ project(testsForServer)
 set(CMAXE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCES "tests.cpp")
+set(SOURCES "ConnectionTests.cpp" 
+            "SerializerTests.cpp"
+            "ServerTests.cpp" 
+            )
 
 include(FetchContent)
 FetchContent_Declare(
