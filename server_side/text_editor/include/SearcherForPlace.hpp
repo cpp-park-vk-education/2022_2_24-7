@@ -18,5 +18,5 @@ class Searcher : public ISearchForPlace {
 
     AnswerForLineAndElementVisible searchForLineAndPos(Element* start, Element* compareElement, StartOfLine* line, IcheckForLessOrEqual* func) override;
 
-    virtual ~Searcher() = default;
+    ~Searcher() override = default;
 };
