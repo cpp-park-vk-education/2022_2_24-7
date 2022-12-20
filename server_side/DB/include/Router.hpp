@@ -29,8 +29,6 @@ class Router : public IRouter {
         return true;
     };
 
-
-
     const Project GetProject() const { return project; };
     const std::unordered_map<char, Handler> GetHandlers() const {
         return handlersMap;

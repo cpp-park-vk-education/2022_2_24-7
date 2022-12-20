@@ -35,11 +35,11 @@ bool Project::ConnectUser(const ConnectionPtr& userConnection) {
 };
 
 bool Project::DisconnectUser(const ConnectionPtr& userConnection) {
-    if(projectUsers.size() == 0) {
+    if (projectUsers.size() == 0) {
         return 0;
     }
-    for(int i = 0; i < projectUsers.size(); ++i) {
-        if(projectUsers[i].userConnection == userConnection) {
+    for (int i = 0; i < projectUsers.size(); ++i) {
+        if (projectUsers[i].userConnection == userConnection) {
             projectUsers.erase(projectUsers.begin() + i);
             return true;
         }

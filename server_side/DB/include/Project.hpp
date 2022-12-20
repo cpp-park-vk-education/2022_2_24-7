@@ -26,7 +26,7 @@ class Project : IProject {
 
     User FindUser(const ConnectionPtr& userConnection);
     bool UserExist(const ConnectionPtr& userConnection);
-    
+
     // IWorkWithData &WorkWithData;
    private:
     std::string filesPath;
