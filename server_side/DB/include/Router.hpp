@@ -18,16 +18,16 @@ class Router : public IRouter {
    public:
     Router(std::string filesPath = "./files");
 
+    ~Router() { 
+        delete workWithData;
+    }
+
+
     bool addHandler(const std::string& method,
                     const Handler& handler) override{};
 
     bool processRoute(Request& request,
-                      const ConnectionPtr& userConnection) override {
-        char method = request.GetMethod();
-        handlersMap.at(method)(request, project.GetPath());
-
-        return true;
-    };
+                      const ConnectionPtr& userConnection) override;
 
     const Project GetProject() const { return project; };
     const std::unordered_map<char, Handler> GetHandlers() const {
@@ -40,6 +40,8 @@ class Router : public IRouter {
                     const ConnectionPtr& userConnection) override;
 
    private:
-    std::unordered_map<char, Handler> handlersMap;
     Project project;
+    IWorkWithData *workWithData;
+    std::unordered_map<char, Handler> handlersMap;
+    
 };

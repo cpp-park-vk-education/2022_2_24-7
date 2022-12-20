@@ -20,4 +20,6 @@ class IRouter {
                             const ConnectionPtr& userConnection) = 0;
     virtual bool sendToAllProjectUsers(const Reply& reply,
                                        const ConnectionPtr& userConnection) = 0;
+
+   //virtual ~IRouter() = 0;
 };

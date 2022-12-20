@@ -1,11 +1,19 @@
 #include "Router.hpp"
-
+#include "IWorkWithData.hpp"
 #include <iostream>
 
-Router::Router(std::string filesPath) {
-    project = Project(filesPath);
+
+
+
+
+
+
+
+Router::Router(std::string filesPath) : project(Project(filesPath)){
     addHandler("i", InsertSymbol);
     addHandler("d", DeleteSymbol);
+    workWithData = new WorkWithData;
+
 };
 
 bool Router::sendToUser(const Reply& reply,
@@ -27,4 +35,15 @@ bool Router::sendToAllProjectUsers(const Reply& reply,
     }
 
     return 1;
+};
+
+bool Router::processRoute(Request& request,
+                      const ConnectionPtr& userConnection) {
+        char method = request.GetMethod();
+        handlersMap.at(method)(request, project.GetPath());
+        std::string replyCommand;
+        replyCommand = workWithData->operationWithData(request.command, true);
+        Reply reply(replyCommand);
+        sendToAllProjectUsers(reply, userConnection);
+        return true;
 };

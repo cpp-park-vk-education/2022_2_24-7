@@ -3,6 +3,8 @@
 #include "IProject.hpp"
 #include "IWorkWithData.hpp"
 #include "User.hpp"
+#include "IConnection.hpp"
+using ConnectionPtr = boost::shared_ptr<IConnection>;
 
 class Project : IProject {
    public:
@@ -11,7 +13,8 @@ class Project : IProject {
         : filesPath(newFilesPath),
           projectName(newProjectName),
           projectUsers(),
-          userIdCounter(0){};
+          projectConnections(),
+          connectionIdCounter(0){};
 
     bool ConnectUser(const ConnectionPtr& userConnection) override;
     bool DisconnectUser(const ConnectionPtr& userConnection) override;
@@ -27,10 +30,12 @@ class Project : IProject {
     User FindUser(const ConnectionPtr& userConnection);
     bool UserExist(const ConnectionPtr& userConnection);
 
-    // IWorkWithData &WorkWithData;
+
    private:
+
     std::string filesPath;
     std::string projectName;
     std::vector<User> projectUsers;
-    int userIdCounter;
+    std::unordered_map<int, ConnectionPtr> projectConnections;
+    int connectionIdCounter;
 };
