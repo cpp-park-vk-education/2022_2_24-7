@@ -8,19 +8,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Boost 1.80.0 COMPONENTS serialization system thread)
 
 set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/Connection.cpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/Serializer.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/Handler.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/Server.cpp"
             )
 set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/IConnection.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/Connection.hpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/ISerializer.hpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/Serializer.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/IHandler.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/Handler.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/IServer.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/Server.hpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/ServerConfig.hpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/IRouter.hpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/Request.hpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/Reply.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/Router.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/Dto.hpp"
             )
 
 set(SERVER_LIB "${PROJECT_NAME}_lib")

@@ -1,25 +1,51 @@
 #pragma once
 
 #include "IConnection.hpp"
-#include "IRouter.hpp"
-#include "ISerializer.hpp"
-#include "Reply.hpp"
-#include "Request.hpp"
+#include "Handler.hpp"
 
-class Connection : public IConnection {
-    void handle_read(const boost::system::error_code& e) override;
-    void handle_write(const boost::system::error_code& e) override;
+#include <boost/asio.hpp>
+#include <boost/bind/bind.hpp>
 
-   public:
-    Connection(boost::asio::io_service& io_service, ISerializer& serializer, IRouter& router);
-    void start() override;
-    boost::asio::ip::tcp::socket& get_socket() override;
+#include <memory>
+#include <string>
 
-   private:
-    boost::asio::ip::tcp::socket socket;
-    boost::asio::streambuf readBuf;
-    boost::asio::streambuf writeBuf;
+static inline constexpr int BUFF_SIZE = 512;
 
-    ISerializer& serializer;
-    IRouter& router;
+class Connection : public IConnection, public std::enable_shared_from_this<Connection> {
+public:
+    Connection(boost::asio::io_context &io_context_);
+
+    void run(size_t *id) override;
+
+    boost::asio::ip::tcp::socket &getSocket() override;
+
+    std::shared_ptr<Connection> getPtr() {
+        return shared_from_this();
+    }
+
+    static std::shared_ptr<Connection> create(boost::asio::io_context &io_context_) {
+        return std::make_shared<Connection>(io_context_);
+    }
+
+private:
+    Handler handler;
+
+    char read_buff[BUFF_SIZE];
+    std::string write_buff;
+    boost::asio::ip::tcp::socket socket_;
+
+    size_t *connections_ = nullptr;
+    size_t id_;
+
+    void readMsg();
+
+    void handleRead(const boost::system::error_code &error, size_t bytes);
+
+    std::string handleMsg(std::string Msg);
+
+    void sendReply();
+
+    void closeConnection();
+
+    void dummy(const boost::system::error_code &error, size_t bytes) {}
 };

@@ -1,37 +1,65 @@
 #include "Connection.hpp"
 
-#include <boost/bind/bind.hpp>
+#include <iostream>
 
-void Connection::handle_read(const boost::system::error_code& e) {
-    if (!e) {
-        Request request;
-        serializer.save(readBuf, request);
+#define IO_BIND(a) boost::bind(&Connection::a, shared_from_this(), boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred)
 
-        Reply reply = router.processRoute(request, *this);
+Connection::Connection(boost::asio::io_context &io_context_) :
+        handler(),
+        socket_(io_context_) {}
 
-        serializer.load(writeBuf, reply);
+void Connection::run(size_t *id) {
+    id_ = *id;
+    connections_ = id;
+    readMsg();
+}
 
-        boost::asio::async_write(
-            socket, writeBuf,
-            boost::bind(&IConnection::handle_write, shared_from_this(), boost::asio::placeholders::error));
+boost::asio::ip::tcp::socket &Connection::getSocket() {
+    return socket_;
+}
+
+void Connection::readMsg() {
+    std::fill(read_buff, read_buff + BUFF_SIZE, 0);
+    socket_.async_read_some(boost::asio::buffer(read_buff, BUFF_SIZE), IO_BIND(handleRead));
+}
+
+void Connection::handleRead(const boost::system::error_code &error, size_t bytes) {
+    if (error) {
+        switch (error.value()) {
+            case boost::asio::error::eof: // ?
+                closeConnection();
+                break;
+            default:
+                std::cerr << id_ << ": INPUT READ ERROR: " << error.message() << "\n";
+                break;
+        }
+        return;
     }
-}
-
-void Connection::handle_write(const boost::system::error_code& e) {
-    if (!e) {
-        boost::asio::async_read(
-            socket, readBuf,
-            boost::bind(&IConnection::handle_read, shared_from_this(), boost::asio::placeholders::error));
+    if (bytes == 0) {
+        std::cerr << id_ << ": NO INPUT GOT\n";
+        return;
     }
+
+    write_buff = handleMsg(std::string(read_buff, bytes));  // BLOCKING OPERATION
+    sendReply();
+    readMsg();
 }
 
-Connection::Connection(boost::asio::io_service& io_service, ISerializer& serializer, IRouter& router)
-    : socket(io_service), serializer(serializer), router(router) {}
-
-void Connection::start() {
-    boost::asio::async_read(
-        socket, readBuf,
-        boost::bind(&IConnection::handle_read, shared_from_this(), boost::asio::placeholders::error));
+std::string Connection::handleMsg(std::string Msg) {
+    std::cout << "CLIENT MESSAGE : " << Msg << std::endl;
+    handler.handle(Msg);  // BLOCKING OPERATION
+    return handler.reply();
 }
 
-boost::asio::ip::tcp::socket& Connection::get_socket() { return socket; }
+void Connection::sendReply() {
+    async_write(socket_, boost::asio::buffer(write_buff), IO_BIND(dummy));
+    write_buff.clear();
+}
+
+void Connection::closeConnection() {
+    std::cout << "CLIENT HAS EXITED\n";
+    // --(*connections_);
+    connections_ = nullptr;
+    socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
+    socket_.close();
+}

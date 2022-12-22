@@ -1,51 +1,34 @@
+#include "Connection.hpp"
 #include "Server.hpp"
 
-#include <boost/bind/bind.hpp>
-#include <boost/thread.hpp>
 #include <iostream>
 
-#include "Connection.hpp"
+Server::Server(boost::asio::io_context &context, unsigned int port):
+        io_context_(context),
+        acceptor_(context, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)) {}
 
-void Server::start_accept() {
-    newConnection.reset(new Connection(service, serializer, router));
-    connections.push_back(newConnection);
-    acceptor.async_accept(newConnection->get_socket(),
-                          boost::bind(&Server::handle_accept, this, boost::asio::placeholders::error));
+void Server::start() {
+    acceptConnection();
 }
 
-void Server::handle_accept(const boost::system::error_code& e) {
-    std::cout << "handle_accept" << std::endl;
-    if (!e) {
-        newConnection->start();
+void Server::acceptConnection() {
+    std::shared_ptr <Connection> connection = Connection::create(io_context_);
+    acceptor_.async_accept(connection->getSocket(), boost::bind(&Server::handleConnection,
+                                                                this,
+                                                                connection,
+                                                                boost::asio::placeholders::error));
+}
+
+void Server::handleConnection(std::shared_ptr <Connection> newConnection,
+                              const boost::system::error_code &error) {
+     if (error) {
+        std::cerr << "CONNECTION ERROR " << error.message() << "\n";
+        acceptConnection();
+        return;
     }
-
-    start_accept();
-}
-
-void Server::handle_stop() { service.stop(); }
-
-Server::Server(ISerializer& ser, IRouter& router)
-    : signals(service),
-      acceptor(service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 8001)),
-      serializer(ser),
-      router(router) {
-    signals.add(SIGINT);
-    signals.add(SIGTERM);
-#if defined(SIGQUIT)
-    signals.add(SIGQUIT);
-#endif  // defined(SIGQUIT)
-    signals.async_wait(boost::bind(&Server::handle_stop, this));
-
-    start_accept();
-}
-
-void Server::run() {
-    std::vector<boost::shared_ptr<boost::thread>> threads;
-    for (std::size_t i = 0; i < 10; ++i) {
-        boost::shared_ptr<boost::thread> thread(
-            new boost::thread(boost::bind(&boost::asio::io_service::run, &service)));
-        threads.push_back(thread);
-    }
-
-    for (std::size_t i = 0; i < threads.size(); ++i) threads[i]->join();
+    std::cout << "CLIENT CONNECTED\n";
+    ++connections_;
+    std::cout << "CONNECTIONS : " << connections_ << std::endl;
+    newConnection->run(&connections_);  // RUN
+    acceptConnection();
 }
