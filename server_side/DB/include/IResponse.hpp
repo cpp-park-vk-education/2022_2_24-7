@@ -4,4 +4,5 @@
 
 struct IResponse {
     virtual char GetMethod() = 0;
+    virtual std::string GetCommand() = 0;
 };

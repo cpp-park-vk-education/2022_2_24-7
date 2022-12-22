@@ -179,5 +179,7 @@ _deps
 
 build
 valgrind.log
+zBackendTesting
+
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,cmake,gcov,linux,test

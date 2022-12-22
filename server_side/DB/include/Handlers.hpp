@@ -6,5 +6,5 @@
 #include "Reply.hpp"
 #include "Request.hpp"
 
-Reply InsertSymbol(const IResponse& request, const std::string filePath);
-Reply DeleteSymbol(const IResponse& request, const std::string filePath);
+Reply InsertSymbol(IResponse& request, const std::string filePath);
+Reply DeleteSymbol(IResponse& request, const std::string filePath);
