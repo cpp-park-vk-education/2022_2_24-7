@@ -239,6 +239,7 @@ std::string WorkWithLines::insertElementInPosition(size_t position, std::string 
 };
 
 std::string WorkWithLines::deleteElementFromPosition(size_t position) {
+    ++_counter;
     AnswerLinePos pos = getPosition(position);
 
     return createCommand(true, deleteElementFromLineAndPos(pos.line, pos.pos).elementBeforeInsert);
@@ -299,7 +300,7 @@ Element* WorkWithLines::getStartOfLine(size_t lineNumber) {
         return nullptr;
     }
 
-    if (lineNumber <= lineCount) {
+    if (lineNumber < lineCount) {
         StartOfLine* searchForStart = searcher->getToLine(lines, lineNumber);
         
         return searchForStart->_elementStart;
@@ -565,6 +566,8 @@ AnswerForInsertAction WorkWithLines::deleteElementFromLineAndPos(size_t lineWher
         
         StartOfLine* tmp = deletionLine->next;
         deletionLine->next = deletionLine->next->next;
+
+        deletionLine->_sizeOfLine += tmp->_sizeOfLine;
         
         lineCount--;
         delete tmp;
