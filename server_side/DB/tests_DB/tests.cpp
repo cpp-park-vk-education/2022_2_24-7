@@ -5,10 +5,9 @@
 
 TEST(BackendConstructorsTest, RouterConstructorTest) {
     Router routerTest;
-    EXPECT_EQ(routerTest.GetProject().GetPath(), "./files");
+    EXPECT_EQ(routerTest.GetProject()->GetPath(), "./files");
     EXPECT_NE(routerTest.GetWorkWithData(), nullptr);
 }
-
 
 TEST(BackendConstructorsTest, ProjectConstructorTest) {
     Project projectTest;
@@ -30,64 +29,59 @@ TEST(ResponseTest, TestAll) {
     EXPECT_EQ(requestIt.GetMethod(), reqString[0]);
 }
 
-/*
 TEST(RouterFunctionsTest, ProcessRouteTest) {
     Router routerTest;
     Request requestIt("d");
-    std::shared_ptr<IConnection> myConnectionPtr =
-        std::shared_ptr<IConnection>();
-    EXPECT_EQ(routerTest.processRoute(requestIt, myConnectionPtr), true);
+    ConnectionPtr userConnection = std::make_shared<Connection>();
+    routerTest.processRoute(requestIt, userConnection);
 }
-*/
 
-TEST(RouterFunctionsTest, CreateProjectTest) {
+TEST(RouterFunctionsTest, IsIWorkWithDataInterfaceWork) {
+    Router routerTest;
+    Request requestIt("d");
+    ConnectionPtr userConnection = std::make_shared<Connection>();
+
+    EXPECT_EQ(routerTest.GetWorkWithData()->operationWithData(requestIt.command, true), "a");
+}
+
+TEST(RouterFunctionsTest, IsProjectCreated) {
     std::string path1 = "./test";
     Router routerTest(path1);
-
-    std::string path2 = routerTest.GetProject().GetPath();
+    std::string path2 = routerTest.GetProject()->GetPath();
     EXPECT_EQ(path1, path2);
 }
 
-/*
-TEST(RouterFunctionsTest, SendTest) {
+TEST(RouterFunctionsTest, SendToUsersTest) {
     Router routerTest;
-    std::shared_ptr<IConnection> myConnectionPtr =
-        std::shared_ptr<IConnection>();
+    ConnectionPtr userConnection = std::make_shared<Connection>(1);
+    ConnectionPtr userConnection1 = std::make_shared<Connection>(2);
     Reply replyIt("d");
-    EXPECT_EQ(routerTest.sendToUser(replyIt, myConnectionPtr), true);
-    EXPECT_EQ(routerTest.sendToAllProjectUsers(replyIt, myConnectionPtr), true);
+    routerTest.GetProject()->ConnectUser(userConnection);
+    routerTest.GetProject()->ConnectUser(userConnection1);
+
+    EXPECT_EQ(routerTest.sendToUser(replyIt, userConnection), true);
+    EXPECT_EQ(routerTest.sendToAllProjectUsers(replyIt, userConnection), true);
 }
-*/
 
-
-
-
-
-
-
-
-
-
-
-
-/*std::shared_ptr<IConnection> myConnectionPtr1 =
-        std::shared_ptr<IConnection>();*/
+/*boost::shared_ptr<IConnection> connectionPtr1 =
+        boost::shared_ptr<IConnection>();*/
 
 TEST(ProjectConnectTests, AttachNewConnection) {
     Project projectTest;
     // connectionIdCounter = 0, projectConnections is empty
-    ConnectionPtr userConnection = std::shared_ptr<IConnection>(new Connection);
+    ConnectionPtr userConnection = std::make_shared<Connection>();
     projectTest.ConnectUser(userConnection);
 
     EXPECT_EQ(projectTest.ConnectionExist(userConnection), true);
     EXPECT_EQ(projectTest.GetCounter(), 1);
     EXPECT_EQ(projectTest.FindConnectionId(userConnection), 0);
+    EXPECT_EQ(projectTest.GetProjectConnections().size(), 1);
 }
 
 TEST(ProjectConnectTests, AttachExistingConnection) {
     Project projectTest;
     // connectionIdCounter = 0, projectConnections is empty
-    ConnectionPtr userConnection = std::shared_ptr<IConnection>(new Connection);
+    ConnectionPtr userConnection = std::make_shared<Connection>();
     projectTest.ConnectUser(userConnection);
 
     EXPECT_NE(projectTest.ConnectUser(userConnection), true);
@@ -97,8 +91,8 @@ TEST(ProjectConnectTests, AttachExistingConnection) {
 TEST(ProjectConnectTests, AttachMultipleConnections) {
     Project projectTest;
     // connectionIdCounter = 0, projectConnections is empty
-    ConnectionPtr userConnection1 = std::shared_ptr<IConnection>(new Connection(1));
-    ConnectionPtr userConnection2 = std::shared_ptr<IConnection>(new Connection(2));
+    ConnectionPtr userConnection1 = std::make_shared<Connection>(1);
+    ConnectionPtr userConnection2 = std::make_shared<Connection>(2);
 
     projectTest.ConnectUser(userConnection1);
     EXPECT_EQ(projectTest.ConnectionExist(userConnection1), true);
@@ -115,7 +109,7 @@ TEST(ProjectConnectTests, AttachMultipleConnections) {
 TEST(ProjectDisonnectTests, DisconnectExistingConnection) {
     Project projectTest;
     // connectionIdCounter = 0, projectConnections is empty
-    ConnectionPtr userConnection = std::shared_ptr<IConnection>(new Connection);
+    ConnectionPtr userConnection = std::make_shared<Connection>();
     projectTest.ConnectUser(userConnection);
 
     EXPECT_EQ(projectTest.ConnectionExist(userConnection), true);
@@ -132,8 +126,8 @@ TEST(ProjectDisonnectTests, DisconnectExistingConnection) {
 TEST(ProjectDisonnectTests, DisconnectNonExistingConnection) {
     Project projectTest;
     // connectionIdCounter = 0, projectConnections is empty
-    ConnectionPtr userConnection = std::shared_ptr<IConnection>(new Connection);
-    
+    ConnectionPtr userConnection = std::make_shared<Connection>();
+
     EXPECT_EQ(projectTest.DisconnectUser(userConnection), false);
     EXPECT_EQ(projectTest.GetCounter(), 0);
     EXPECT_EQ(projectTest.ConnectionExist(userConnection), false);
@@ -142,8 +136,8 @@ TEST(ProjectDisonnectTests, DisconnectNonExistingConnection) {
 TEST(ProjectDisonnectTests, DisconnectMultipleConnections) {
     Project projectTest;
     // connectionIdCounter = 0, projectConnections is empty
-    ConnectionPtr userConnection1 = std::shared_ptr<IConnection>(new Connection(1));
-    ConnectionPtr userConnection2 = std::shared_ptr<IConnection>(new Connection(2));
+    ConnectionPtr userConnection1 = std::make_shared<Connection>(1);
+    ConnectionPtr userConnection2 = std::make_shared<Connection>(2);
 
     projectTest.ConnectUser(userConnection1);
     projectTest.ConnectUser(userConnection2);
@@ -164,23 +158,13 @@ TEST(ProjectDisonnectTests, DisconnectMultipleConnections) {
     EXPECT_EQ(projectTest.ConnectionExist(userConnection2), false);
 };
 
-
-
-
-
-
-
 class MockRouter : public IRouter {
    public:
-    MOCK_METHOD(void, processRoute,
-                (Request & request, const ConnectionPtr& userConnection),
-                (override));
+    MOCK_METHOD(void, processRoute, (Request & request, const ConnectionPtr& userConnection), (override));
 
-    MOCK_METHOD2(sendToUser,
-                 bool(const Reply& reply, const ConnectionPtr& userConnection));
+    MOCK_METHOD2(sendToUser, bool(const Reply& reply, const ConnectionPtr& userConnection));
 
-    MOCK_METHOD(bool, sendToAllProjectUsers,
-                (const Reply& reply, const ConnectionPtr& userConnection),
+    MOCK_METHOD(bool, sendToAllProjectUsers, (const Reply& reply, const ConnectionPtr& userConnection),
                 (override));
 };
 
@@ -188,10 +172,10 @@ TEST(GMockTests, RouterGMock) {
     MockRouter mockRouter;
     Reply replyIt("i");
     Request requestIt("d");
-    ConnectionPtr myConnectionPtr{};
-    EXPECT_CALL(mockRouter, sendToUser(replyIt, myConnectionPtr)).Times(1);
-    EXPECT_CALL(mockRouter, processRoute(requestIt, myConnectionPtr)).Times(1);
+    ConnectionPtr connectionPtr{};
+    EXPECT_CALL(mockRouter, sendToUser(replyIt, connectionPtr)).Times(1);
+    EXPECT_CALL(mockRouter, processRoute(requestIt, connectionPtr)).Times(1);
 
-    mockRouter.sendToUser(replyIt, myConnectionPtr);
-    mockRouter.processRoute(requestIt, myConnectionPtr);
+    mockRouter.sendToUser(replyIt, connectionPtr);
+    mockRouter.processRoute(requestIt, connectionPtr);
 }

@@ -19,12 +19,12 @@ class IWorkWithData {
 class WorkWithData : public IWorkWithData {
    public:
     WorkWithData(){};
-    std::string operationWithData(std::string, bool) override{};
+    std::string operationWithData(std::string, bool) override { return "a"; };
     void userFirst(size_t, size_t) override{};
-    std::string getLine(size_t) override{};
-    void addDirectoryToPlaceFiles(std::string)
-        override{};  //                 сюда я передаю путь до срр файла,
+    std::string getLine(size_t) override { return "a"; };
+    void addDirectoryToPlaceFiles(
+        std::string) override{};  //                       сюда я передаю путь до срр файла,
     void addFile(std::string) override{};  // с которым работают клиенты
-    std::string getLogFileDirectory() override{};
-    std::string getFileWithDataDirectory() override{};
+    std::string getLogFileDirectory() override { return "a"; };
+    std::string getFileWithDataDirectory() override { return "a"; };
 };

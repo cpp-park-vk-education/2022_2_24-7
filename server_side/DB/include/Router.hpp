@@ -18,16 +18,13 @@ class Router : public IRouter {
 
     ~Router() { delete workWithData; }
 
-    void processRoute(Request& request,
-                      const ConnectionPtr& userConnection) override;
+    void processRoute(Request& request, const ConnectionPtr& userConnection) override;
 
-    bool sendToAllProjectUsers(const Reply& reply,
-                               const ConnectionPtr& userConnection) override;
-    bool sendToUser(const Reply& reply,
-                    const ConnectionPtr& userConnection) override;
+    bool sendToAllProjectUsers(const Reply& reply, const ConnectionPtr& userConnection) override;
+    bool sendToUser(const Reply& reply, const ConnectionPtr& userConnection) override;
 
-    const Project GetProject() const;
-    const IWorkWithData* GetWorkWithData() const;
+    Project* GetProject();
+    IWorkWithData* GetWorkWithData() const;
 
    private:
     Project project;
