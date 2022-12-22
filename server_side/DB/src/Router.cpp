@@ -1,5 +1,6 @@
-#include <iostream>
 #include "Router.hpp"
+
+#include <iostream>
 
 Router::Router() {
     project = Project();

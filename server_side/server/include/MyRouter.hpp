@@ -5,5 +5,5 @@
 
 class Router {
    public:
-    void processRoute(const Dto& request, const IConnection& connect) { }
+    void processRoute(const Dto& request, const IConnection& connect) {}
 };

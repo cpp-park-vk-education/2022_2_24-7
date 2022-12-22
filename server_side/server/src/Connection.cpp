@@ -2,11 +2,11 @@
 
 #include <iostream>
 
-#define IO_BIND(a) boost::bind(&Connection::a, shared_from_this(), boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred)
+#define IO_BIND(a)                                                                    \
+    boost::bind(&Connection::a, shared_from_this(), boost::asio::placeholders::error, \
+                boost::asio::placeholders::bytes_transferred)
 
-Connection::Connection(boost::asio::io_context &io_context_) :
-        handler(),
-        socket_(io_context_) {}
+Connection::Connection(boost::asio::io_context &io_context_) : handler(), socket_(io_context_) {}
 
 void Connection::run(size_t *id) {
     id_ = *id;
@@ -14,9 +14,7 @@ void Connection::run(size_t *id) {
     readMsg();
 }
 
-boost::asio::ip::tcp::socket &Connection::getSocket() {
-    return socket_;
-}
+boost::asio::ip::tcp::socket &Connection::getSocket() { return socket_; }
 
 void Connection::readMsg() {
     std::fill(read_buff, read_buff + BUFF_SIZE, 0);
@@ -26,7 +24,7 @@ void Connection::readMsg() {
 void Connection::handleRead(const boost::system::error_code &error, size_t bytes) {
     if (error) {
         switch (error.value()) {
-            case boost::asio::error::eof: // ?
+            case boost::asio::error::eof:  // ?
                 closeConnection();
                 break;
             default:
