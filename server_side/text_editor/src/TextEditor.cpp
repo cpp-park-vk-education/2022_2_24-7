@@ -248,7 +248,22 @@ std::string WorkWithLines::insertElementInPosition(std::string command) {
     Command com(command);
 
     insertElement(com._insertElement, com._beforeElement,com._afterElemenet);
-    return command;
+    
+    size_t position = 0;
+    Element* nowEl = beggining;
+    while (nowEl && !(nowEl->isVisible && checkForAfterElement(nowEl, com._insertElement))) {
+        if (nowEl->isVisible) {
+            position++;
+        }
+        nowEl = nowEl->next;
+    }
+
+    // return command;
+    std::string returnString = "i:";
+    returnString.push_back(com._insertElement->_value);
+    returnString.push_back(':');
+    returnString.append(std::to_string(++position));
+    return returnString;
 };
 
 std::string WorkWithLines::deleteElementFromPosition(std::string command) {
@@ -268,7 +283,11 @@ std::string WorkWithLines::deleteElementFromPosition(std::string command) {
     
     delete com._insertElement;
     
-    return createCommand(true, deleteElementFromLineAndPos(pos.line, pos.pos).elementBeforeInsert);
+    // return createCommand(true, deleteElementFromLineAndPos(pos.line, pos.pos).elementBeforeInsert);
+    std::string returnString;
+    returnString.append("d:");
+    returnString.append(std::to_string(++position));
+    return returnString;
 };
 
 size_t WorkWithLines::getQuantityOfLines() {
