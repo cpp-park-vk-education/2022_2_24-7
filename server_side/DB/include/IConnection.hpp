@@ -2,7 +2,6 @@
 
 #include <boost/shared_ptr.hpp>
 
-
 class IConnection {
    public:
     virtual void handle_read() = 0;
@@ -18,10 +17,11 @@ class Connection : public IConnection {
     void handle_write() override{};
     void start() override{};
     void get_socket() override{};
+
    private:
     int ID;
 };
-using ConnectionPtr = boost::shared_ptr<IConnection>;
+using ConnectionPtr = std::shared_ptr<IConnection>;
 // это интерфейс сущности из сервера проекта, он служит для последующей
 // интеграции
-//using ConnectionPtr = IConnection *;
+// using ConnectionPtr = IConnection *;

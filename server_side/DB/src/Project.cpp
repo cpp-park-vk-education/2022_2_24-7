@@ -1,10 +1,7 @@
 #include "Project.hpp"
 
 Project::Project(std::string newProjectName, std::string newFilesPath)
-    : projectName(newProjectName),
-      filesPath(newFilesPath),
-      projectConnections(),
-      connectionIdCounter(0){};
+    : projectName(newProjectName), filesPath(newFilesPath), projectConnections(), connectionIdCounter(0){};
 
 bool Project::ConnectUser(const ConnectionPtr& userConnection) {
     if (ConnectionExist(userConnection) == true) {
@@ -17,7 +14,7 @@ bool Project::ConnectUser(const ConnectionPtr& userConnection) {
 
 bool Project::DisconnectUser(const ConnectionPtr& userConnection) {
     int tempConnectionId = FindConnectionId(userConnection);
-    if(tempConnectionId == -1) {
+    if (tempConnectionId == -1) {
         return false;
     }
     projectConnections.erase(tempConnectionId);

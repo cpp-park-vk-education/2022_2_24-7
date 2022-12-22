@@ -2,20 +2,18 @@
 
 #include <limits>
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 #include "IConnection.hpp"
 #include "IProject.hpp"
 #include "IWorkWithData.hpp"
 
-
-//using ConnectionPtr = std::make_shared<IConnection> (Connection());
+// using ConnectionPtr = std::make_shared<IConnection> (Connection());
 
 class Project : IProject {
    public:
-    Project(std::string newProjectName = "project",
-            std::string newFilesPath = "./files");
+    Project(std::string newProjectName = "project", std::string newFilesPath = "./files");
 
     bool ConnectUser(const ConnectionPtr& userConnection) override;
     bool DisconnectUser(const ConnectionPtr& userConnection) override;

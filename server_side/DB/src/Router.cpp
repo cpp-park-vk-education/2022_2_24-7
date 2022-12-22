@@ -1,39 +1,39 @@
 #include "Router.hpp"
 
-Router::Router(std::string filesPath)
-    : project(Project("project", filesPath)), workWithData() {
+Router::Router(std::string filesPath) : project(Project("project", filesPath)), workWithData() {
     workWithData = new WorkWithData;
 };
 
-bool Router::sendToUser(const Reply& reply,
-                        const ConnectionPtr& userConnection) {
+bool Router::sendToUser(const Reply& reply, const ConnectionPtr& userConnection) {
     userConnection->handle_write();
 
     return true;
 };
 
-bool Router::sendToAllProjectUsers(const Reply& reply,
-                                   const ConnectionPtr& userConnection) {
-    /*    if (project.GetUsers().size() == 0) {
-            return 0;
+bool Router::sendToAllProjectUsers(const Reply& reply, const ConnectionPtr& userConnection) {
+    if (project.GetProjectConnections().size() == 0) {
+        return false;
+    }
+    std::unordered_map<int, ConnectionPtr> tempProjectConnections = project.GetProjectConnections();
+    for (auto& i : tempProjectConnections) {
+        if (i.second == nullptr) {  // если пользователь отключился, то я удаляю конекшн из списка
+            project.DisconnectUser(i.second);
+            continue;
         }
-        for (int i = 0; i < project.GetUsers().size(); ++i) {
-            if (project.GetUsers()[i].userConnection != userConnection) {
-                sendToUser(reply, project.GetUsers()[i].userConnection);
-            }
+        if (i.second != userConnection) {
+            sendToUser(reply, i.second);
         }
-        */
+    }
     return true;
 };
 
-void Router::processRoute(Request& request,
-                          const ConnectionPtr& userConnection) {
+void Router::processRoute(Request& request, const ConnectionPtr& userConnection) {
     std::string replyCommand = request.command;
     workWithData->operationWithData(request.command, true);
     Reply reply(replyCommand);
     sendToAllProjectUsers(reply, userConnection);
 };
 
-const Project Router::GetProject() const { return project; };
+Project* Router::GetProject() { return &project; };
 
-const IWorkWithData* Router::GetWorkWithData() const { return workWithData; };
+IWorkWithData* Router::GetWorkWithData() const { return workWithData; };
