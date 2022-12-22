@@ -1,41 +1,34 @@
 #pragma once
 
+#include <limits>
+#include <string>
+#include <vector>
+
+#include "IConnection.hpp"
 #include "IProject.hpp"
 #include "IWorkWithData.hpp"
-#include "User.hpp"
-#include "IConnection.hpp"
-using ConnectionPtr = boost::shared_ptr<IConnection>;
+
+//using ConnectionPtr = boost::shared_ptr<IConnection>;
 
 class Project : IProject {
    public:
-    Project(std::string newFilesPath = "./files",
-            std::string newProjectName = "project")
-        : filesPath(newFilesPath),
-          projectName(newProjectName),
-          projectUsers(),
-          projectConnections(),
-          connectionIdCounter(0){};
+    Project(std::string newProjectName = "project",
+            std::string newFilesPath = "./files");
 
     bool ConnectUser(const ConnectionPtr& userConnection) override;
     bool DisconnectUser(const ConnectionPtr& userConnection) override;
 
-    std::vector<User> GetUsers() const override;
-
     const std::string GetPath() const;
-
     const std::string GetName() const;
+    const std::unordered_map<int, ConnectionPtr> GetProjectConnections() const;
+    const int GetCounter() const;
 
-    int GetCounter() const;
-
-    User FindUser(const ConnectionPtr& userConnection);
-    bool UserExist(const ConnectionPtr& userConnection);
-
+    bool ConnectionExist(const ConnectionPtr& userConnection);
+    int FindConnectionId(const ConnectionPtr& userConnection);
 
    private:
-
-    std::string filesPath;
     std::string projectName;
-    std::vector<User> projectUsers;
+    std::string filesPath;
     std::unordered_map<int, ConnectionPtr> projectConnections;
     int connectionIdCounter;
 };

@@ -3,31 +3,20 @@
 
 #include "includes.hpp"
 
-TEST(DefaultTestBack, Test) { EXPECT_EQ((2 * 2), 4); }
-
-TEST(BackendConstructorsTest, RouterTest) { Router routerTest; }
-
-TEST(BackendConstructorsTest, ProjectTest) { Project projectTest; }
-
-TEST(BackendConstructorsTest, UserTest) {
-    boost::shared_ptr<IConnection> myConnectionPtr =
-        boost::shared_ptr<IConnection>();
-    User userTest(2, myConnectionPtr, 2);
-    userTest.countUserChanges++;
-
-    EXPECT_EQ(userTest.userID, 2);
-    EXPECT_EQ(userTest.countUserChanges, 3);
-}
-/*
-TEST(RouterFunctionsTest, AddHandlerTest) {
+TEST(BackendConstructorsTest, RouterConstructorTest) {
     Router routerTest;
-    EXPECT_EQ(routerTest.addHandler("i", InsertSymbol), true);
-    EXPECT_EQ(routerTest.GetHandlers().size(), 1);
-
-    EXPECT_EQ(routerTest.addHandler("d", DeleteSymbol), true);
-    EXPECT_NE(routerTest.GetHandlers().size(), 1);
+    EXPECT_EQ(routerTest.GetProject().GetPath(), "./files");
+    EXPECT_NE(routerTest.GetWorkWithData(), nullptr);
 }
-*/
+
+
+TEST(BackendConstructorsTest, ProjectConstructorTest) {
+    Project projectTest;
+    EXPECT_EQ(projectTest.GetPath(), "./files");
+    EXPECT_EQ(projectTest.GetName(), "project");
+    EXPECT_EQ(projectTest.GetCounter(), 0);
+}
+
 TEST(ResponseTest, TestAll) {
     std::string replString = "insert";
     std::string reqString = "delete";
@@ -40,15 +29,17 @@ TEST(ResponseTest, TestAll) {
     EXPECT_EQ(replyIt.GetMethod(), replString[0]);
     EXPECT_EQ(requestIt.GetMethod(), reqString[0]);
 }
+
 /*
 TEST(RouterFunctionsTest, ProcessRouteTest) {
     Router routerTest;
     Request requestIt("d");
-    boost::shared_ptr<IConnection> myConnectionPtr =
-        boost::shared_ptr<IConnection>();
+    std::shared_ptr<IConnection> myConnectionPtr =
+        std::shared_ptr<IConnection>();
     EXPECT_EQ(routerTest.processRoute(requestIt, myConnectionPtr), true);
 }
 */
+
 TEST(RouterFunctionsTest, CreateProjectTest) {
     std::string path1 = "./test";
     Router routerTest(path1);
@@ -56,74 +47,137 @@ TEST(RouterFunctionsTest, CreateProjectTest) {
     std::string path2 = routerTest.GetProject().GetPath();
     EXPECT_EQ(path1, path2);
 }
+
 /*
 TEST(RouterFunctionsTest, SendTest) {
     Router routerTest;
-    boost::shared_ptr<IConnection> myConnectionPtr =
-        boost::shared_ptr<IConnection>();
+    std::shared_ptr<IConnection> myConnectionPtr =
+        std::shared_ptr<IConnection>();
     Reply replyIt("d");
     EXPECT_EQ(routerTest.sendToUser(replyIt, myConnectionPtr), true);
     EXPECT_EQ(routerTest.sendToAllProjectUsers(replyIt, myConnectionPtr), true);
 }
 */
-TEST(ProjectFunctionsTest, GettersTest) {
+
+
+
+
+
+
+
+
+
+
+
+
+/*std::shared_ptr<IConnection> myConnectionPtr1 =
+        std::shared_ptr<IConnection>();*/
+
+TEST(ProjectConnectTests, AttachNewConnection) {
     Project projectTest;
-    EXPECT_EQ(projectTest.GetName(), "project");
-    EXPECT_EQ(projectTest.GetUsers().size(), 0);
-    EXPECT_EQ(projectTest.GetPath(), "./files");
-    EXPECT_EQ(projectTest.GetCounter(), 0);
+    // connectionIdCounter = 0, projectConnections is empty
+    ConnectionPtr userConnection = std::shared_ptr<IConnection>(new Connection);
+    projectTest.ConnectUser(userConnection);
+
+    EXPECT_EQ(projectTest.ConnectionExist(userConnection), true);
+    EXPECT_EQ(projectTest.GetCounter(), 1);
+    EXPECT_EQ(projectTest.FindConnectionId(userConnection), 0);
 }
 
-TEST(ProjectFunctionsTest, UserTest) {
+TEST(ProjectConnectTests, AttachExistingConnection) {
     Project projectTest;
-    boost::shared_ptr<IConnection> myConnectionPtr1 =
-        boost::shared_ptr<IConnection>();
+    // connectionIdCounter = 0, projectConnections is empty
+    ConnectionPtr userConnection = std::shared_ptr<IConnection>(new Connection);
+    projectTest.ConnectUser(userConnection);
 
-    projectTest.ConnectUser(myConnectionPtr1);
-    EXPECT_EQ(projectTest.GetUsers().size(), 1);
+    EXPECT_NE(projectTest.ConnectUser(userConnection), true);
     EXPECT_EQ(projectTest.GetCounter(), 1);
+}
 
-    projectTest.ConnectUser(myConnectionPtr1);
-    EXPECT_NE(projectTest.GetUsers().size(), 2);
-    EXPECT_NE(projectTest.GetCounter(), 2);
+TEST(ProjectConnectTests, AttachMultipleConnections) {
+    Project projectTest;
+    // connectionIdCounter = 0, projectConnections is empty
+    ConnectionPtr userConnection1 = std::shared_ptr<IConnection>(new Connection(1));
+    ConnectionPtr userConnection2 = std::shared_ptr<IConnection>(new Connection(2));
 
-    projectTest.DisconnectUser(myConnectionPtr1);
-    EXPECT_EQ(projectTest.GetUsers().size(), 0);
+    projectTest.ConnectUser(userConnection1);
+    EXPECT_EQ(projectTest.ConnectionExist(userConnection1), true);
     EXPECT_EQ(projectTest.GetCounter(), 1);
+    EXPECT_EQ(projectTest.FindConnectionId(userConnection1), 0);
 
-    projectTest.ConnectUser(myConnectionPtr1);
-    EXPECT_EQ(projectTest.GetUsers().size(), 1);
+    EXPECT_NE(userConnection1, userConnection2);
+
+    EXPECT_EQ(projectTest.ConnectUser(userConnection2), true);
     EXPECT_EQ(projectTest.GetCounter(), 2);
+    EXPECT_EQ(projectTest.FindConnectionId(userConnection2), 1);
 }
 
-TEST(HandlersTest, InsertTest) {
-    Request requestIt("d");
-    std::string filePath = "./files";
-    Reply replyIt("d");
-    EXPECT_EQ(replyIt.command, InsertSymbol(requestIt, filePath).command);
+TEST(ProjectDisonnectTests, DisconnectExistingConnection) {
+    Project projectTest;
+    // connectionIdCounter = 0, projectConnections is empty
+    ConnectionPtr userConnection = std::shared_ptr<IConnection>(new Connection);
+    projectTest.ConnectUser(userConnection);
+
+    EXPECT_EQ(projectTest.ConnectionExist(userConnection), true);
+    EXPECT_EQ(projectTest.GetCounter(), 1);
+    EXPECT_EQ(projectTest.FindConnectionId(userConnection), 0);
+
+    projectTest.DisconnectUser(userConnection);
+
+    EXPECT_NE(projectTest.ConnectionExist(userConnection), true);
+    EXPECT_EQ(projectTest.GetCounter(), 1);
+    EXPECT_EQ(projectTest.ConnectionExist(userConnection), false);
 }
 
-TEST(HandlersTest, DeleteTest) {
-    Request requestIt("d");
-    std::string filePath = "./files";
-    Reply replyIt("d");
-    EXPECT_EQ(replyIt.GetMethod(),
-              DeleteSymbol(requestIt, filePath).GetMethod());
+TEST(ProjectDisonnectTests, DisconnectNonExistingConnection) {
+    Project projectTest;
+    // connectionIdCounter = 0, projectConnections is empty
+    ConnectionPtr userConnection = std::shared_ptr<IConnection>(new Connection);
+    
+    EXPECT_EQ(projectTest.DisconnectUser(userConnection), false);
+    EXPECT_EQ(projectTest.GetCounter(), 0);
+    EXPECT_EQ(projectTest.ConnectionExist(userConnection), false);
 }
+
+TEST(ProjectDisonnectTests, DisconnectMultipleConnections) {
+    Project projectTest;
+    // connectionIdCounter = 0, projectConnections is empty
+    ConnectionPtr userConnection1 = std::shared_ptr<IConnection>(new Connection(1));
+    ConnectionPtr userConnection2 = std::shared_ptr<IConnection>(new Connection(2));
+
+    projectTest.ConnectUser(userConnection1);
+    projectTest.ConnectUser(userConnection2);
+    EXPECT_EQ(projectTest.GetProjectConnections().size(), 2);
+    EXPECT_EQ(projectTest.GetCounter(), 2);
+
+    projectTest.DisconnectUser(userConnection1);
+
+    EXPECT_EQ(projectTest.GetProjectConnections().size(), 1);
+    EXPECT_EQ(projectTest.GetCounter(), 2);
+    EXPECT_EQ(projectTest.ConnectionExist(userConnection1), false);
+    EXPECT_EQ(projectTest.ConnectionExist(userConnection2), true);
+
+    projectTest.DisconnectUser(userConnection2);
+
+    EXPECT_EQ(projectTest.GetProjectConnections().size(), 0);
+    EXPECT_EQ(projectTest.GetCounter(), 2);
+    EXPECT_EQ(projectTest.ConnectionExist(userConnection2), false);
+};
+
+
+
+
+
+
 
 class MockRouter : public IRouter {
    public:
-    MOCK_METHOD(bool, addHandler,
-                (const std::string& method, const Handler& handler),
-                (override));
-
     MOCK_METHOD(bool, processRoute,
                 (Request & request, const ConnectionPtr& userConnection),
                 (override));
 
-    MOCK_METHOD(bool, sendToUser,
-                (const Reply& reply, const ConnectionPtr& userConnection),
-                (override));
+    MOCK_METHOD2(sendToUser,
+                 bool(const Reply& reply, const ConnectionPtr& userConnection));
 
     MOCK_METHOD(bool, sendToAllProjectUsers,
                 (const Reply& reply, const ConnectionPtr& userConnection),
@@ -136,10 +190,8 @@ TEST(GMockTests, RouterGMock) {
     Request requestIt("d");
     ConnectionPtr myConnectionPtr{};
     EXPECT_CALL(mockRouter, sendToUser(replyIt, myConnectionPtr)).Times(1);
-    EXPECT_CALL(mockRouter, addHandler("i", InsertSymbol)).Times(1);
     EXPECT_CALL(mockRouter, processRoute(requestIt, myConnectionPtr)).Times(1);
 
     mockRouter.sendToUser(replyIt, myConnectionPtr);
-    mockRouter.addHandler("i", InsertSymbol);
     mockRouter.processRoute(requestIt, myConnectionPtr);
 }

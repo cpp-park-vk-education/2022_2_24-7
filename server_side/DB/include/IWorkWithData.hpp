@@ -3,7 +3,7 @@
 #include <string>
 
 class IWorkWithData {
-    public:
+   public:
     virtual std::string operationWithData(std::string, bool) = 0;
     virtual void userFirst(size_t, size_t) = 0;
     virtual std::string getLine(size_t) = 0;
@@ -16,17 +16,15 @@ class IWorkWithData {
 // это интерфейс сущности из системы проекта, он служит для последующей
 // интеграции
 
-
 class WorkWithData : public IWorkWithData {
-    public:
+   public:
     WorkWithData(){};
-    std::string operationWithData(std::string, bool) override {};
-    void userFirst(size_t, size_t) override {};
-    std::string getLine(size_t) override {};
-    void addDirectoryToPlaceFiles(
-        std::string) override {};  //                 сюда я передаю путь до срр файла,
-    void addFile(std::string) override {}; // с которым работают клиенты
-    std::string getLogFileDirectory() override {};
-    std::string getFileWithDataDirectory() override {};
-
+    std::string operationWithData(std::string, bool) override{};
+    void userFirst(size_t, size_t) override{};
+    std::string getLine(size_t) override{};
+    void addDirectoryToPlaceFiles(std::string)
+        override{};  //                 сюда я передаю путь до срр файла,
+    void addFile(std::string) override{};  // с которым работают клиенты
+    std::string getLogFileDirectory() override{};
+    std::string getFileWithDataDirectory() override{};
 };

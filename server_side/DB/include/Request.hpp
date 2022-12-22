@@ -1,20 +1,20 @@
 #pragma once
 
+#include <boost/serialization/access.hpp>
 #include <string>
 
 #include "IResponse.hpp"
-#include <boost/serialization/access.hpp>
 
 struct Request : IResponse {
-    private:
+   private:
     friend class boost::serialization::access;
 
     template <class Archive>
     void serialize(Archive& ar, unsigned) {
-        ar & command;
-    }    
-    
-    public:
+        ar& command;
+    }
+
+   public:
     char GetMethod() override { return command[0]; }
 
     Request(std::string _command) : command(_command){};

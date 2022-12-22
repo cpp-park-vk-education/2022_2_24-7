@@ -4,7 +4,6 @@
 #include <string>
 
 #include "IConnection.hpp"
-using ConnectionPtr = boost::shared_ptr<IConnection>;
 
 struct User {
     User(int _userID, ConnectionPtr _newConnection = nullptr,
