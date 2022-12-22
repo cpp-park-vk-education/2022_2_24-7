@@ -26,13 +26,12 @@ bool Router::sendToAllProjectUsers(const Reply& reply,
     return true;
 };
 
-bool Router::processRoute(Request& request,
+void Router::processRoute(Request& request,
                           const ConnectionPtr& userConnection) {
     std::string replyCommand = request.command;
     workWithData->operationWithData(request.command, true);
     Reply reply(replyCommand);
     sendToAllProjectUsers(reply, userConnection);
-    return true;
 };
 
 const Project Router::GetProject() const { return project; };

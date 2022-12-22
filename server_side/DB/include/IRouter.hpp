@@ -9,7 +9,7 @@
 
 class IRouter {
    public:
-    virtual bool processRoute(Request& request,
+    virtual void processRoute(Request& request,
                               const ConnectionPtr& userConnection) = 0;
     virtual bool sendToUser(const Reply& reply,
                             const ConnectionPtr& userConnection) = 0;

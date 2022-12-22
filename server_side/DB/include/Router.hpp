@@ -18,7 +18,7 @@ class Router : public IRouter {
 
     ~Router() { delete workWithData; }
 
-    bool processRoute(Request& request,
+    void processRoute(Request& request,
                       const ConnectionPtr& userConnection) override;
 
     bool sendToAllProjectUsers(const Reply& reply,

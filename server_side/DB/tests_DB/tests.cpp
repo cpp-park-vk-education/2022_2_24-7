@@ -172,7 +172,7 @@ TEST(ProjectDisonnectTests, DisconnectMultipleConnections) {
 
 class MockRouter : public IRouter {
    public:
-    MOCK_METHOD(bool, processRoute,
+    MOCK_METHOD(void, processRoute,
                 (Request & request, const ConnectionPtr& userConnection),
                 (override));
 
