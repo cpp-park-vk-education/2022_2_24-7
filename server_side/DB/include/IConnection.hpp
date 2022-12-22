@@ -21,7 +21,7 @@ class Connection : public IConnection {
    private:
     int ID;
 };
-using ConnectionPtr = std::shared_ptr<IConnection>;
+using ConnectionPtr = boost::shared_ptr<IConnection>;
 // это интерфейс сущности из сервера проекта, он служит для последующей
 // интеграции
 //using ConnectionPtr = IConnection *;

@@ -34,8 +34,8 @@ TEST(ResponseTest, TestAll) {
 TEST(RouterFunctionsTest, ProcessRouteTest) {
     Router routerTest;
     Request requestIt("d");
-    std::shared_ptr<IConnection> myConnectionPtr =
-        std::shared_ptr<IConnection>();
+    boost::shared_ptr<IConnection> myConnectionPtr =
+        boost::shared_ptr<IConnection>();
     EXPECT_EQ(routerTest.processRoute(requestIt, myConnectionPtr), true);
 }
 */
@@ -51,32 +51,21 @@ TEST(RouterFunctionsTest, CreateProjectTest) {
 /*
 TEST(RouterFunctionsTest, SendTest) {
     Router routerTest;
-    std::shared_ptr<IConnection> myConnectionPtr =
-        std::shared_ptr<IConnection>();
+    boost::shared_ptr<IConnection> myConnectionPtr =
+        boost::shared_ptr<IConnection>();
     Reply replyIt("d");
     EXPECT_EQ(routerTest.sendToUser(replyIt, myConnectionPtr), true);
     EXPECT_EQ(routerTest.sendToAllProjectUsers(replyIt, myConnectionPtr), true);
 }
 */
 
-
-
-
-
-
-
-
-
-
-
-
-/*std::shared_ptr<IConnection> myConnectionPtr1 =
-        std::shared_ptr<IConnection>();*/
+/*boost::shared_ptr<IConnection> myConnectionPtr1 =
+        boost::shared_ptr<IConnection>();*/
 
 TEST(ProjectConnectTests, AttachNewConnection) {
     Project projectTest;
     // connectionIdCounter = 0, projectConnections is empty
-    ConnectionPtr userConnection = std::shared_ptr<IConnection>(new Connection);
+    ConnectionPtr userConnection = boost::shared_ptr<IConnection>(new Connection);
     projectTest.ConnectUser(userConnection);
 
     EXPECT_EQ(projectTest.ConnectionExist(userConnection), true);
@@ -87,7 +76,7 @@ TEST(ProjectConnectTests, AttachNewConnection) {
 TEST(ProjectConnectTests, AttachExistingConnection) {
     Project projectTest;
     // connectionIdCounter = 0, projectConnections is empty
-    ConnectionPtr userConnection = std::shared_ptr<IConnection>(new Connection);
+    ConnectionPtr userConnection = boost::shared_ptr<IConnection>(new Connection);
     projectTest.ConnectUser(userConnection);
 
     EXPECT_NE(projectTest.ConnectUser(userConnection), true);
@@ -97,8 +86,8 @@ TEST(ProjectConnectTests, AttachExistingConnection) {
 TEST(ProjectConnectTests, AttachMultipleConnections) {
     Project projectTest;
     // connectionIdCounter = 0, projectConnections is empty
-    ConnectionPtr userConnection1 = std::shared_ptr<IConnection>(new Connection(1));
-    ConnectionPtr userConnection2 = std::shared_ptr<IConnection>(new Connection(2));
+    ConnectionPtr userConnection1 = boost::shared_ptr<IConnection>(new Connection(1));
+    ConnectionPtr userConnection2 = boost::shared_ptr<IConnection>(new Connection(2));
 
     projectTest.ConnectUser(userConnection1);
     EXPECT_EQ(projectTest.ConnectionExist(userConnection1), true);
@@ -115,7 +104,7 @@ TEST(ProjectConnectTests, AttachMultipleConnections) {
 TEST(ProjectDisonnectTests, DisconnectExistingConnection) {
     Project projectTest;
     // connectionIdCounter = 0, projectConnections is empty
-    ConnectionPtr userConnection = std::shared_ptr<IConnection>(new Connection);
+    ConnectionPtr userConnection = boost::shared_ptr<IConnection>(new Connection);
     projectTest.ConnectUser(userConnection);
 
     EXPECT_EQ(projectTest.ConnectionExist(userConnection), true);
@@ -132,7 +121,7 @@ TEST(ProjectDisonnectTests, DisconnectExistingConnection) {
 TEST(ProjectDisonnectTests, DisconnectNonExistingConnection) {
     Project projectTest;
     // connectionIdCounter = 0, projectConnections is empty
-    ConnectionPtr userConnection = std::shared_ptr<IConnection>(new Connection);
+    ConnectionPtr userConnection = boost::shared_ptr<IConnection>(new Connection);
     
     EXPECT_EQ(projectTest.DisconnectUser(userConnection), false);
     EXPECT_EQ(projectTest.GetCounter(), 0);
@@ -142,8 +131,8 @@ TEST(ProjectDisonnectTests, DisconnectNonExistingConnection) {
 TEST(ProjectDisonnectTests, DisconnectMultipleConnections) {
     Project projectTest;
     // connectionIdCounter = 0, projectConnections is empty
-    ConnectionPtr userConnection1 = std::shared_ptr<IConnection>(new Connection(1));
-    ConnectionPtr userConnection2 = std::shared_ptr<IConnection>(new Connection(2));
+    ConnectionPtr userConnection1 = boost::shared_ptr<IConnection>(new Connection(1));
+    ConnectionPtr userConnection2 = boost::shared_ptr<IConnection>(new Connection(2));
 
     projectTest.ConnectUser(userConnection1);
     projectTest.ConnectUser(userConnection2);

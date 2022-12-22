@@ -11,7 +11,7 @@ bool Project::ConnectUser(const ConnectionPtr& userConnection) {
         return false;
     }
     projectConnections.emplace(connectionIdCounter, userConnection);
-    connectionIdCounter = (connectionIdCounter + 1) % 1000;
+    connectionIdCounter = (connectionIdCounter + 1) % std::numeric_limits<int>::max();
     return true;
 };
 

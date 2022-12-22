@@ -3,12 +3,14 @@
 #include <limits>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "IConnection.hpp"
 #include "IProject.hpp"
 #include "IWorkWithData.hpp"
 
-//using ConnectionPtr = boost::shared_ptr<IConnection>;
+
+//using ConnectionPtr = std::make_shared<IConnection> (Connection());
 
 class Project : IProject {
    public:
