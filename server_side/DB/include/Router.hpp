@@ -12,6 +12,8 @@
 #include "Reply.hpp"
 #include "Request.hpp"
 
+using ConnectionPtr = std::shared_ptr<IConnection>;
+
 class Router : public IRouter {
    public:
     Router(std::string filesPath = "./files");

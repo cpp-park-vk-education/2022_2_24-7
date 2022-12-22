@@ -9,7 +9,7 @@
 #include "IProject.hpp"
 #include "IWorkWithData.hpp"
 
-// using ConnectionPtr = std::make_shared<IConnection> (Connection());
+using ConnectionPtr = std::shared_ptr<IConnection>;
 
 class Project : IProject {
    public:
