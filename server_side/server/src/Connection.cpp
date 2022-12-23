@@ -1,4 +1,5 @@
 #include "Connection.hpp"
+#include "nlohmann/json.hpp"
 
 #include <iostream>
 
@@ -11,6 +12,9 @@ Connection::Connection(boost::asio::io_context &io_context_) : handler(), socket
 void Connection::run(size_t *id) {
     id_ = *id;
     connections_ = id;
+    nlohmann::json j;
+    j["command"] = "First message from server";
+    socket_.write_some(boost::asio::buffer(j.dump()));
     readMsg();
 }
 
@@ -56,7 +60,7 @@ void Connection::sendReply() {
 
 void Connection::closeConnection() {
     std::cout << "CLIENT HAS EXITED\n";
-    // --(*connections_);
+    --(*connections_);
     connections_ = nullptr;
     socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
     socket_.close();
