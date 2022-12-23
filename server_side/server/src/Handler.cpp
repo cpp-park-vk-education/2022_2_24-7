@@ -17,6 +17,7 @@ void Handler::logic() {}
 void Handler::convertMsgToDto(std::string vpnMsg) {
     nlohmann::json j = nlohmann::json::parse(vpnMsg);
     dto.command = j["command"].get<std::string>();
+    dto.command = j["id"].get<int>();
 }
 
 void Handler::convertDtoToMsg(const Dto&) { reply_ = dto.command; }

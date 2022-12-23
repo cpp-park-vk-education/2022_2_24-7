@@ -77,6 +77,10 @@ std::string Client::handleMsg(std::string msg) {
 
     Dto dto;
     dto.command = j["command"];
+    dto.id = j["id"];
+
+    std::cout << "SERVER MESSAGE DTO: " << dto.command << std::endl << dto.id << std::endl;
+
 
     return dto.command;
 }

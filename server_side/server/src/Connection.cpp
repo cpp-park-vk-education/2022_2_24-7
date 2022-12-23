@@ -14,6 +14,7 @@ void Connection::run(size_t *id) {
     connections_ = id;
     nlohmann::json j;
     j["command"] = "First message from server";
+    j["id"] = 1;
     socket_.write_some(boost::asio::buffer(j.dump()));
     readMsg();
 }

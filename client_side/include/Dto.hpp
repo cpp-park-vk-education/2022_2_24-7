@@ -5,4 +5,5 @@
 class Dto {
    public:
     std::string command;
+    int id = 0;
 };
