@@ -92,7 +92,6 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
     if (beforeElement) {
         // element before exist
         tmpBefore = beggining;
-        StartOfLine* tmpLine = lines;
 
         checkForNotEqual notEq;
 
@@ -103,7 +102,6 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
 
         countVisibleBefore = answer.visibleCount;
         lineCountBefore = answer.lineCount;
-
     } else {
 
         if (beggining) {
@@ -123,6 +121,7 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
             // elements doesnt exist
             // what position
             beggining = insertElement;
+            lineCount++;
             lines = new StartOfLine(insertElement, 1);
             return answer;
         }
@@ -285,6 +284,8 @@ std::string WorkWithLines::deleteElementFromPosition(std::string command) {
     delete com._insertElement;
     
     // return createCommand(true, deleteElementFromLineAndPos(pos.line, pos.pos).elementBeforeInsert);
+    deleteElementFromLineAndPos(pos.line, pos.pos);
+    
     std::string returnString;
     returnString.append("d:");
     returnString.append(std::to_string(++position));
