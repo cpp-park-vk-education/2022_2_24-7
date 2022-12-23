@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 project(tests)
 
 # set(TestSOURCES "testExampleLib/tests.cpp" "editorTests/textEditor.cpp" "editorTests/lineOfText.cpp" "editorTests/lineElement.cpp")
-set(TestSOURCES "editorTests/textEditor1.cpp" "editorTests/lineOfText1.cpp" "editorTests/lineElement1.cpp")
+set(TestSOURCES "testExampleLib/tests.cpp")
 set(OUR_LIBS ${TEXT_LIB})
 set(OUR_DIRS ${TEXT_INCLUDE_DIRS})
 
@@ -21,12 +21,9 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-
 add_executable(${PROJECT_NAME} ${TestSOURCES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OUR_DIRS})
-
-target_link_libraries(${PROJECT_NAME} PRIVATE ${TEST_LIB} ${OUR_LIBS} GTest::gtest_main)
 
 target_link_libraries(${PROJECT_NAME} ${mutual_editing_lib} GTest::gtest_main GTest::gmock)
 target_include_directories(${PROJECT_NAME} PUBLIC ${mutual_editing_include_directories})
