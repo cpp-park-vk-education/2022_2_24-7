@@ -1,5 +1,0 @@
-if(EXISTS "/mnt/c/deleteCommandProjectTechnopark/server_side/text_editor/text_editor/tests_text_editor/testsForTextEditor[1]_tests.cmake")
-  include("/mnt/c/deleteCommandProjectTechnopark/server_side/text_editor/text_editor/tests_text_editor/testsForTextEditor[1]_tests.cmake")
-else()
-  add_test(testsForTextEditor_NOT_BUILT testsForTextEditor_NOT_BUILT)
-endif()

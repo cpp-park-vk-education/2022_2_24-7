@@ -14,10 +14,9 @@ bool WorkWithCppFile::writeToFile(std::string whatToWrite) {
     std::ofstream out;
 
     out.open(_path + "res" + _extension, std::ios::app);
-
     if (out.is_open())
     {
-        out << whatToWrite << std::endl;
+        out << whatToWrite;
     } else {
         return 0;
     }

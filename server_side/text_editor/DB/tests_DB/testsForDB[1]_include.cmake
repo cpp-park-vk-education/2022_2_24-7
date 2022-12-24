@@ -1,5 +1,0 @@
-if(EXISTS "/mnt/c/deleteCommandProjectTechnopark/server_side/text_editor/DB/tests_DB/testsForDB[1]_tests.cmake")
-  include("/mnt/c/deleteCommandProjectTechnopark/server_side/text_editor/DB/tests_DB/testsForDB[1]_tests.cmake")
-else()
-  add_test(testsForDB_NOT_BUILT testsForDB_NOT_BUILT)
-endif()
