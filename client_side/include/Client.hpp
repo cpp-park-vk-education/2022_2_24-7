@@ -4,6 +4,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <nlohmann/json.hpp>
 
 #include <memory>
@@ -33,7 +34,7 @@ class Client : public std::enable_shared_from_this<Client> {
     void acceptConnection();
 
     void readMsg();
-    void handleRead();
+    void handleRead(const boost::system::error_code &error, size_t bytes);
     std::string handleMsg(std::string msg);
     void dummy(const boost::system::error_code &error, size_t bytes);
 };

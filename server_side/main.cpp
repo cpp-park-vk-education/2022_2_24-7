@@ -3,8 +3,6 @@
 
 #include "Server.hpp"
 
-// #include <iostream>
-
 static inline constexpr int THREADS_NUM = 10;
 
 boost::asio::io_context context;

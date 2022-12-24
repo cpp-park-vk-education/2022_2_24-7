@@ -39,26 +39,26 @@ void Client::sendMsg(std::string msg) {
 void Client::readMsg() {
     std::cout << "----- INPUT BEFORE RECEIVING -----" << std::endl;
 
-    boost::asio::read_until(_socket, read_buff, '}');
-    handleRead();
+    boost::asio::async_read_until(_socket, read_buff, '}', IO_BIND(handleRead));
+    // handleRead();
 }
 
-void Client::handleRead() {
-    // if (error) {
-    //     switch (error.value()) {
-    //         case boost::asio::error::eof:  // ?
-    //             closeConnection();
-    //             break;
-    //         default:
-    //             std::cerr << ": INPUT READ ERROR: " << error.message() << "\n";
-    //             break;
-    //     }
-    //     return;
-    // }
-    // if (bytes == 0) {
-    //     std::cerr << ": NO INPUT GOT\n";
-    //     return;
-    // }
+void Client::handleRead(const boost::system::error_code &error, size_t bytes) {
+    if (error) {
+        switch (error.value()) {
+            case boost::asio::error::eof:  // ?
+                closeConnection();
+                break;
+            default:
+                std::cerr << ": INPUT READ ERROR: " << error.message() << "\n";
+                break;
+        }
+        return;
+    }
+    if (bytes == 0) {
+        std::cerr << ": NO INPUT GOT\n";
+        return;
+    }
 
     std::istream is(&read_buff);
     std::string msg;
