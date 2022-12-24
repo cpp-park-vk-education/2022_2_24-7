@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "IConnection.hpp"
+#include "../../server/include/IConnection.hpp"
 #include "IProject.hpp"
 #include "IRouter.hpp"
 #include "IWorkWithData.hpp"
@@ -18,7 +18,7 @@ class Router : public IRouter {
 
     ~Router() { delete workWithData; }
 
-    void processRoute(Request& request, const ConnectionPtr& userConnection) override;
+    void processRoute(const std::string& request, const ConnectionPtr userConnection) override;
 
     bool sendToAllProjectUsers(const Reply& reply, const ConnectionPtr& userConnection) override;
     bool sendToUser(const Reply& reply, const ConnectionPtr& userConnection) override;

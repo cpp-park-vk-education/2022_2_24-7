@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Dto.hpp"
-
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/enable_shared_from_this.hpp>
@@ -22,7 +20,6 @@ class Client : public std::enable_shared_from_this<Client> {
     void closeConnection();
 
    private:
-    // boost::asio::posix::stream_descriptor _inputStream;
     boost::asio::ip::tcp::socket _socket;
 
     std::string _ip;
@@ -30,6 +27,7 @@ class Client : public std::enable_shared_from_this<Client> {
 
     boost::asio::streambuf read_buff;
     std::string write_buff;
+    nlohmann::json dto;
 
     void acceptConnection();
 

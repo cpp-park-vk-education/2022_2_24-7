@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "IConnection.hpp"
 #include "IProject.hpp"
 #include "IWorkWithData.hpp"
 

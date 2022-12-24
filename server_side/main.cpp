@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "Server.hpp"
+#include "Router.hpp"
 
 static inline constexpr int THREADS_NUM = 10;
 
@@ -11,7 +12,10 @@ void server_threads_spawn() { context.run(); }
 
 int main(int argc, char *argv[]) {
     unsigned int port = argc > 1 ? std::stol(argv[1]) : default_port;
-    Server server(context, port);
+
+    Router router;
+    
+    Server server(context, router, port);
     server.start();
 
     std::vector<std::thread> thread_pool;

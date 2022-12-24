@@ -4,14 +4,15 @@
 
 #include "Connection.hpp"
 
-Server::Server(boost::asio::io_context &context, unsigned int port)
+Server::Server(boost::asio::io_context &context, IRouter& router, unsigned int port)
     : io_context_(context),
-      acceptor_(context, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)) {}
+      acceptor_(context, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
+      _router(router) {}
 
 void Server::start() { acceptConnection(); }
 
 void Server::acceptConnection() {
-    std::shared_ptr<Connection> connection = Connection::create(io_context_);
+    std::shared_ptr<Connection> connection = Connection::create(io_context_, _router);
     acceptor_.async_accept(connection->getSocket(), boost::bind(&Server::handleConnection, this, connection,
                                                                 boost::asio::placeholders::error));
 }
@@ -24,8 +25,8 @@ void Server::handleConnection(std::shared_ptr<Connection> newConnection,
         return;
     }
     std::cout << "CLIENT CONNECTED\n";
-    ++connections_;
-    std::cout << "CONNECTIONS : " << connections_ << std::endl;
-    newConnection->run(&connections_);  // RUN
+    ++all_connections_;
+    std::cout << "CONNECTIONS : " << all_connections_ - closed_connections_ << std::endl;
+    newConnection->run(&all_connections_, &closed_connections_);  // RUN
     acceptConnection();
 }

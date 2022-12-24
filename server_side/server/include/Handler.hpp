@@ -1,38 +1,16 @@
 #pragma once
 
-#include "Dto.hpp"
 #include "IHandler.hpp"
-#include "MyRouter.hpp"
-
-// #include <chrono>
-// #include <cstdio>
-// #include <cstdlib>
-// #include <ctime>
-// #include <iostream>
-// #include <fstream>
-// #include <thread>
-
-// #include <boost/asio.hpp>
-// #include <boost/filesystem.hpp>
-// #include <boost/process.hpp>
-// #include <boost/property_tree/ptree.hpp>
-// #include <boost/regex.hpp>
 
 class Handler : public IHandler {
    public:
-    void handle(std::string) override;
-    void handle(const Dto&) override;
-    std::string reply() override;
+    void handleFromClient(std::string msg) override;
+    void handleFromBack(std::string msg) override;
+    nlohmann::json reply() override;
 
    private:
-    std::string reply_;
-    Dto dto;
-    Router router;
+    nlohmann::json dto;
 
-    void inputAnalyze(std::string);
-    void inputAnalyze(const Dto&);
-    void logic();
-
-    void convertMsgToDto(std::string);
-    void convertDtoToMsg(const Dto&);
+    void convertDtoToMsg(std::string msg);
+    void convertMsgToDto(std::string msg);
 };

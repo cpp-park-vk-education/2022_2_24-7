@@ -1,10 +1,12 @@
 #pragma once
 
+#include <nlohmann/json.hpp>
+
 #include <string>
 
 class IHandler {
    public:
-    virtual void handle(std::string) = 0;
-    virtual void handle(const Dto&) = 0;
-    virtual std::string reply() = 0;
+    virtual void handleFromClient(std::string msg) = 0;
+    virtual void handleFromBack(std::string msg) = 0;
+    virtual nlohmann::json reply() = 0;
 };

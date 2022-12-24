@@ -4,8 +4,8 @@ Router::Router(std::string filesPath) : project(Project("project", filesPath)), 
     workWithData = new WorkWithData;
 };
 
-bool Router::sendToUser(const Reply& reply, const ConnectionPtr& userConnection) {
-    userConnection->handle_write();
+bool Router::sendToUser(const Reply& reply, const ConnectionPtr& userConnection) { // здесь передается dto, а не реплай
+    // userConnection->writeMsg();
 
     return true;
 };
@@ -27,9 +27,9 @@ bool Router::sendToAllProjectUsers(const Reply& reply, const ConnectionPtr& user
     return true;
 };
 
-void Router::processRoute(Request& request, const ConnectionPtr& userConnection) {
-    std::string replyCommand = request.command;
-    workWithData->operationWithData(request.command, true);
+void Router::processRoute(const std::string& request, const ConnectionPtr userConnection) {
+    std::string replyCommand = request;
+    workWithData->operationWithData(replyCommand, true);
     Reply reply(replyCommand);
     sendToAllProjectUsers(reply, userConnection);
 };

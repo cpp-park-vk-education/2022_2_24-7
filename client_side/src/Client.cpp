@@ -73,22 +73,16 @@ void Client::handleRead(const boost::system::error_code &error, size_t bytes) {
 std::string Client::handleMsg(std::string msg) {
     std::cout << "SERVER MESSAGE : " << msg << std::endl;
     
-    nlohmann::json j = nlohmann::json::parse(msg);
+    dto = nlohmann::json::parse(msg);
 
-    Dto dto;
-    dto.command = j["command"];
-    dto.id = j["id"];
+    // logic
 
-    std::cout << "SERVER MESSAGE DTO: " << dto.command << std::endl << dto.id << std::endl;
-
-
-    return dto.command;
+    return dto.dump();
 }
 
 void Client::closeConnection() {
     _socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
 
-    // _inputStream.close(); 
     _socket.close();
 
     std::cout << "CONNECTION IS CLOSED" << std::endl;
