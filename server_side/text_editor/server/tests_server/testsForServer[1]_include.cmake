@@ -1,0 +1,5 @@
+if(EXISTS "/mnt/c/deleteCommandProjectTechnopark/server_side/text_editor/server/tests_server/testsForServer[1]_tests.cmake")
+  include("/mnt/c/deleteCommandProjectTechnopark/server_side/text_editor/server/tests_server/testsForServer[1]_tests.cmake")
+else()
+  add_test(testsForServer_NOT_BUILT testsForServer_NOT_BUILT)
+endif()
