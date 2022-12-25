@@ -16,13 +16,17 @@ std::string WorkWithData::operationWithData(std::string operation, bool isComman
     }
 
     std::string stringToWriteInLogs;
+    std::string stringToReturn;
 
     if (isCommand) {
+        stringToWriteInLogs = operation;
         if (isInsert){
-            stringToWriteInLogs = textEditor->insertElementInPosition(operation);
+            stringToReturn = textEditor->insertElementInPosition(operation);
         } else {
-            stringToWriteInLogs = textEditor->deleteElementFromPosition(operation);
+            stringToReturn = textEditor->deleteElementFromPosition(operation);
         }
+        
+        stringToWriteInLogs = operation;
     } else {
         if (isInsert){
             size_t post = std::stoul(vecs[2]);
@@ -31,11 +35,14 @@ std::string WorkWithData::operationWithData(std::string operation, bool isComman
         } else {
             stringToWriteInLogs = textEditor->deleteElementFromPosition(std::stoul(vecs[1]));
         }
+
+        stringToReturn = stringToWriteInLogs;
+
     }
     
     workWithLog->writeToFile(stringToWriteInLogs);
     
-    return stringToWriteInLogs;
+    return stringToReturn;
 };
 
 void WorkWithData::userFirst(size_t UserId, size_t userCount) {
@@ -47,10 +54,10 @@ std::string WorkWithData::getLine(size_t numberOfLine) {
 };
 
 void WorkWithData::addFile(std::string path) {
-    workWithCPP->addExtension("cpp");
+    workWithCPP->addExtension(".cpp");
     workWithCPP->addPathFile(path);
 
-    workWithLog->addExtension("txt");
+    workWithLog->addExtension(".txt");
     workWithLog->addPathFile(path);
 };
 
