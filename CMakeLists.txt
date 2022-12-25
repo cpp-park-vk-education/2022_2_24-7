@@ -1,53 +1,69 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.5)
 
-project(mutual_editing)
+project(client VERSION 0.1 LANGUAGES CXX)
 
-option(BUILD_ALL "Build all" ON)
-option(BUILD_TESTS "Build test programs" ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
-string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -pedantic -Wformat=2 -Wfloat-equal -Wconversion -fprofile-arcs")
-string(APPEND CMAKE_CXX_FLAGS " -Wlogical-op  -Wduplicated-cond -Wcast-qual -Wcast-align -g")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if(BUILD_DEV)
-    string(APPEND CMAKE_CXX_FLAGS " -g -O0")
+add_subdirectory(text_editor)
+
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+
+set(PROJECT_SOURCES
+        main.cpp
+        mainwindow.cpp
+        mainwindow.h
+        mainwindow.ui
+        Client.cpp
+        Client.hpp
+        mythread.cpp
+        mythread.h
+)
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(client
+        MANUAL_FINALIZATION
+        ${PROJECT_SOURCES}
+    )
+# Define target properties for Android with Qt 6 as:
+#    set_property(TARGET client APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+else()
+    if(ANDROID)
+        add_library(client SHARED
+            ${PROJECT_SOURCES}
+        )
+# Define properties for Android with Qt 5 after find_package() calls as:
+#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+    else()
+        add_executable(client
+            ${PROJECT_SOURCES}
+        )
+    endif()
 endif()
 
-if(BUILD_SANITIZE)
-    string(APPEND CMAKE_CXX_FLAGS " -fsanitize=address,undefined -fno-sanitize-recover=all -fsanitize-undefined-trap-on-error")
-endif()
+target_link_libraries(client PRIVATE ${TEXT_EDITOR_LIB})
+target_link_libraries(client PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_include_directories(client PRIVATE ${TEXT_EDITOR_INCLUDE_DIRS} )
 
-if(BUILD_VALGRIND)
-    
-endif()
+set_target_properties(client PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
 
-if(BUILD_SERVER_SIDE OR BUILD_ALL)
-    message("BUILD SERVER SIDE")
-    add_subdirectory(server_side)
-endif()
+install(TARGETS client
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-if(BUILD_CLIENT_SIDE OR BUILD_ALL)
-    message("BUILD CLIENT SIDE")
-    add_subdirectory(client_side)
-endif()
-
-if(BUILD_TESTS OR BUILD_ALL)
-    message("BUILD GLOBAL TESTS")
-    
-    message("Server LIB " ${SERVER_SIDE_LIB})
-    message("Server DIR " ${SERVER_SIDE_INCLUDE_DIRECTORIES})
-    
-    set(${PROJECT_NAME}_lib ${SERVER_SIDE_LIB} ${CLIENT_SIDE_LIB})
-    set(${PROJECT_NAME}_include_directories ${SERVER_SIDE_INCLUDE_DIRECTORIES} ${CLIENT_SIDE_INCLUDE_DIRS})
-
-    message("mutual_editing_lib " ${MUTUAL_EDITING_LIB})
-    message("mutual_editing_include_directories " ${mutual_editing_include_directories})
-
-    enable_testing()
-    
-    add_test(tests_text_editor "./server_side/text_editor/tests_text_editor/testsForTextEditor")
-    add_test(tests_server "./server_side/server/tests_server/testsForServer")
-    add_test(tests_DB "./server_side/DB/tests_DB/testsForDB")
-    add_test(tests_client_side "./client_side/tests_client_side/testsForClientSide")
-
-    add_subdirectory(tests)
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(client)
 endif()
