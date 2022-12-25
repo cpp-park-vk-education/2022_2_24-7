@@ -36,6 +36,7 @@ void Connection::handleRead(const boost::system::error_code &error, size_t bytes
                 std::cerr << id_ << ": INPUT READ ERROR: " << error.message() << "\n";
                 break;
         }
+        _router.disconnectProjectUser(this);
         return;
     }
     if (bytes == 0) {
