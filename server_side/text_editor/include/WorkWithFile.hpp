@@ -14,7 +14,7 @@ class WorkWithCppFile : public IWorkWithFile {
 
     std::string getPath() override;
 
-    virtual ~WorkWithCppFile() = default;
+    ~WorkWithCppFile() override = default;
 
    private:
     std::string _path;

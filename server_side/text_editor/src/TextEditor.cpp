@@ -93,7 +93,6 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
     if (beforeElement) {
         // element before exist
         tmpBefore = beggining;
-        StartOfLine* tmpLine = lines;
 
         checkForNotEqual notEq;
 
@@ -105,7 +104,6 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
 
         countVisibleBefore = answer.visibleCount;
         lineCountBefore = answer.lineCount;
-
     } else {
         if (beggining) {
             // elements exist
@@ -125,6 +123,7 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, Eleme
             // elements doesnt exist
             // what position
             beggining = insertElement;
+            lineCount++;
             lines = new StartOfLine(insertElement, 1);
             return answer;
         }
@@ -239,6 +238,7 @@ std::string WorkWithLines::insertElementInPosition(size_t position, std::string 
 };
 
 std::string WorkWithLines::deleteElementFromPosition(size_t position) {
+    ++_counter;
     AnswerLinePos pos = getPosition(position);
 
     return createCommand(true, deleteElementFromLineAndPos(pos.line, pos.pos).elementBeforeInsert);
@@ -247,8 +247,23 @@ std::string WorkWithLines::deleteElementFromPosition(size_t position) {
 std::string WorkWithLines::insertElementInPosition(std::string command) {
     Command com(command);
 
-    insertElement(com._insertElement, com._beforeElement, com._afterElemenet);
-    return command;
+    insertElement(com._insertElement, com._beforeElement,com._afterElemenet);
+    
+    size_t position = 0;
+    Element* nowEl = beggining;
+    while (nowEl && !(nowEl->isVisible && checkForAfterElement(nowEl, com._insertElement))) {
+        if (nowEl->isVisible) {
+            position++;
+        }
+        nowEl = nowEl->next;
+    }
+
+    // return command;
+    std::string returnString = "i:";
+    returnString.push_back(com._insertElement->_value);
+    returnString.push_back(':');
+    returnString.append(std::to_string(++position));
+    return returnString;
 };
 
 std::string WorkWithLines::deleteElementFromPosition(std::string command) {
@@ -267,8 +282,14 @@ std::string WorkWithLines::deleteElementFromPosition(std::string command) {
     AnswerLinePos pos = getPosition(position);
 
     delete com._insertElement;
-
-    return createCommand(true, deleteElementFromLineAndPos(pos.line, pos.pos).elementBeforeInsert);
+    
+    // return createCommand(true, deleteElementFromLineAndPos(pos.line, pos.pos).elementBeforeInsert);
+    deleteElementFromLineAndPos(pos.line, pos.pos);
+    
+    std::string returnString;
+    returnString.append("d:");
+    returnString.append(std::to_string(++position));
+    return returnString;
 };
 
 size_t WorkWithLines::getQuantityOfLines() { return lineCount; };
@@ -278,7 +299,7 @@ Element* WorkWithLines::getStartOfLine(size_t lineNumber) {
         return nullptr;
     }
 
-    if (lineNumber <= lineCount) {
+    if (lineNumber < lineCount) {
         StartOfLine* searchForStart = searcher->getToLine(lines, lineNumber);
 
         return searchForStart->_elementStart;
@@ -549,6 +570,8 @@ AnswerForInsertAction WorkWithLines::deleteElementFromLineAndPos(size_t lineWher
         StartOfLine* tmp = deletionLine->next;
         deletionLine->next = deletionLine->next->next;
 
+        deletionLine->_sizeOfLine += tmp->_sizeOfLine;
+        
         lineCount--;
         delete tmp;
     }

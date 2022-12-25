@@ -17,11 +17,9 @@ std::vector<std::string> parseString(std::string str, char separator) {
 };
 
 Command::Command(std::string str) {
-    // int x = 1;
-
-    _insertElement = nullptr;
-    _afterElemenet = nullptr;
-    _beforeElement = nullptr;
+        _insertElement = nullptr;
+        _afterElemenet = nullptr;
+        _beforeElement = nullptr;
 
     std::vector<std::string> parsedString = parseString(str, ':');
 

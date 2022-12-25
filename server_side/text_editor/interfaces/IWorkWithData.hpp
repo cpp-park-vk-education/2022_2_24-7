@@ -12,4 +12,6 @@ class IWorkWithData {
     virtual void addFile(std::string path) = 0;
     virtual std::string getLogFileDirectory() = 0;
     virtual std::string getFileWithDataDricetory() = 0;
+
+    virtual ~IWorkWithData() = default;
 };

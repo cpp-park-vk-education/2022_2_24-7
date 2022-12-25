@@ -21,5 +21,5 @@ class Searcher : public ISearchForPlace {
                                                        StartOfLine* line,
                                                        IcheckForLessOrEqual* func) override;
 
-    virtual ~Searcher() = default;
+    ~Searcher() override = default;
 };
