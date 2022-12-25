@@ -12,6 +12,7 @@ void Connection::run(size_t *all_connections, size_t *closed_connections) {
     id_ = *all_connections;
     all_connections_ = all_connections;
     closed_connections_ = closed_connections;
+    _router.connectProjectUser(this);
     nlohmann::json j;
     j["command"] = "First message from server";
     j["id"] = id_;
