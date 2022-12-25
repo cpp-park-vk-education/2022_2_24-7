@@ -44,4 +44,5 @@ bool Router::disconnectProjectUser(const ConnectionPtr userConnection) {
 
 bool Router::connectProjectUser(const ConnectionPtr userConnection) {
     project.ConnectUser(userConnection);
+    return true;
 }
