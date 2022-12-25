@@ -27,6 +27,7 @@ class Router : public IRouter {
 
     Project* GetProject();
     IWorkWithData* GetWorkWithData() const;
+    bool disconnectProjectUser(const ConnectionPtr userConnection);
 
    private:
     Project project;

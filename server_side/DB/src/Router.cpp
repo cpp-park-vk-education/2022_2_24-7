@@ -35,3 +35,9 @@ void Router::processRoute(const std::string& request, const ConnectionPtr userCo
 Project* Router::GetProject() { return &project; };
 
 IWorkWithData* Router::GetWorkWithData() const { return workWithData; };
+
+
+bool Router::disconnectProjectUser(const ConnectionPtr userConnection) {
+    project.DisconnectUser(userConnection);
+    return true;
+};
