@@ -46,5 +46,5 @@ target_include_directories(${TEXT_EDITOR_LIB} PUBLIC ${TEXT_EDITOR_INCLUDE_DIRS}
 
 if(BUILD_TESTS OR BUILD_ALL)
     enable_testing()
-    add_subdirectory(tests_text_editor)    
+    add_subdirectory(tests_text_editor)
 endif()
