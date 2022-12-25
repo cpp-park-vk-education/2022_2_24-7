@@ -49,7 +49,7 @@ void Connection::handleRead(const boost::system::error_code &error, size_t bytes
 
 void Connection::handleMsg(std::string Msg) {
     std::cout << "CLIENT MESSAGE : " << Msg << std::endl;
-    handler.handleFromClient(Msg);  
+    handler.handleFromClient(Msg); 
     _router.processRoute(handler.reply()["command"], this);// BLOCKING OPERATION
 }
 

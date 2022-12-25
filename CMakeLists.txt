@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 project(mutual_editing)
 
+option(BUILD_ALL "Build all" ON)
 option(BUILD_TESTS "Build test programs" ON)
 
 string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -pedantic -Wformat=2 -Wfloat-equal -Wconversion -fprofile-arcs")
