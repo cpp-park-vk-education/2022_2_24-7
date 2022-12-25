@@ -10,7 +10,7 @@
 #include <QKeyEvent>
 #include <QTextCursor>
 #include "./ui_mainwindow.h"
-//#include "mainwindow.ui"
+
 #include "WorkWithData.hpp"
 #include "Client.hpp"
 #include "nlohmann/json.hpp"
@@ -42,10 +42,11 @@ public:
     void deleteSym();
     void contextRun();
 
+    void serverAsked(std::string);
+
 public slots:
     void sockReady();
     void sockDisc();
-    void serverAsked(std::string);
 
 private slots:
 

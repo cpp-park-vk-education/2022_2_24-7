@@ -87,3 +87,15 @@ void Client::closeConnection() {
 
     std::cout << "CONNECTION IS CLOSED" << std::endl;
 }
+
+void Client::addClass(MainWindow* wind) {
+    _window = wind;
+}
+
+void Client::addFunc(const void (*f)(std::string)) {
+    _f = f;
+}
+
+
+
+

@@ -3,7 +3,6 @@
 #include <QKeyEvent>
 #include <iostream>
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -11,8 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     client = std::make_shared<Client>(context);
     ui->setupUi(this);
-
-    editor.userFirst(0,0);
 
     newThread = new mythread(context, client, this);
     newThread->start();
@@ -31,24 +28,24 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::serverAsked(std::string serverString) {
-//    nlohmann::json j = nlohmann::json::parse(serverString);
-//    std::string command = j["command"].get<std::string>();
-//    if (id_ == 0) {
-//        id_ = j["id"].get<int>();
-//        editor.userFirst(id_);
-//    }
+   nlohmann::json j = nlohmann::json::parse(serverString);
+   std::string command = j["command"].get<std::string>();
+   if (id_ == 0) {
+       id_ = j["id"].get<int>();
+       editor.userFirst(id_);
+   }
 
-//    isCommandBefore = true;
+   isCommandBefore = true;
 
-//    QString operation = QString::fromStdString(command);
+   QString operation = QString::fromStdString(command);
 
-//    operation = QString::fromStdString(editor.operationWithData(operation.toStdString(), 1));
+   operation = QString::fromStdString(editor.operationWithData(operation.toStdString(), 1));
 
-//    if (ui->commandLine->text().split(':')[0] == 'i') {
-//        insertIntoPosition(operation.split(':')[2].toInt(), operation.split(':')[1][0]);
-//    } else {
-//        deleteFromPosition(operation.split(':')[1].toULongLong());
-//    }
+   if (ui->commandLine->text().split(':')[0] == 'i') {
+       insertIntoPosition(operation.split(':')[2].toInt(), operation.split(':')[1][0]);
+   } else {
+       deleteFromPosition(operation.split(':')[1].toULongLong());
+   }
 }
 
 void MainWindow::contextRun() { context.run(); }
@@ -57,13 +54,6 @@ void MainWindow::sockDisc(){
 }
 
 void MainWindow::sockReady() {
-//    if (socket->waitForConnected(500)) {
-//        socket->waitForReadyRead(500);
-//        Data = socket->readAll();
-//        qDebug() << Data;
-//    }
-
-
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
@@ -76,8 +66,11 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 
 void MainWindow::on_connectProjectButton_clicked()
 {
-    this->nameProject = ui->idProject->toPlainText();
-    ui->idProjectLabel->setText(nameProject);
+//    this->nameProject = ui->idProject->toPlainText();
+//    ui->idProjectLabel->setText(nameProject);
+    MainWindow* a = this;
+    client->addFunc(&a->serverAsked);
+//    client->addClass(a);
 }
 
 
@@ -119,21 +112,20 @@ void MainWindow::on_codeText_textChanged()
     {
         deleteSym();
     }
-    //if (sym.length() != 0) {
-        //qDebug() << sym.at(textCursor.position()-1) << "    " << textCursor.position();
         qDebug() << dataForManager;
-        qDebug() << QString::fromStdString(editor.operationWithData(dataForManager.toStdString()));
-        client->sendMsg(editor.operationWithData(dataForManager.toStdString()));
-    //}
+        if (!isCommandBefore) {
+            qDebug() << QString::fromStdString(editor.operationWithData(dataForManager.toStdString()));
+            isCommandBefore = false;
+        }
+
     dataForManager.clear();
-    curSym = this->sym[this->sym.length()-1];
+//    curSym = this->sym[this->sym.length()-1];
 }
 
 size_t MainWindow::insertIntoPosition(int position, QChar insertedSymb) {
     int positionBeforeChanges = ui->codeText->textCursor().position();
     int returnPositionCursor = positionBeforeChanges;
 
-//    textCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, -position);
     textCursor.setPosition(position,QTextCursor::MoveAnchor);
 
     textCursor.insertText(insertedSymb);
@@ -148,20 +140,22 @@ size_t MainWindow::insertIntoPosition(int position, QChar insertedSymb) {
 };
 
 size_t MainWindow::deleteFromPosition(size_t position) {
-    size_t returnPositionCursor;
-    size_t positionBeforeChanges = ui->codeText->textCursor().position();
+    int positionBeforeChanges = ui->codeText->textCursor().position();
+    int returnPositionCursor = positionBeforeChanges;
 
-    ui->codeText->textCursor().setPosition(position);
-    ui->codeText->textCursor().deleteChar();
+    textCursor = ui->codeText->textCursor();
+    textCursor.setPosition(position,QTextCursor::MoveAnchor);
 
-    if(position > positionBeforeChanges) {
+    textCursor.deleteChar();
+
+
+
+    if(position <= positionBeforeChanges) {
         returnPositionCursor = positionBeforeChanges - 1;
-    } else {
-        returnPositionCursor = positionBeforeChanges;
     }
 
-    ui->codeText->textCursor().setPosition(positionBeforeChanges);
-    textCursor = ui->codeText->textCursor();
+    textCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, returnPositionCursor);
 
     return returnPositionCursor;
 };
+

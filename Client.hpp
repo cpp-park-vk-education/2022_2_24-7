@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 
+#include "mainwindow.h"
+
 static inline constexpr int BUFF_SIZE = 512;
 
 class Client : public std::enable_shared_from_this<Client> {
@@ -21,7 +23,13 @@ class Client : public std::enable_shared_from_this<Client> {
     void sendMsg(std::string msg);
     void closeConnection();
 
+    void addClass(MainWindow* wind);
+    void addFunc(const void (*f)(std::string));
+
    private:
+    MainWindow* _window;
+    const void (*_f)(std::string);
+
     boost::asio::ip::tcp::socket _socket;
 
     std::string _ip;

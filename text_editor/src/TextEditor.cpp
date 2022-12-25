@@ -262,7 +262,7 @@ std::string WorkWithLines::insertElementInPosition(std::string command) {
     std::string returnString = "i:";
     returnString.push_back(com._insertElement->_value);
     returnString.push_back(':');
-    returnString.append(std::to_string(++position));
+    returnString.append(std::to_string(position));
     return returnString;
 };
 
@@ -288,7 +288,7 @@ std::string WorkWithLines::deleteElementFromPosition(std::string command) {
     
     std::string returnString;
     returnString.append("d:");
-    returnString.append(std::to_string(++position));
+    returnString.append(std::to_string(position));
     return returnString;
 };
 
@@ -376,8 +376,13 @@ AnswerForInsertAction WorkWithLines::insertElement(Element* insertElement, size_
                     answer.elementBeforeInsert = tmpEl;
                 }
 
-                lines->_elementStart = insertElement;
-                lines->_sizeOfLine++;
+                if (!lines) {
+                    lines = new StartOfLine(insertElement, 1);
+                } else {
+                    lines->_elementStart = insertElement;
+                    lines->_sizeOfLine++;
+                }
+
 
             } else {
                 // first symbol not first line
@@ -470,7 +475,7 @@ AnswerLinePos WorkWithLines::getPosition(size_t position) {
 };
 
 AnswerForInsertAction WorkWithLines::deleteElementFromLineAndPos(size_t lineWhereToDelete, size_t positionInLine) {
-    AnswerForInsertAction answer;
+   AnswerForInsertAction answer;
     
     Element* afterWhatElement = nullptr;
     Element* deletionElement = nullptr;
