@@ -25,17 +25,14 @@ bool Router::sendToAllProjectUsers(const Reply& reply, const ConnectionPtr userC
 };
 
 void Router::processRoute(const std::string& request, const ConnectionPtr userConnection) {
-
-    std::string replyCommand = request;
-    // workWithData->operationWithData(replyCommand, true);
-    Reply reply(request);
+    std::string replyCommand = workWithData->operationWithData(request, true);
+    Reply reply(replyCommand);
     sendToAllProjectUsers(reply, userConnection);
 };
 
 Project* Router::GetProject() { return &project; };
 
 IWorkWithData* Router::GetWorkWithData() const { return workWithData; };
-
 
 bool Router::disconnectProjectUser(const ConnectionPtr userConnection) {
     project.DisconnectUser(userConnection);

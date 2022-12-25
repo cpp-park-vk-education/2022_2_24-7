@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
     unsigned int port = argc > 1 ? std::stol(argv[1]) : default_port;
 
     WorkWithData workWithData;
+    workWithData.userFirst();
     Router router(&workWithData);
     
     Server server(context, router, port);
