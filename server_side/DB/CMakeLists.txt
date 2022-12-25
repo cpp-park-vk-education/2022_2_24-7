@@ -10,15 +10,14 @@ set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/Router.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/Project.cpp"
 )
 
-set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/Handlers.hpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/IProject.hpp"
+set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/IProject.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/Project.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/IResponse.hpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/IWorkWithData.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/Reply.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/Request.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/Router.hpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/User.hpp")
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/IRouter.hpp"
+)
 
 set(DB_LIB "${PROJECT_NAME}_lib")
 set(DB_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")

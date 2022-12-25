@@ -1,25 +1,21 @@
 #include "Router.hpp"
 
-Router::Router(std::string filesPath) : project(Project("project", filesPath)), workWithData() {
-    workWithData = new WorkWithData;
-};
+Router::Router(IWorkWithData* _workWithData, std::string filesPath)
+    : project(Project("project", filesPath)), workWithData(_workWithData){};
 
-bool Router::sendToUser(const Reply& reply, const ConnectionPtr& userConnection) { // здесь передается dto, а не реплай
-    // userConnection->writeMsg();
-
+bool Router::sendToUser(const Reply& reply, const ConnectionPtr userConnection) {
+    std::string tempMsg = reply.command;
+    userConnection->writeMsg(tempMsg);
     return true;
 };
 
-bool Router::sendToAllProjectUsers(const Reply& reply, const ConnectionPtr& userConnection) {
+bool Router::sendToAllProjectUsers(const Reply& reply, const ConnectionPtr userConnection) {
     if (project.GetProjectConnections().size() == 0) {
         return false;
     }
     std::unordered_map<int, ConnectionPtr> tempProjectConnections = project.GetProjectConnections();
     for (auto& i : tempProjectConnections) {
-        if (i.second == nullptr) {  // если пользователь отключился, то я удаляю конекшн из списка
-            project.DisconnectUser(i.second);
-            continue;
-        }
+
         if (i.second != userConnection) {
             sendToUser(reply, i.second);
         }
@@ -28,9 +24,10 @@ bool Router::sendToAllProjectUsers(const Reply& reply, const ConnectionPtr& user
 };
 
 void Router::processRoute(const std::string& request, const ConnectionPtr userConnection) {
+    project.ConnectUser(userConnection);
     std::string replyCommand = request;
     workWithData->operationWithData(replyCommand, true);
-    Reply reply(replyCommand);
+    Reply reply(request);
     sendToAllProjectUsers(reply, userConnection);
 };
 

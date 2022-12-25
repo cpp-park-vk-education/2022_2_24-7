@@ -1,8 +1,9 @@
 #include <thread>
 #include <vector>
 
-#include "Server.hpp"
 #include "Router.hpp"
+#include "Server.hpp"
+#include "WorkWithData.hpp"
 
 static inline constexpr int THREADS_NUM = 10;
 
@@ -13,7 +14,8 @@ void server_threads_spawn() { context.run(); }
 int main(int argc, char *argv[]) {
     unsigned int port = argc > 1 ? std::stol(argv[1]) : default_port;
 
-    Router router;
+    WorkWithData workWithData;
+    Router router(&workWithData);
     
     Server server(context, router, port);
     server.start();
