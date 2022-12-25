@@ -1,14 +1,14 @@
 #pragma once
+#include <fstream>
+#include <iostream>
+
 #include "IWorkWithFile.hpp"
 
-#include <iostream>
-#include <fstream>
-
-class WorkWithLogFile: public IWorkWithFile{
-    public:
+class WorkWithLogFile : public IWorkWithFile {
+   public:
     bool addExtension(std::string extensionToAdd) override;
     bool addPathFile(std::string addPathToFile) override;
-    
+
     bool writeToFile(std::string whatToWrite) override;
     bool clearFile() override;
 
@@ -16,7 +16,7 @@ class WorkWithLogFile: public IWorkWithFile{
 
     virtual ~WorkWithLogFile() = default;
 
-    private:
+   private:
     std::string _path;
     std::string _extension;
 };

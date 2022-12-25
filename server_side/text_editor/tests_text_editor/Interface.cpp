@@ -1,11 +1,12 @@
 #include <gtest/gtest.h>
+
 #include <iostream>
 
 #include "WorkWithData.hpp"
 
 TEST(interface, insert1) {
     WorkWithData a;
-    a.userFirst(0,0);
+    a.userFirst(0, 0);
 
     a.operationWithData("i:0|0:0", 1);
 
@@ -23,7 +24,7 @@ TEST(interface, insert1) {
 
 TEST(interface, delete1) {
     WorkWithData a;
-    a.userFirst(0,0);
+    a.userFirst(0, 0);
 
     a.operationWithData("i:a:0");
     a.operationWithData("i:b:1");
@@ -32,5 +33,4 @@ TEST(interface, delete1) {
     a.operationWithData("d:0");
     EXPECT_EQ(a.getLine(1), "\n");
     EXPECT_EQ(a.getLine(2), "b");
-
 };

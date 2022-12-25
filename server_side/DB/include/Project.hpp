@@ -6,16 +6,14 @@
 #include <vector>
 
 #include "IProject.hpp"
-#include "IWorkWithData.hpp"
-
-// using ConnectionPtr = std::make_shared<IConnection> (Connection());
+//#include "IWorkWithData.hpp"
 
 class Project : IProject {
    public:
     Project(std::string newProjectName = "project", std::string newFilesPath = "./files");
 
-    bool ConnectUser(const ConnectionPtr& userConnection) override;
-    bool DisconnectUser(const ConnectionPtr& userConnection) override;
+    bool ConnectUser(const ConnectionPtr userConnection) override;
+    bool DisconnectUser(const ConnectionPtr userConnection) override;
 
     const std::string GetPath() const;
     const std::string GetName() const;

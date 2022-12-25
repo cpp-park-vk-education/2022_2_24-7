@@ -14,10 +14,10 @@ bool checkForBeforeLess(Element* elementBefore, Element* elementAfter) {
     return elementBefore->UserId < elementAfter->UserId;
 };
 
-bool  checkForLess::func(Element* elementBefore, Element* elementAfter) {
+bool checkForLess::func(Element* elementBefore, Element* elementAfter) {
     return checkForBeforeLess(elementBefore, elementAfter);
 };
 
-bool  checkForNotEqual::func(Element* elementBefore, Element* elementAfter) {
+bool checkForNotEqual::func(Element* elementBefore, Element* elementAfter) {
     return !checkForAfterElement(elementBefore, elementAfter);
 };

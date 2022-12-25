@@ -13,9 +13,9 @@ struct StartOfLine {
             _elementStart = new Element(&sym, &a, &a);
         }
     };
-    
+
     Element* _elementStart;
     size_t _sizeOfLine;
-    
+
     StartOfLine* next;
 };

@@ -1,19 +1,19 @@
 #include "../include/Client.hpp"
 
-#include <iostream>
-#include <vector>
 #include <algorithm>
-#include <numeric>
 #include <future>
-#include <string>
+#include <iostream>
 #include <mutex>
+#include <numeric>
+#include <string>
+#include <vector>
 
-#define IO_BIND(a)                                                                    \
+#define IO_BIND(a)                                                                \
     boost::bind(&Client::a, shared_from_this(), boost::asio::placeholders::error, \
                 boost::asio::placeholders::bytes_transferred)
 
-Client::Client(boost::asio::io_context& context, std::string ip, short unsigned int port) :
-    _socket(context), _ip(ip), _port(port) {}
+Client::Client(boost::asio::io_context& context, std::string ip, short unsigned int port)
+    : _socket(context), _ip(ip), _port(port) {}
 
 void Client::start() { acceptConnection(); }
 
@@ -23,7 +23,7 @@ void Client::acceptConnection() {
         _socket.close();
     }
     boost::asio::ip::tcp::endpoint ep(boost::asio::ip::address::from_string(_ip), _port);
-    
+
     _socket.connect(ep);
     readMsg();
 }
@@ -43,7 +43,7 @@ void Client::readMsg() {
     // handleRead();
 }
 
-void Client::handleRead(const boost::system::error_code &error, size_t bytes) {
+void Client::handleRead(const boost::system::error_code& error, size_t bytes) {
     if (error) {
         switch (error.value()) {
             case boost::asio::error::eof:  // ?
@@ -62,9 +62,7 @@ void Client::handleRead(const boost::system::error_code &error, size_t bytes) {
 
     std::istream is(&read_buff);
     std::string msg;
-    std::copy(std::istreambuf_iterator<char>(is),
-        std::istreambuf_iterator<char>(),
-        std::back_inserter(msg));
+    std::copy(std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>(), std::back_inserter(msg));
 
     write_buff = handleMsg(msg);  // BLOCKING OPERATION
     readMsg();
@@ -72,7 +70,7 @@ void Client::handleRead(const boost::system::error_code &error, size_t bytes) {
 
 std::string Client::handleMsg(std::string msg) {
     std::cout << "SERVER MESSAGE : " << msg << std::endl;
-    
+
     dto = nlohmann::json::parse(msg);
 
     // logic

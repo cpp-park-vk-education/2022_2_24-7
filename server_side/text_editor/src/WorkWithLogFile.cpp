@@ -15,8 +15,7 @@ bool WorkWithLogFile::writeToFile(std::string whatToWrite) {
 
     out.open(_path + "log" + _extension, std::ios::app);
 
-    if (out.is_open())
-    {
+    if (out.is_open()) {
         out << whatToWrite << "!!" << std::endl;
     } else {
         return 0;
@@ -31,6 +30,4 @@ bool WorkWithLogFile::clearFile() {
     return 1;
 };
 
-std::string WorkWithLogFile::getPath() {
-    return _path + "res" + _extension;
-};
+std::string WorkWithLogFile::getPath() { return _path + "res" + _extension; };

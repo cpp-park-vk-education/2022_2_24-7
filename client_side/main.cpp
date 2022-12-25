@@ -1,7 +1,6 @@
-#include "Client.hpp"
-
-#include <boost/system.hpp>
 #include <thread>
+
+#include "Client.hpp"
 
 boost::asio::io_context context;
 

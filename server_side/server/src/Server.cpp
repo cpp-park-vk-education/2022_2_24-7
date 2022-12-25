@@ -4,7 +4,7 @@
 
 #include "Connection.hpp"
 
-Server::Server(boost::asio::io_context &context, IRouter& router, unsigned int port)
+Server::Server(boost::asio::io_context &context, IRouter &router, unsigned int port)
     : io_context_(context),
       acceptor_(context, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
       _router(router) {}

@@ -15,8 +15,7 @@ bool WorkWithCppFile::writeToFile(std::string whatToWrite) {
 
     out.open(_path + "res" + _extension, std::ios::app);
 
-    if (out.is_open())
-    {
+    if (out.is_open()) {
         out << whatToWrite << std::endl;
     } else {
         return 0;
@@ -31,6 +30,4 @@ bool WorkWithCppFile::clearFile() {
     return 1;
 };
 
-std::string WorkWithCppFile::getPath() {
-    return _path + "res" + _extension;
-};
+std::string WorkWithCppFile::getPath() { return _path + "res" + _extension; };

@@ -4,7 +4,7 @@
 #include "element.hpp"
 
 class ITranslator {
-    public:
+   public:
     virtual std::string returnStringFromDataType(Element* from) = 0;
 
     virtual ~ITranslator() = default;

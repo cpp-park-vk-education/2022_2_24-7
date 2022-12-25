@@ -13,7 +13,7 @@ static inline constexpr int BUFF_SIZE = 512;
 
 class Connection : public IConnection, public std::enable_shared_from_this<Connection> {
    public:
-    Connection(boost::asio::io_context &io_context_, IRouter& router);
+    Connection(boost::asio::io_context &io_context_, IRouter &router);
 
     void run(size_t *all_connections_, size_t *closed_connections_) override;
 
@@ -23,13 +23,13 @@ class Connection : public IConnection, public std::enable_shared_from_this<Conne
 
     std::shared_ptr<Connection> getPtr() { return shared_from_this(); }
 
-    static std::shared_ptr<Connection> create(boost::asio::io_context &io_context_, IRouter& router) {
+    static std::shared_ptr<Connection> create(boost::asio::io_context &io_context_, IRouter &router) {
         return std::make_shared<Connection>(io_context_, router);
     }
 
    private:
     Handler handler;
-    IRouter& _router;
+    IRouter &_router;
 
     char read_buff[BUFF_SIZE];
     std::string write_buff;

@@ -9,7 +9,7 @@ WorkWithData::WorkWithData() {
 
 std::string WorkWithData::operationWithData(std::string operation, bool isCommand) {
     bool isInsert = false;
-    
+
     std::vector<std::string> vecs = parseString(operation, ':');
     if (vecs[0][0] == 'i') {
         isInsert = true;
@@ -18,13 +18,13 @@ std::string WorkWithData::operationWithData(std::string operation, bool isComman
     std::string stringToWriteInLogs;
 
     if (isCommand) {
-        if (isInsert){
+        if (isInsert) {
             stringToWriteInLogs = textEditor->insertElementInPosition(operation);
         } else {
             stringToWriteInLogs = textEditor->deleteElementFromPosition(operation);
         }
     } else {
-        if (isInsert){
+        if (isInsert) {
             size_t post = std::stoul(vecs[2]);
 
             stringToWriteInLogs = textEditor->insertElementInPosition(post, vecs[1]);
@@ -32,9 +32,9 @@ std::string WorkWithData::operationWithData(std::string operation, bool isComman
             stringToWriteInLogs = textEditor->deleteElementFromPosition(std::stoul(vecs[1]));
         }
     }
-    
+
     workWithLog->writeToFile(stringToWriteInLogs);
-    
+
     return stringToWriteInLogs;
 };
 
@@ -54,20 +54,17 @@ void WorkWithData::addFile(std::string path) {
     workWithLog->addPathFile(path);
 };
 
-std::string WorkWithData::getLogFileDirectory() {
-    return workWithLog->getPath();
-};
+std::string WorkWithData::getLogFileDirectory() { return workWithLog->getPath(); };
 
 std::string WorkWithData::getFileWithDataDricetory() {
     workWithCPP->clearFile();
-    
+
     for (size_t i = 0; i < textEditor->getQuantityOfLines(); ++i) {
         workWithCPP->writeToFile(translator->returnStringFromDataType(textEditor->getStartOfLine(i)));
     }
 
     return workWithCPP->getPath();
 };
-
 
 WorkWithData::~WorkWithData() {
     delete translator;

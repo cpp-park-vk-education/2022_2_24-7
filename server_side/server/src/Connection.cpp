@@ -1,4 +1,4 @@
-#include "Connection.hpp"
+#include "../include/Connection.hpp"
 
 #include <iostream>
 
@@ -6,7 +6,8 @@
     boost::bind(&Connection::a, shared_from_this(), boost::asio::placeholders::error, \
                 boost::asio::placeholders::bytes_transferred)
 
-Connection::Connection(boost::asio::io_context &io_context_, IRouter& router) : handler(), socket_(io_context_), _router(router) {}
+Connection::Connection(boost::asio::io_context &io_context_, IRouter &router)
+    : handler(), socket_(io_context_), _router(router) {}
 
 void Connection::run(size_t *all_connections, size_t *closed_connections) {
     id_ = *all_connections;
@@ -49,8 +50,8 @@ void Connection::handleRead(const boost::system::error_code &error, size_t bytes
 
 void Connection::handleMsg(std::string Msg) {
     std::cout << "CLIENT MESSAGE : " << Msg << std::endl;
-    handler.handleFromClient(Msg);  
-    _router.processRoute(handler.reply()["command"], this);// BLOCKING OPERATION
+    handler.handleFromClient(Msg);
+    _router.processRoute(handler.reply()["command"], this);  // BLOCKING OPERATION
 }
 
 void Connection::writeMsg(std::string msg) {

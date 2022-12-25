@@ -3,9 +3,8 @@
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/enable_shared_from_this.hpp>
-#include <nlohmann/json.hpp>
-
 #include <memory>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
 
@@ -13,7 +12,7 @@ static inline constexpr int BUFF_SIZE = 512;
 
 class Client : public std::enable_shared_from_this<Client> {
    public:
-    Client(boost::asio::io_context& context, std::string ip = "127.0.0.1", short unsigned int port = 2020);
+    Client(boost::asio::io_context &context, std::string ip = "127.0.0.1", short unsigned int port = 2020);
     void start();
 
     void sendMsg(std::string msg);

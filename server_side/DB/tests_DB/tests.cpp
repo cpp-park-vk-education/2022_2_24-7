@@ -1,7 +1,24 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-// #include "includes.hpp"
+#include <boost/asio.hpp>
+#include <boost/bind/bind.hpp>
+#include <boost/shared_ptr.hpp>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+
+#include "../../server/include/Connection.hpp"
+#include "../../server/include/Handler.hpp"
+#include "../../server/include/Server.hpp"
+#include "../../text_editor/interfaces/IWorkWithData.hpp"
+#include "IProject.hpp"
+#include "IResponse.hpp"
+#include "IRouter.hpp"
+#include "Project.hpp"
+#include "Reply.hpp"
+#include "Request.hpp"
+#include "Router.hpp"
 
 // TEST(BackendConstructorsTest, RouterConstructorTest) {
 //     Router routerTest;
@@ -9,37 +26,40 @@
 //     EXPECT_NE(routerTest.GetWorkWithData(), nullptr);
 // }
 
-// TEST(BackendConstructorsTest, ProjectConstructorTest) {
-//     Project projectTest;
-//     EXPECT_EQ(projectTest.GetPath(), "./files");
-//     EXPECT_EQ(projectTest.GetName(), "project");
-//     EXPECT_EQ(projectTest.GetCounter(), 0);
-// }
+TEST(BackendConstructorsTest, ProjectConstructorTest) {
+    Project projectTest;
+    EXPECT_EQ(projectTest.GetPath(), "./files");
+    EXPECT_EQ(projectTest.GetName(), "project");
+    EXPECT_EQ(projectTest.GetCounter(), 0);
+}
 
-// TEST(ResponseTest, TestAll) {
-//     std::string replString = "insert";
-//     std::string reqString = "delete";
-//     Reply replyIt(replString);
-//     Request requestIt(reqString);
+TEST(ResponseTest, TestAll) {
+    std::string replString = "insert";
+    std::string reqString = "delete";
+    Reply replyIt(replString);
+    Request requestIt(reqString);
 
-//     EXPECT_EQ(replyIt.command, replString);
-//     EXPECT_EQ(requestIt.command, reqString);
+    EXPECT_EQ(replyIt.command, replString);
+    EXPECT_EQ(requestIt.command, reqString);
 
-//     EXPECT_EQ(replyIt.GetMethod(), replString[0]);
-//     EXPECT_EQ(requestIt.GetMethod(), reqString[0]);
-// }
+    EXPECT_EQ(replyIt.GetMethod(), replString[0]);
+    EXPECT_EQ(requestIt.GetMethod(), reqString[0]);
+}
 
 // TEST(RouterFunctionsTest, ProcessRouteTest) {
 //     Router routerTest;
 //     Request requestIt("d");
-//     ConnectionPtr userConnection = std::make_shared<Connection>();
-//     routerTest.processRoute(requestIt, userConnection);
+//     boost::asio::io_context io_context_;
+//     ConnectionPtr userConnection = new Connection(io_context_, routerTest);
+//     routerTest.processRoute(requestIt.command, userConnection);
 // }
 
 // TEST(RouterFunctionsTest, IsIWorkWithDataInterfaceWork) {
 //     Router routerTest;
 //     Request requestIt("d");
-//     ConnectionPtr userConnection = std::make_shared<Connection>();
+
+//     boost::asio::io_context io_context_;
+//     ConnectionPtr userConnection = new Connection(io_context_, routerTest);
 
 //     EXPECT_EQ(routerTest.GetWorkWithData()->operationWithData(requestIt.command, true), "a");
 // }
@@ -53,8 +73,10 @@
 
 // TEST(RouterFunctionsTest, SendToUsersTest) {
 //     Router routerTest;
-//     ConnectionPtr userConnection = std::make_shared<Connection>(1);
-//     ConnectionPtr userConnection1 = std::make_shared<Connection>(2);
+//     boost::asio::io_context io_context_;
+
+//     ConnectionPtr userConnection = new Connection(io_context_, routerTest);
+//     ConnectionPtr userConnection1 = new Connection(io_context_, routerTest);
 //     Reply replyIt("d");
 //     routerTest.GetProject()->ConnectUser(userConnection);
 //     routerTest.GetProject()->ConnectUser(userConnection1);
@@ -67,9 +89,11 @@
 //         boost::shared_ptr<IConnection>();*/
 
 // TEST(ProjectConnectTests, AttachNewConnection) {
+//     Router routerTest;
 //     Project projectTest;
 //     // connectionIdCounter = 0, projectConnections is empty
-//     ConnectionPtr userConnection = std::make_shared<Connection>();
+//     boost::asio::io_context io_context_;
+//     ConnectionPtr userConnection = new Connection(io_context_, routerTest);
 //     projectTest.ConnectUser(userConnection);
 
 //     EXPECT_EQ(projectTest.ConnectionExist(userConnection), true);
@@ -79,9 +103,11 @@
 // }
 
 // TEST(ProjectConnectTests, AttachExistingConnection) {
+//     Router routerTest;
+//     boost::asio::io_context io_context_;
 //     Project projectTest;
 //     // connectionIdCounter = 0, projectConnections is empty
-//     ConnectionPtr userConnection = std::make_shared<Connection>();
+//     ConnectionPtr userConnection = new Connection(io_context_, routerTest);
 //     projectTest.ConnectUser(userConnection);
 
 //     EXPECT_NE(projectTest.ConnectUser(userConnection), true);
@@ -89,10 +115,12 @@
 // }
 
 // TEST(ProjectConnectTests, AttachMultipleConnections) {
+//     Router routerTest;
+//     boost::asio::io_context io_context_;
 //     Project projectTest;
 //     // connectionIdCounter = 0, projectConnections is empty
-//     ConnectionPtr userConnection1 = std::make_shared<Connection>(1);
-//     ConnectionPtr userConnection2 = std::make_shared<Connection>(2);
+//     ConnectionPtr userConnection1 = new Connection(io_context_, routerTest);
+//     ConnectionPtr userConnection2 = new Connection(io_context_, routerTest);
 
 //     projectTest.ConnectUser(userConnection1);
 //     EXPECT_EQ(projectTest.ConnectionExist(userConnection1), true);
@@ -107,9 +135,11 @@
 // }
 
 // TEST(ProjectDisonnectTests, DisconnectExistingConnection) {
+//     Router routerTest;
+//     boost::asio::io_context io_context_;
 //     Project projectTest;
 //     // connectionIdCounter = 0, projectConnections is empty
-//     ConnectionPtr userConnection = std::make_shared<Connection>();
+//     ConnectionPtr userConnection = new Connection(io_context_, routerTest);
 //     projectTest.ConnectUser(userConnection);
 
 //     EXPECT_EQ(projectTest.ConnectionExist(userConnection), true);
@@ -124,9 +154,11 @@
 // }
 
 // TEST(ProjectDisonnectTests, DisconnectNonExistingConnection) {
+//     Router routerTest;
+//     boost::asio::io_context io_context_;
 //     Project projectTest;
 //     // connectionIdCounter = 0, projectConnections is empty
-//     ConnectionPtr userConnection = std::make_shared<Connection>();
+//     ConnectionPtr userConnection = new Connection(io_context_, routerTest);
 
 //     EXPECT_EQ(projectTest.DisconnectUser(userConnection), false);
 //     EXPECT_EQ(projectTest.GetCounter(), 0);
@@ -134,10 +166,12 @@
 // }
 
 // TEST(ProjectDisonnectTests, DisconnectMultipleConnections) {
+//     Router routerTest;
+//     boost::asio::io_context io_context_;
 //     Project projectTest;
 //     // connectionIdCounter = 0, projectConnections is empty
-//     ConnectionPtr userConnection1 = std::make_shared<Connection>(1);
-//     ConnectionPtr userConnection2 = std::make_shared<Connection>(2);
+//     ConnectionPtr userConnection1 = new Connection(io_context_, routerTest);
+//     ConnectionPtr userConnection2 = new Connection(io_context_, routerTest);
 
 //     projectTest.ConnectUser(userConnection1);
 //     projectTest.ConnectUser(userConnection2);

@@ -2,10 +2,10 @@
 #include <string>
 
 class IWorkWithFile {
-    public:
+   public:
     virtual bool addExtension(std::string extensionToAdd) = 0;
     virtual bool addPathFile(std::string addPathToFile) = 0;
-    
+
     virtual bool writeToFile(std::string whatToWrite) = 0;
     virtual bool clearFile() = 0;
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "nlohmann/json.hpp"
-
 #include <boost/asio.hpp>
+
+#include "nlohmann/json.hpp"
 
 class IConnection {
    public:

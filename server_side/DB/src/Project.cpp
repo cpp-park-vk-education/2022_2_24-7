@@ -1,18 +1,21 @@
 #include "Project.hpp"
 
 Project::Project(std::string newProjectName, std::string newFilesPath)
-    : projectName(newProjectName), filesPath(newFilesPath), projectConnections(), connectionIdCounter(0){};
+    : projectName(newProjectName), filesPath(newFilesPath), projectConnections(), connectionIdCounter(1){};
 
-bool Project::ConnectUser(const ConnectionPtr& userConnection) {
+bool Project::ConnectUser(const ConnectionPtr userConnection) {
     if (ConnectionExist(userConnection) == true) {
         return false;
     }
     projectConnections.emplace(connectionIdCounter, userConnection);
     connectionIdCounter = (connectionIdCounter + 1) % std::numeric_limits<int>::max();
+    if (connectionIdCounter == 0) {
+        connectionIdCounter = 1;
+    }
     return true;
 };
 
-bool Project::DisconnectUser(const ConnectionPtr& userConnection) {
+bool Project::DisconnectUser(const ConnectionPtr userConnection) {
     int tempConnectionId = FindConnectionId(userConnection);
     if (tempConnectionId == -1) {
         return false;
