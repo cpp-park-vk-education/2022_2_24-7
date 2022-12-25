@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.14)
 
 project(mutual_editing)
 
-option(BUILD_ALL "Build all" ON)
-option(BUILD_TESTS "Build test programs" ON)
+option(BUILD_ALL "Build all" OFF)
+option(BUILD_SERVER_SIDE "Build server side" ON)
+option(BUILD_CLIENT_SIDE "Build client side" OFF)
+option(BUILD_TESTS "Build test programs" OFF)
 
 string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -pedantic -Wformat=2 -Wfloat-equal -Wconversion -fprofile-arcs")
 string(APPEND CMAKE_CXX_FLAGS " -Wlogical-op  -Wduplicated-cond -Wcast-qual -Wcast-align -g")
