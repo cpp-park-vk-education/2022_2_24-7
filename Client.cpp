@@ -92,9 +92,9 @@ void Client::addClass(MainWindow* wind) {
     _window = wind;
 }
 
-void Client::addFunc(const void (*f)(std::string)) {
-    _f = f;
-}
+//void Client::addFunc(const void (*f)(std::string)) {
+//    _f = f;
+//}
 
 
 

@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     newThread = new mythread(context, client, this);
     newThread->start();
 
+    editor.userFirst(1);
+
 //    connect(threadNew, SIGNAL(stringFromServer(std::string)), this, SLOT(serverAsked(std::string)));
 //    client->start();
 
@@ -32,7 +34,6 @@ void MainWindow::serverAsked(std::string serverString) {
    std::string command = j["command"].get<std::string>();
    if (id_ == 0) {
        id_ = j["id"].get<int>();
-       editor.userFirst(id_);
    }
 
    isCommandBefore = true;
@@ -41,9 +42,9 @@ void MainWindow::serverAsked(std::string serverString) {
 
    operation = QString::fromStdString(editor.operationWithData(operation.toStdString(), 1));
 
-   if (ui->commandLine->text().split(':')[0] == 'i') {
+   if (operation.split(':')[0] == 'i') {
        insertIntoPosition(operation.split(':')[2].toInt(), operation.split(':')[1][0]);
-   } else {
+   } else if (operation.split(':')[0] == 'd') {
        deleteFromPosition(operation.split(':')[1].toULongLong());
    }
 }
@@ -69,8 +70,8 @@ void MainWindow::on_connectProjectButton_clicked()
 //    this->nameProject = ui->idProject->toPlainText();
 //    ui->idProjectLabel->setText(nameProject);
     MainWindow* a = this;
-    client->addFunc(&a->serverAsked);
-//    client->addClass(a);
+//    client->addFunc(&a->serverAsked);
+    client->addClass(a);
 }
 
 
@@ -105,18 +106,22 @@ void MainWindow::deleteSym(){
 void MainWindow::on_codeText_textChanged()
 {
     this->sym = ui->codeText->toPlainText();
-
+    bool flag = false;
     if (sym.length() > this->curLengt) {
-        insertSym();
+            insertSym();
+            flag = true;
     } else
-    {
+    if (sym.length() < this->curLengt) {
         deleteSym();
+        flag = true;
     }
-        qDebug() << dataForManager;
-        if (!isCommandBefore) {
-            qDebug() << QString::fromStdString(editor.operationWithData(dataForManager.toStdString()));
-            isCommandBefore = false;
-        }
+    qDebug() << dataForManager;
+    if (flag && !(dataForManager.split(':')[0] == 'd' && dataForManager.split(':')[1].toInt() < 0) && !isCommandBefore) {
+        std::string command = editor.operationWithData(dataForManager.toStdString());
+        qDebug() << QString::fromStdString(command);
+        client->sendMsg(command);
+        isCommandBefore = false;
+    }
 
     dataForManager.clear();
 //    curSym = this->sym[this->sym.length()-1];

@@ -11,7 +11,9 @@
 #include <string>
 #include <vector>
 
-#include "mainwindow.h"
+//#include "mainwindow.h"
+
+class MainWindow;
 
 static inline constexpr int BUFF_SIZE = 512;
 
@@ -24,7 +26,7 @@ class Client : public std::enable_shared_from_this<Client> {
     void closeConnection();
 
     void addClass(MainWindow* wind);
-    void addFunc(const void (*f)(std::string));
+//    void addFunc(const void (*f)(std::string));
 
    private:
     MainWindow* _window;
