@@ -25,7 +25,7 @@ bool Router::sendToAllProjectUsers(const Reply& reply, const ConnectionPtr userC
 };
 
 void Router::processRoute(const std::string& request, const ConnectionPtr userConnection) {
-    project.ConnectUser(userConnection);
+
     std::string replyCommand = request;
     // workWithData->operationWithData(replyCommand, true);
     Reply reply(request);
@@ -41,3 +41,7 @@ bool Router::disconnectProjectUser(const ConnectionPtr userConnection) {
     project.DisconnectUser(userConnection);
     return true;
 };
+
+bool Router::connectProjectUser(const ConnectionPtr userConnection) {
+    project.ConnectUser(userConnection);
+}
