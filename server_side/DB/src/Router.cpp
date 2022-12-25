@@ -14,10 +14,7 @@ bool Router::sendToAllProjectUsers(const Reply& reply, const ConnectionPtr userC
     }
     std::unordered_map<int, ConnectionPtr> tempProjectConnections = project.GetProjectConnections();
     for (auto& i : tempProjectConnections) {
-        // if (i.second == nullptr) {  // если пользователь отключился, то я удаляю конекшн из списка
-        //     project.DisconnectUser(i.second);
-        //     continue;
-        // }
+
         if (i.second != userConnection) {
             sendToUser(reply, i.second);
         }
@@ -30,7 +27,7 @@ void Router::processRoute(const std::string& request, const ConnectionPtr userCo
     std::string replyCommand = request;
     workWithData->operationWithData(replyCommand, true);
     Reply reply(replyCommand);
-    // sendToAllProjectUsers(reply, userConnection);
+    sendToAllProjectUsers(reply, userConnection);
 };
 
 Project* Router::GetProject() { return &project; };
