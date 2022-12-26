@@ -26,7 +26,7 @@ bool Router::sendToAllProjectUsers(const Reply& reply, const ConnectionPtr userC
 
 void Router::processRoute(const std::string& request, const ConnectionPtr userConnection) {
     std::string replyCommand = workWithData->operationWithData(request, true);
-    Reply reply(replyCommand);
+    Reply reply(request);
     sendToAllProjectUsers(reply, userConnection);
 };
 
