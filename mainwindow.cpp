@@ -16,8 +16,6 @@ MainWindow::MainWindow(QWidget *parent)
     newThread = new mythread(context, client, this);
     newThread->start();
 
-    editor.userFirst(1);
-
 //    connect(threadNew, SIGNAL(stringFromServer(std::string)), this, SLOT(serverAsked(std::string)));
 //    client->start();
 
@@ -36,18 +34,25 @@ void MainWindow::serverAsked(std::string serverString) {
    std::string command = j["command"].get<std::string>();
    if (id_ == 0) {
        id_ = j["id"].get<int>();
+       editor.userFirst(id_);
    }
 
    isCommandBefore = true;
 
    QString operation = QString::fromStdString(command);
 
+   qDebug() << operation;
+
    operation = QString::fromStdString(editor.operationWithData(operation.toStdString(), 1));
 
-   if (operation.split(':')[0] == 'i') {
-       insertIntoPosition(operation.split(':')[2].toInt(), operation.split(':')[1][0]);
-   } else if (operation.split(':')[0] == 'd') {
-       deleteFromPosition(operation.split(':')[1].toULongLong());
+   if (operation != "") {
+       if (operation.split(':')[0] == 'i') {
+           insertIntoPosition(operation.split(':')[2].toInt(), operation.split(':')[1][0]);
+       } else if (operation.split(':')[0] == 'd') {
+           deleteFromPosition(operation.split(':')[1].toULongLong());
+       }
+   } else {
+       isCommandBefore = false;
    }
 }
 
@@ -65,7 +70,6 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
     texto += char(e->key());
     ui->idProjectLabel->setText(texto);
 }
-
 
 void MainWindow::on_connectProjectButton_clicked()
 {
@@ -122,8 +126,8 @@ void MainWindow::on_codeText_textChanged()
         std::string command = editor.operationWithData(dataForManager.toStdString());
         qDebug() << QString::fromStdString(command);
         client->sendMsg(command);
-        isCommandBefore = false;
     }
+    isCommandBefore = false;
 
     dataForManager.clear();
 //    curSym = this->sym[this->sym.length()-1];
@@ -133,6 +137,7 @@ size_t MainWindow::insertIntoPosition(int position, QChar insertedSymb) {
     int positionBeforeChanges = ui->codeText->textCursor().position();
     int returnPositionCursor = positionBeforeChanges;
 
+    textCursor = ui->codeText->textCursor();
     textCursor.setPosition(position,QTextCursor::MoveAnchor);
 
     textCursor.insertText(insertedSymb);

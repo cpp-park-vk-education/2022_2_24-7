@@ -89,7 +89,7 @@ Command::Command(std::string str) {
             Element* tmp = _afterElemenet;
             _afterElemenet = _beforeElement;
             _beforeElement = tmp;
-        } else {
+        } else if (parsedString[0][0] == 'd'){
             // delete command
             std::vector<std::string> insertElementStrings = parseString(parsedString[1], '|');
 

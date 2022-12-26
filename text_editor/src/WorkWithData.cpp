@@ -9,10 +9,14 @@ WorkWithData::WorkWithData() {
 
 std::string WorkWithData::operationWithData(std::string operation, bool isCommand) {
     bool isInsert = false;
+    bool isDelete = false;
     
     std::vector<std::string> vecs = parseString(operation, ':');
     if (vecs[0][0] == 'i') {
         isInsert = true;
+    }
+    if (vecs[0][0] == 'd') {
+        isDelete = true;
     }
 
     std::string stringToWriteInLogs;
@@ -22,7 +26,7 @@ std::string WorkWithData::operationWithData(std::string operation, bool isComman
         stringToWriteInLogs = operation;
         if (isInsert){
             stringToReturn = textEditor->insertElementInPosition(operation);
-        } else {
+        } else if (isDelete) {
             stringToReturn = textEditor->deleteElementFromPosition(operation);
         }
         
@@ -32,7 +36,7 @@ std::string WorkWithData::operationWithData(std::string operation, bool isComman
             size_t post = std::stoul(vecs[2]);
 
             stringToWriteInLogs = textEditor->insertElementInPosition(post, vecs[1]);
-        } else {
+        } else if (isDelete) {
             stringToWriteInLogs = textEditor->deleteElementFromPosition(std::stoul(vecs[1]));
         }
 

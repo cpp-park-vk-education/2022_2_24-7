@@ -533,7 +533,7 @@ AnswerForInsertAction WorkWithLines::deleteElementFromLineAndPos(size_t lineWher
             }
         } else {
             // not last symbol delete
-        
+
             Element* nextVisible = deletionLine->_elementStart->next;
             while (!nextVisible->isVisible) {
                 nextVisible = nextVisible->next;
