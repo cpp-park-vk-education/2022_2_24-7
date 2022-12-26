@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent)
     , context()
 {
     client = std::make_shared<Client>(context);
+//    client->addFunc(this->serverAsked);
+    client->addClass(this);
     ui->setupUi(this);
 
     newThread = new mythread(context, client, this);
@@ -69,9 +71,9 @@ void MainWindow::on_connectProjectButton_clicked()
 {
 //    this->nameProject = ui->idProject->toPlainText();
 //    ui->idProjectLabel->setText(nameProject);
-    MainWindow* a = this;
+//    MainWindow* a = this;
 //    client->addFunc(&a->serverAsked);
-    client->addClass(a);
+//    client->addClass(a);
 }
 
 

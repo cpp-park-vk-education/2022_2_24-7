@@ -23,6 +23,7 @@ set(PROJECT_SOURCES
         Client.hpp
         mythread.cpp
         mythread.h
+        IMainWindow.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

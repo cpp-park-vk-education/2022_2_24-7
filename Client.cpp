@@ -66,18 +66,15 @@ void Client::handleRead(const boost::system::error_code &error, size_t bytes) {
         std::istreambuf_iterator<char>(),
         std::back_inserter(msg));
 
-    write_buff = handleMsg(msg);  // BLOCKING OPERATION
+    handleMsg(msg);  // BLOCKING OPERATION
     readMsg();
 }
 
-std::string Client::handleMsg(std::string msg) {
+void Client::handleMsg(std::string msg) {
     std::cout << "SERVER MESSAGE : " << msg << std::endl;
     
-    dto = nlohmann::json::parse(msg);
-
-    // logic
-
-    return dto.dump();
+//    _f(msg);
+    _window->serverAsked(msg);
 }
 
 void Client::closeConnection() {
@@ -88,14 +85,10 @@ void Client::closeConnection() {
     std::cout << "CONNECTION IS CLOSED" << std::endl;
 }
 
-void Client::addClass(MainWindow* wind) {
+void Client::addClass(IMainWindow* wind) {
     _window = wind;
 }
 
-//void Client::addFunc(const void (*f)(std::string)) {
+//void Client::addFunc(void (*f)(std::string)) {
 //    _f = f;
 //}
-
-
-
-

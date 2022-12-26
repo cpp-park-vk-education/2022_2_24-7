@@ -12,6 +12,7 @@
 #include <vector>
 
 //#include "mainwindow.h"
+#include "IMainWindow.h"
 
 class MainWindow;
 
@@ -25,12 +26,12 @@ class Client : public std::enable_shared_from_this<Client> {
     void sendMsg(std::string msg);
     void closeConnection();
 
-    void addClass(MainWindow* wind);
-//    void addFunc(const void (*f)(std::string));
+    void addClass(IMainWindow* wind);
+//    void addFunc(void (*f)(std::string));
 
    private:
-    MainWindow* _window;
-    const void (*_f)(std::string);
+    IMainWindow* _window;
+//    void (*_f)(std::string);
 
     boost::asio::ip::tcp::socket _socket;
 
@@ -45,6 +46,6 @@ class Client : public std::enable_shared_from_this<Client> {
 
     void readMsg();
     void handleRead(const boost::system::error_code &error, size_t bytes);
-    std::string handleMsg(std::string msg);
+    void handleMsg(std::string msg);
     void dummy(const boost::system::error_code &error, size_t bytes);
 };

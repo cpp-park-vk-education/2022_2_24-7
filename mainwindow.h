@@ -20,7 +20,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public IMainWindow
 {
     Q_OBJECT
 
@@ -42,7 +42,7 @@ public:
     void deleteSym();
     void contextRun();
 
-    void serverAsked(std::string);
+    void serverAsked(std::string) override;
 
 public slots:
     void sockReady();
