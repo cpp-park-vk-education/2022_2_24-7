@@ -6,11 +6,17 @@
     boost::bind(&Connection::a, shared_from_this(), boost::asio::placeholders::error, \
                 boost::asio::placeholders::bytes_transferred)
 
-Connection::Connection(boost::asio::io_context &io_context_) : handler(), socket_(io_context_) {}
+Connection::Connection(boost::asio::io_context &io_context_, IRouter& router) : handler(), socket_(io_context_), _router(router) {}
 
-void Connection::run(size_t *id) {
-    id_ = *id;
-    connections_ = id;
+void Connection::run(size_t *all_connections, size_t *closed_connections) {
+    id_ = *all_connections;
+    all_connections_ = all_connections;
+    closed_connections_ = closed_connections;
+    // _router.connectProjectUser(this);
+    nlohmann::json j;
+    j["command"] = "First message from server";
+    j["id"] = id_;
+    socket_.write_some(boost::asio::buffer(j.dump()));
     readMsg();
 }
 
@@ -24,13 +30,14 @@ void Connection::readMsg() {
 void Connection::handleRead(const boost::system::error_code &error, size_t bytes) {
     if (error) {
         switch (error.value()) {
-            case boost::asio::error::eof:  // ?
+            case boost::asio::error::eof:
                 closeConnection();
                 break;
             default:
                 std::cerr << id_ << ": INPUT READ ERROR: " << error.message() << "\n";
                 break;
         }
+        // _router.disconnectProjectUser(this);
         return;
     }
     if (bytes == 0) {
@@ -38,26 +45,28 @@ void Connection::handleRead(const boost::system::error_code &error, size_t bytes
         return;
     }
 
-    write_buff = handleMsg(std::string(read_buff, bytes));  // BLOCKING OPERATION
-    sendReply();
+    handleMsg(std::string(read_buff, bytes));  // BLOCKING OPERATION
     readMsg();
 }
 
-std::string Connection::handleMsg(std::string Msg) {
+void Connection::handleMsg(std::string Msg) {
     std::cout << "CLIENT MESSAGE : " << Msg << std::endl;
-    handler.handle(Msg);  // BLOCKING OPERATION
-    return handler.reply();
+    handler.handleFromClient(Msg); 
+    // _router.processRoute(handler.reply()["command"], this);// BLOCKING OPERATION
 }
 
-void Connection::sendReply() {
+void Connection::writeMsg(std::string msg) {
+    handler.handleFromBack(msg);
+    write_buff = handler.reply().dump();
     async_write(socket_, boost::asio::buffer(write_buff), IO_BIND(dummy));
     write_buff.clear();
 }
 
 void Connection::closeConnection() {
     std::cout << "CLIENT HAS EXITED\n";
-    // --(*connections_);
-    connections_ = nullptr;
+    ++(*closed_connections_);
+    all_connections_ = nullptr;
+    closed_connections_ = nullptr;
     socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
     socket_.close();
 }

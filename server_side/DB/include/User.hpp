@@ -3,7 +3,7 @@
 #include <boost/shared_ptr.hpp>
 #include <string>
 
-#include "IConnection.hpp"
+#include "MyIConnection.hpp"
 using ConnectionPtr = boost::shared_ptr<IConnection>;
 
 struct User {

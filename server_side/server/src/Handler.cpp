@@ -1,22 +1,19 @@
 #include "Handler.hpp"
 
-#include <nlohmann/json.hpp>
+void Handler::handleFromClient(std::string msg) { convertMsgToDto(msg); }
 
-void Handler::handle(std::string msgBuffer) { inputAnalyze(msgBuffer); }
+void Handler::handleFromBack(std::string msg) { convertDtoToMsg(msg); }
 
-void Handler::handle(const Dto& msgBack) { inputAnalyze(msgBack); }
-
-std::string Handler::reply() { return reply_; }
-
-void Handler::inputAnalyze(std::string msgBuffer) { convertMsgToDto(msgBuffer); }
-
-void Handler::inputAnalyze(const Dto& msgBack) { convertDtoToMsg(msgBack); }
-
-void Handler::logic() {}
-
-void Handler::convertMsgToDto(std::string vpnMsg) {
-    nlohmann::json j = nlohmann::json::parse(vpnMsg);
-    dto.command = j["command"].get<std::string>();
+nlohmann::json Handler::reply() { 
+    auto return_dto = dto;
+    dto.clear();
+    return return_dto; 
 }
 
-void Handler::convertDtoToMsg(const Dto&) { reply_ = dto.command; }
+void Handler::convertMsgToDto(std::string msg) {
+    dto = nlohmann::json::parse(msg);
+}
+
+void Handler::convertDtoToMsg(std::string msg) {
+    dto["command"] = msg;
+}

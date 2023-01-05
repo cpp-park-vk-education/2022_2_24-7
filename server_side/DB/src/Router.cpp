@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-Router::Router() {
-    project = Project();
-    addHandler("i", InsertSymbol);
-    addHandler("d", DeleteSymbol);
-};
+// Router::Router() {
+//     project = Project();
+//     addHandler("i", InsertSymbol);
+//     addHandler("d", DeleteSymbol);
+// };

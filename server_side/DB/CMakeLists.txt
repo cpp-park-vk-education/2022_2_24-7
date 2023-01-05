@@ -10,7 +10,7 @@ set(SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/Router.cpp"
 )
 
 set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/Handlers.hpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/IConnection.hpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/MyIConnection.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/IProject.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/IResponse.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/IWorkWithData.hpp"

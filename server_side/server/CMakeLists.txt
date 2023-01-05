@@ -17,8 +17,6 @@ set(HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/IConnection.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/Handler.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/IServer.hpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/Server.hpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/Router.hpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/Dto.hpp"
             )
 
 set(SERVER_LIB "${PROJECT_NAME}_lib")
