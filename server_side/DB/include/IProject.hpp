@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "IConnection.hpp"
+#include "MyIConnection.hpp"
 #include "IWorkWithData.hpp"
 #include "User.hpp"
 

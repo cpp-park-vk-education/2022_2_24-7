@@ -6,7 +6,6 @@
 TeamWork - Сервис для совместного редактирования файла
 
 UML - https://app.diagrams.net/#G1AVHA6EZTSq85JVlhVzCM8U1wmhueDZke
-
 ## Разработчики
 - [Геворк Габриелян] - капитан команды
 - [Игнат Роменский]

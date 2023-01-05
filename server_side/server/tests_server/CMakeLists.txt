@@ -6,7 +6,7 @@ set(CMAXE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES "ConnectionTests.cpp" 
-            "SerializerTests.cpp"
+            "HandlerTests.cpp"
             "ServerTests.cpp" 
             )
 
@@ -21,7 +21,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${SERVER_LIB} GTest::gtest_main)
+target_link_libraries(${PROJECT_NAME} ${SERVER_LIB} GTest::gtest_main GTest::gmock)
 target_include_directories(${PROJECT_NAME} PRIVATE ${SERVER_INCLUDE_DIRS})
 
 include(GoogleTest)
